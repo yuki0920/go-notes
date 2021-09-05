@@ -16,6 +16,12 @@ $ mysql --version
 mysql  Ver 14.14 Distrib 5.6.51, for osx10.16 (x86_64) using  EditLine wrapper
 ```
 
+### パッケージ管理の初期化
+
+```sh
+go mod init $(git config user.name)/$(basename `pwd`)
+```
+
 ## 起動
 
 ### MySQL Server 起動
