@@ -63,10 +63,17 @@ Shutting down MySQL
 .. SUCCESS!
 
 # ログイン
-$ mysql -u root -p
-Enter password: # 何も入力せずEnter
+$ mysql -u go_blog_user -ppassword
 mysql> #プロンプト出現したら成功
 
 # ログアウト
 mysql> \q
+```
+
+### 環境変数インポート
+
+.envrcを作成し読み込む
+
+```sh
+direnv allow
 ```
