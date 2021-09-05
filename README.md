@@ -63,10 +63,23 @@ Shutting down MySQL
 .. SUCCESS!
 
 # ログイン
-$ mysql -u root -p
-Enter password: # 何も入力せずEnter
+$ mysql -u go_blog_user -ppassword
 mysql> #プロンプト出現したら成功
 
 # ログアウト
 mysql> \q
 ```
+
+### 環境変数インポート
+
+.envrcを作成し読み込む
+
+```sh
+direnv allow
+```
+
+## ディレクトリ構成
+
+- model: データベースに保管されたデータをプログラム上においてどのようなデータ構造で利用するかを記述する
+- repository: データストアからデータを取得するための処理を記述する
+- handler: ハンドラ関数(リクエストを受け取りレスポンスを返す関数)を記述する
