@@ -16,11 +16,32 @@ $ mysql --version
 mysql  Ver 14.14 Distrib 5.6.51, for osx10.16 (x86_64) using  EditLine wrapper
 ```
 
-### パッケージ管理の初期化
+## パッケージ管理
+
+
+### 初期化
 
 ```sh
 go mod init $(git config user.name)/$(basename `pwd`)
 ```
+
+### 依存管理
+
+```sh
+go mod tidy
+```
+
+- ソースコードを検査して、どのような外部パッケージを利用しているかを判定する
+- ソースコード内で利用されている外部パッケージは go.mod と go.sum というファイルに書き出される
+- 直接的に利用しているパッケージは go.mod に、間接的に利用しているパッケージは go.sum に記載される
+
+### ダウンロード
+
+```sh
+go mod download
+```
+
+- ダウンロードされた外部パッケージのソースコードは `$HOME/go/pkg/mod/` に配置される
 
 ## 起動
 
