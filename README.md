@@ -16,6 +16,14 @@ $ mysql --version
 mysql  Ver 14.14 Distrib 5.6.51, for osx10.16 (x86_64) using  EditLine wrapper
 ```
 
+## マイグレーションツール
+
+```
+$ go get -u -v bitbucket.org/liamstask/goose/cmd/goose
+$ which goose
+/Users/yuki.watanabe/.goenv/shims/goose
+```
+
 ## パッケージ管理
 
 
@@ -78,8 +86,26 @@ mysql> \q
 direnv allow
 ```
 
+### マイグレーション
+
+```sh
+# 接続確認
+goose mysql $DSN status
+
+# 適用
+cd db/migrations
+goose mysql $DSN up
+
+# ロールバック
+cd db/migrations
+goose mysql $DSN down
+```
+
+- マイグレーションを適用する際は、 `db/migrations` まで移動する必要がある
+
 ## ディレクトリ構成
 
+- db: DB用の設定ファイルやマイグレーションスクリプトを配置する
 - model: データベースに保管されたデータをプログラム上においてどのようなデータ構造で利用するかを記述する
 - repository: データストアからデータを取得するための処理を記述する
 - handler: ハンドラ関数(リクエストを受け取りレスポンスを返す関数)を記述する
