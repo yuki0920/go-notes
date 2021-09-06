@@ -13,3 +13,5 @@ CREATE TABLE articles (
 -- +goose StatementBegin
 SELECT 'down SQL query';
 -- +goose StatementEnd
+
+DROP TABLE articles;
