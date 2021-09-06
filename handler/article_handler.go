@@ -6,6 +6,7 @@ import (
 	"strconv"
 	"time"
 
+	"yuki0920/go-blog/model"
 	"yuki0920/go-blog/repository"
 
 	"github.com/labstack/echo/v4"
@@ -60,4 +61,45 @@ func ArticleEdit(c echo.Context) error {
 	}
 
 	return render(c, "article/edit.html", data)
+}
+
+type ArticleCreateOutput struct {
+	Article          *model.Article
+	Message          string
+	ValidationErrors []string
+}
+
+func ArticleCreate(c echo.Context) error {
+	// 送信されてくるフォームの内容を格納する構造体を宣言
+	var article model.Article
+
+	// レスポンスとして返却する構造体を宣言
+	var out ArticleCreateOutput
+
+	// フォームの内容を構造体にバインド
+	if err := c.Bind(&article); err != nil {
+		c.Logger().Error(err.Error())
+
+		return c.JSON(http.StatusBadRequest, out)
+	}
+
+	// repository を呼び出して保存処理を実行
+	res, err := repository.ArticleCreate(&article)
+	if err != nil {
+		c.Logger().Error(err.Error())
+
+		return c.JSON(http.StatusInternalServerError, out)
+	}
+
+	// SQL 実行結果から作成されたレコードの ID を取得
+	id, _ := res.LastInsertId()
+
+	// 構造体に ID をセット
+	article.ID = int(id)
+
+	// レスポンスの構造体に保存した記事のデータを格納
+	out.Article = &article
+
+	// JSONにパースしてレスポンスを返却
+	return c.JSON(http.StatusOK, out)
 }
