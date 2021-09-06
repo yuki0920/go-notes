@@ -11,6 +11,7 @@ import (
 	"github.com/jmoiron/sqlx"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+	"gopkg.in/go-playground/validator.v9"
 )
 
 // main 実行前にグローバル定数を宣言する
@@ -30,6 +31,8 @@ func main() {
 	e.GET("/:id", handler.ArticleShow)
 	e.GET("/:id/edit", handler.ArticleEdit)
 	e.POST("/", handler.ArticleCreate)
+
+	e.Validator = &CustomValidator{validator: validator.New()}
 
 	// Webサーバーをポート番号 8080 で起動する
 	e.Logger.Fatal(e.Start(":8080"))
@@ -64,4 +67,12 @@ func createMux() *echo.Echo {
 
 	// インスタンス返却
 	return e
+}
+
+type CustomValidator struct {
+	validator *validator.Validate
+}
+
+func (cv *CustomValidator) Validate(i interface{}) error {
+	return cv.validator.Struct(i)
 }
