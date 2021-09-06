@@ -24,6 +24,14 @@ $ which goose
 /Users/yuki.watanabe/.goenv/shims/goose
 ```
 
+## ホットリロードツール
+
+```sh
+$ go get -u github.com/cosmtrek/air
+$ which air
+/Users/yuki.watanabe/.goenv/shims/air
+```
+
 ## パッケージ管理
 
 
@@ -102,6 +110,13 @@ goose mysql $DSN down
 ```
 
 - マイグレーションを適用する際は、 `db/migrations` まで移動する必要がある
+
+### アプリケーション起動
+
+```sh
+# ホットリロードで起動
+$ air
+```
 
 ## ディレクトリ構成
 
