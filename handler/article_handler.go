@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"log"
 	"net/http"
 	"strconv"
 	"time"
@@ -13,19 +12,19 @@ import (
 )
 
 // ハンドラ関数という MVCにおけるコントローラーのアクションの位置づけ
-// HTTP リクエストの情報（リクエストの送信元や各種パラメータ等）は、 echo.Context という構造体でハンドラ関数に渡ってくる
 func ArticleIndex(c echo.Context) error {
-	articles, err := repository.ArticleList()
+	articles, err := repository.ArticleListByCursor(0)
+
 	if err != nil {
-		log.Println(err.Error())
+		c.Logger().Error(err.Error())
+
 		return c.NoContent(http.StatusInternalServerError)
 	}
 
 	data := map[string]interface{}{
-		"Message":  "Article Index",
-		"Now":      time.Now(),
 		"Articles": articles,
 	}
+
 	return render(c, "article/index.html", data)
 }
 

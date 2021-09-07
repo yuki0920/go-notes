@@ -2,16 +2,27 @@ package repository
 
 import (
 	"database/sql"
+	"math"
 	"time"
 
 	"yuki0920/go-blog/model"
 )
 
-func ArticleList() ([]*model.Article, error) {
-	query := `SELECT * FROM articles;`
+func ArticleListByCursor(cursor int) ([]*model.Article, error) {
+	// 引数で渡されたカーソルの値が 0 以下の場合は、代わりに int 型の最大値で置き換える
+	if cursor <= 0 {
+		cursor = math.MaxInt32
+	}
 
-	var articles []*model.Article
-	if err := db.Select(&articles, query); err != nil {
+	query := `SELECT *
+	FROM articles
+	WHERE id < ?
+	ORDER BY id desc
+	LIMIT 10`
+
+	// クエリ結果を格納するスライスを初期化 10 件取得のため、サイズとキャパシティを指定
+	articles := make([]*model.Article, 0, 10)
+	if err := db.Select(&articles, query, cursor); err != nil {
 		return nil, err
 	}
 
