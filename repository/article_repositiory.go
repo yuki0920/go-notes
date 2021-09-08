@@ -68,3 +68,42 @@ func ArticleDelete(id int) error {
 
 	return tx.Commit()
 }
+
+func ArticleGetByID(id int) (*model.Article, error) {
+	query := `SELECT *
+	FROM articles
+	WHERE id = ?;`
+
+	var article model.Article
+	if err := db.Get(&article, query, id); err != nil {
+		return nil, err
+	}
+
+	return &article, nil
+}
+
+func ArticleUpdate(article *model.Article) (sql.Result, error) {
+	now := time.Now()
+	article.Updated = now
+
+	query := `UPDATE articles
+	SET title = :title,
+			body = :body,
+			updated = :updated
+	WHERE id = :id;`
+
+	tx := db.MustBegin()
+
+	// クエリ文字列内の :title, :body, :id には、第 2 引数の Article 構造体の Title, Body, ID が bind される
+	res, err := tx.NamedExec(query, article)
+
+	if err != nil {
+		tx.Rollback()
+
+		return nil, err
+	}
+
+	tx.Commit()
+
+	return res, nil
+}
