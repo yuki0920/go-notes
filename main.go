@@ -34,6 +34,7 @@ func main() {
 	e.GET("/api/articles", handler.ArticleList)
 	e.POST("/api/articles", handler.ArticleCreate)
 	e.DELETE("/api/articles/:articleID", handler.ArticleDelete)
+	e.PATCH("/api/articles/:articleID", handler.ArticleUpdate)
 
 	e.Validator = &CustomValidator{validator: validator.New()}
 
