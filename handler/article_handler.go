@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 	"time"
@@ -109,4 +110,18 @@ func ArticleCreate(c echo.Context) error {
 
 	// JSONにパースしてレスポンスを返却
 	return c.JSON(http.StatusOK, out)
+}
+
+func ArticleDelete(c echo.Context) error {
+	// パスパラメータから記事 ID を取得
+	// 文字列型で取得されるので、strconv パッケージを利用して数値型にキャスト
+	id, _ := strconv.Atoi(c.Param("id"))
+
+	if err := repository.ArticleDelete(id); err != nil {
+		c.Logger().Error(err.Error())
+
+		return c.JSON(http.StatusInternalServerError, "")
+	}
+
+	return c.JSON(http.StatusOK, fmt.Sprintf("Article %d is deleted.", id))
 }
