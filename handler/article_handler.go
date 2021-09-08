@@ -14,6 +14,10 @@ import (
 
 // ハンドラ関数という MVCにおけるコントローラーのアクションの位置づけ
 func ArticleIndex(c echo.Context) error {
+	if c.Request().URL.Path == "/articles" {
+		c.Redirect(http.StatusPermanentRedirect, "/")
+	}
+
 	articles, err := repository.ArticleListByCursor(0)
 
 	if err != nil {
@@ -22,8 +26,15 @@ func ArticleIndex(c echo.Context) error {
 		return c.NoContent(http.StatusInternalServerError)
 	}
 
+	// 取得できた最後の記事の ID をカーソルとして設定
+	var cursor int
+	if len(articles) != 0 {
+		cursor = articles[len(articles)-1].ID
+	}
+
 	data := map[string]interface{}{
 		"Articles": articles,
+		"Cursor":   cursor,
 	}
 
 	return render(c, "article/index.html", data)
@@ -40,7 +51,7 @@ func ArticleNew(c echo.Context) error {
 
 func ArticleShow(c echo.Context) error {
 	// パスパラメータを抽出
-	id, _ := strconv.Atoi(c.Param("id"))
+	id, _ := strconv.Atoi(c.Param("articleID"))
 
 	data := map[string]interface{}{
 		"Message": "Article Show",
@@ -52,7 +63,7 @@ func ArticleShow(c echo.Context) error {
 }
 
 func ArticleEdit(c echo.Context) error {
-	id, _ := strconv.Atoi(c.Param("id"))
+	id, _ := strconv.Atoi(c.Param("articleID"))
 
 	data := map[string]interface{}{
 		"Message": "Article Edit",
@@ -115,7 +126,7 @@ func ArticleCreate(c echo.Context) error {
 func ArticleDelete(c echo.Context) error {
 	// パスパラメータから記事 ID を取得
 	// 文字列型で取得されるので、strconv パッケージを利用して数値型にキャスト
-	id, _ := strconv.Atoi(c.Param("id"))
+	id, _ := strconv.Atoi(c.Param("articleID"))
 
 	if err := repository.ArticleDelete(id); err != nil {
 		c.Logger().Error(err.Error())
@@ -124,4 +135,20 @@ func ArticleDelete(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, fmt.Sprintf("Article %d is deleted.", id))
+}
+
+func ArticleList(c echo.Context) error {
+	// 文字列型で取得できるので strconv パッケージを用いて数値型にキャスト
+	cursor, _ := strconv.Atoi(c.QueryParam("cursor"))
+
+	// 引数にカーソルの値を渡して、ID のどの位置から 10 件取得するかを指定
+	articles, err := repository.ArticleListByCursor(cursor)
+
+	if err != nil {
+		c.Logger().Error(err.Error())
+
+		return c.JSON(http.StatusInternalServerError, "")
+	}
+
+	return c.JSON(http.StatusOK, articles)
 }
