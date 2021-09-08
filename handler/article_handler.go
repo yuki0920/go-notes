@@ -1,7 +1,7 @@
 package handler
 
 import (
-	"log"
+	"fmt"
 	"net/http"
 	"strconv"
 	"time"
@@ -13,19 +13,19 @@ import (
 )
 
 // ハンドラ関数という MVCにおけるコントローラーのアクションの位置づけ
-// HTTP リクエストの情報（リクエストの送信元や各種パラメータ等）は、 echo.Context という構造体でハンドラ関数に渡ってくる
 func ArticleIndex(c echo.Context) error {
-	articles, err := repository.ArticleList()
+	articles, err := repository.ArticleListByCursor(0)
+
 	if err != nil {
-		log.Println(err.Error())
+		c.Logger().Error(err.Error())
+
 		return c.NoContent(http.StatusInternalServerError)
 	}
 
 	data := map[string]interface{}{
-		"Message":  "Article Index",
-		"Now":      time.Now(),
 		"Articles": articles,
 	}
+
 	return render(c, "article/index.html", data)
 }
 
@@ -110,4 +110,18 @@ func ArticleCreate(c echo.Context) error {
 
 	// JSONにパースしてレスポンスを返却
 	return c.JSON(http.StatusOK, out)
+}
+
+func ArticleDelete(c echo.Context) error {
+	// パスパラメータから記事 ID を取得
+	// 文字列型で取得されるので、strconv パッケージを利用して数値型にキャスト
+	id, _ := strconv.Atoi(c.Param("id"))
+
+	if err := repository.ArticleDelete(id); err != nil {
+		c.Logger().Error(err.Error())
+
+		return c.JSON(http.StatusInternalServerError, "")
+	}
+
+	return c.JSON(http.StatusOK, fmt.Sprintf("Article %d is deleted.", id))
 }
