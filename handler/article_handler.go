@@ -22,8 +22,15 @@ func ArticleIndex(c echo.Context) error {
 		return c.NoContent(http.StatusInternalServerError)
 	}
 
+	// 取得できた最後の記事の ID をカーソルとして設定
+	var cursor int
+	if len(articles) != 0 {
+		cursor = articles[len(articles)-1].ID
+	}
+
 	data := map[string]interface{}{
 		"Articles": articles,
+		"Cursor":   cursor,
 	}
 
 	return render(c, "article/index.html", data)
@@ -124,4 +131,20 @@ func ArticleDelete(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, fmt.Sprintf("Article %d is deleted.", id))
+}
+
+func ArticleList(c echo.Context) error {
+	// 文字列型で取得できるので strconv パッケージを用いて数値型にキャスト
+	cursor, _ := strconv.Atoi(c.QueryParam("cursor"))
+
+	// 引数にカーソルの値を渡して、ID のどの位置から 10 件取得するかを指定
+	articles, err := repository.ArticleListByCursor(cursor)
+
+	if err != nil {
+		c.Logger().Error(err.Error())
+
+		return c.JSON(http.StatusInternalServerError, "")
+	}
+
+	return c.JSON(http.StatusOK, articles)
 }
