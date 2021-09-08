@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const deleteArticle = id => {
     let statusCode;
 
-    fetch(`/${id}`, {
+    fetch(`/api/articles/${id}`, {
       method: 'DELETE',
     })
       .then(res => {
