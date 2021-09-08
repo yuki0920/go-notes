@@ -50,13 +50,18 @@ func ArticleNew(c echo.Context) error {
 }
 
 func ArticleShow(c echo.Context) error {
-	// パスパラメータを抽出
+	// パスパラメータから記事 ID を取得
 	id, _ := strconv.Atoi(c.Param("articleID"))
 
+	article, err := repository.ArticleGetByID(id)
+	if err != nil {
+		c.Logger().Error(err.Error())
+
+		return c.NoContent(http.StatusInternalServerError)
+	}
+
 	data := map[string]interface{}{
-		"Message": "Article Show",
-		"Now":     time.Now(),
-		"ID":      id,
+		"Article": article,
 	}
 
 	return render(c, "article/show.html", data)
