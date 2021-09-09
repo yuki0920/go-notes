@@ -1,0 +1,31 @@
+version: '3'
+services:
+  db:
+    image: mysql:8.0
+    ports:
+      - "3307:3306"
+    volumes:
+      # 起動時データの初期化
+      - ./mysql/db:/docker-entrypoint-initdb.d
+      # 設定ファイル
+      - ./mysql/my.cnf:/etc/mysql/conf.d/my.cnf
+      - ./mysql/db/mysql_data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: go_blog
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+
+  api:
+    build:
+      context: ./api
+    volumes:
+      - ./api/:/go/src
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    depends_on:
+      - db
+    command: air

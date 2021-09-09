@@ -19,7 +19,7 @@ mysql  Ver 14.14 Distrib 5.6.51, for osx10.16 (x86_64) using  EditLine wrapper
 ## マイグレーションツール
 
 ```
-$ go get -u -v bitbucket.org/liamstask/goose/cmd/goose
+$ go get -u github.com/pressly/goose/v3/cmd/goose
 $ which goose
 /Users/yuki.watanabe/.goenv/shims/goose
 ```

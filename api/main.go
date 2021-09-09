@@ -1,6 +1,8 @@
 package main
 
 import (
+	"errors"
+	"fmt"
 	"log"
 	"os"
 
@@ -44,7 +46,11 @@ func main() {
 
 func connectDB() *sqlx.DB {
 	// DSN(Data Source Name)は環境変数として定義している
-	dsn := os.Getenv("DSN")
+	dsn, err := dsn()
+	if err != nil {
+		e.Logger.Fatal(err)
+	}
+
 	db, err := sqlx.Open("mysql", dsn)
 	if err != nil {
 		e.Logger.Fatal(err)
@@ -54,6 +60,39 @@ func connectDB() *sqlx.DB {
 	}
 	log.Println("db connection succeeded")
 	return db
+}
+
+func dsn() (string, error) {
+	user := os.Getenv("DB_USER")
+	if user == "" {
+		return "", errors.New("$DB_USER is not set")
+	}
+
+	password := os.Getenv("DB_PASSWORD")
+	if password == "" {
+		return "", errors.New("$DB_PASSWORD is not set")
+	}
+
+	port := os.Getenv("DB_PORT")
+	if port == "" {
+		return "", errors.New("$DB_PORT is not set")
+	}
+
+	host := os.Getenv("DB_HOST")
+	if host == "" {
+		return "", errors.New("$DB_HOST is not set")
+	}
+
+	name := os.Getenv("DB_NAME")
+	if name == "" {
+		return "", errors.New("$DB_NAME is not set")
+	}
+
+	options := "charset=utf8mb4&parseTime=True&loc=Local"
+
+	// "user:password@host:port/dbname?options"
+	return fmt.Sprintf("%s:%s@(%s:%s)/%s?%s",
+		user, password, host, port, name, options), nil
 }
 
 func createMux() *echo.Echo {
