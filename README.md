@@ -2,12 +2,14 @@
 
 ## 環境構築
 
-### ツール群インストール
+### VS Code用ツール群インストール
 
 1.  `command + shift + P` でコマンドパレットを表示
 2. コマンドパレットに go tool と入力して `Go: Install/Update Tools` を選択し、インストール
 
 ## 言語、ミドルウェア
+
+Dockerfile で用意している
 
 ```sh
 $ go version
@@ -30,6 +32,8 @@ $ which goose
 $ go get -u github.com/cosmtrek/air
 $ which air
 /Users/yuki.watanabe/.goenv/shims/air
+# 初期化
+$ air init
 ```
 
 ## パッケージ管理
@@ -38,13 +42,16 @@ $ which air
 ### 初期化
 
 ```sh
-go mod init $(git config user.name)/$(basename `pwd`)
+$  go mod init $(git config user.name)/$(basename `pwd`)
 ```
 
 ### 依存管理
 
+
+参照しているパケージを整理する
+
 ```sh
-go mod tidy
+$  go mod tidy
 ```
 
 - ソースコードを検査して、どのような外部パッケージを利用しているかを判定する
@@ -55,68 +62,39 @@ go mod tidy
 ### ダウンロード
 
 ```sh
-go mod download
+$ go mod download
 ```
 
 - ダウンロードされた外部パッケージのソースコードは `$HOME/go/pkg/mod/` に配置される
 
 ## 起動
 
-### MySQL Server 起動
-
-```sh
-# 起動
-$ mysql.server start
-Starting MySQL
-.. SUCCESS!
-
-# ステータス確認
-$ mysql.server status
- SUCCESS! MySQL running (XXXXX)
-
-#  停止
-$ mysql.server stop
-Shutting down MySQL
-.. SUCCESS!
-
-# ログイン
-$ mysql -u go_blog_user -ppassword
-mysql> #プロンプト出現したら成功
-
-# ログアウト
-mysql> \q
-```
-
-### 環境変数インポート
-
-.envrcを作成し読み込む
-
-```sh
-direnv allow
-```
-
 ### マイグレーション
 
 ```sh
+# コンテナに入る
+$ docker-compose run --rm api bash
+
 # 接続確認
-goose mysql $DSN status
+$ goose mysql $DSN status
 
 # 適用
-cd db/migrations
-goose mysql $DSN up
+cd migrations
+$ goose mysql $DSN up
 
 # ロールバック
-cd db/migrations
-goose mysql $DSN down
+$ cd migrations
+$ goose mysql $DSN down
 ```
 
-- マイグレーションを適用する際は、 `db/migrations` まで移動する必要がある
+- マイグレーションを適用する際は、 `migrations` まで移動する必要がある
+- 引数に`$DSN`(`"user:password@tcp(db:3306)/go_blog?charset=utf8&parseTime=true&loc=Asia%2FTokyo"`)が必要となる
 
 ### アプリケーション起動
 
 ```sh
-# ホットリロードで起動
-$ air
+# air コマンドでホットリロードで起動
+$ docker-compose up
 ```
 
 ## ディレクトリ構成
