@@ -1,0 +1,46 @@
+openapi: 3.0.3
+info:
+  title: Go Blog API Document
+  version: 1.0.0
+paths:
+  /api/articles/{id}:
+    get:
+      operationId: GetArticle
+      summary: Get Article
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Get article
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetArticleResponse"
+
+components:
+  schemas:
+    GetArticleResponse:
+      type: object
+      required:
+        - id
+        - title
+        - body
+        - created
+        - updated
+      properties:
+        id:
+          type: number
+        picture_url:
+          type: string
+        title:
+          type: string
+        body:
+          type: string
+        created:
+          type: string
+        updated:
+          type: string
