@@ -221,3 +221,13 @@ func ArticleUpdate(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, out)
 }
+
+func ArticleSample(c echo.Context) error {
+	var article model.Article
+
+	article.ID = 1
+	article.Title = "Sample Article"
+	article.Body = "Sample Article Body"
+
+	return c.JSON(http.StatusOK, article)
+}
