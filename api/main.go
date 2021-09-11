@@ -6,8 +6,8 @@ import (
 	"log"
 	"os"
 
-	"yuki0920/go-blog/handler"
 	"yuki0920/go-blog/repository"
+	"yuki0920/go-blog/server"
 
 	_ "github.com/go-sql-driver/mysql" // MySQLのドライバーを使う
 	"github.com/jmoiron/sqlx"
@@ -27,28 +27,12 @@ func main() {
 	db = connectDB()
 	repository.SetDB(db)
 
-	router := NewRouter()
+	router := server.Router(e)
 
 	router.Validator = &CustomValidator{validator: validator.New()}
 
 	// Webサーバーをポート番号 8080 で起動する
 	router.Logger.Fatal(router.Start(":8080"))
-}
-
-func NewRouter() *echo.Echo {
-	// ルーティングの設定
-	e.GET("/", handler.ArticleIndex)
-	e.GET("/articles", handler.ArticleIndex)
-	e.GET("/articles/new", handler.ArticleNew)
-	e.GET("/articles/:articleID", handler.ArticleShowData)
-	e.GET("/articles/:articleID/edit", handler.ArticleEdit)
-	e.GET("/api/articles", handler.ArticleList)
-	e.POST("/api/articles", handler.ArticleCreate)
-	e.DELETE("/api/articles/:articleID", handler.ArticleDelete)
-	e.PATCH("/api/articles/:articleID", handler.ArticleUpdate)
-	e.GET("/api/articles/:articleID", handler.ArticleShow)
-
-	return e
 }
 
 func connectDB() *sqlx.DB {
