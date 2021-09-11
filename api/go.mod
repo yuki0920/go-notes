@@ -3,6 +3,7 @@ module yuki0920/go-blog
 go 1.16
 
 require (
+	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/flosch/pongo2 v0.0.0-20200913210552-0d938eb266f3
 	github.com/go-playground/universal-translator v0.18.0 // indirect
 	github.com/go-sql-driver/mysql v1.5.0
