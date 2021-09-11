@@ -18,6 +18,7 @@ func Router(e *echo.Echo) *echo.Echo {
 	e.DELETE("/api/articles/:articleID", handler.ArticleDelete)
 	e.PATCH("/api/articles/:articleID", handler.ArticleUpdate)
 	e.GET("/api/articles/:articleID", handler.ArticleShow)
+	e.GET("/api/sample", handler.ArticleSample)
 
 	return e
 }
