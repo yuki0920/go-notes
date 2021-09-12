@@ -15,6 +15,7 @@ services:
       MYSQL_DATABASE: go_blog
       MYSQL_USER: user
       MYSQL_PASSWORD: password
+      CONTAINER_PORT: $CONTAINER_PORT
     command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
 
   api:
@@ -23,9 +24,24 @@ services:
     volumes:
       - ./api/:/go/src
     ports:
-      - "8080:8080"
+      - "$API_PORT:$CONTAINER_PORT"
     env_file:
       - .env
     depends_on:
       - db
     command: air
+
+  front:
+    build:
+      context: ./front
+      args:
+        WORKDIR: $WORKDIR
+        CONTAINER_PORT: $CONTAINER_PORT
+        API_URL: "http://localhost:$API_PORT"
+    volumes:
+      - ./front:/$WORKDIR
+    ports:
+      - "$FRONT_PORT:$CONTAINER_PORT"
+    depends_on:
+      - api
+    command: yarn run dev
