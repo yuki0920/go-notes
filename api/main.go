@@ -32,7 +32,8 @@ func main() {
 	router.Validator = &CustomValidator{validator: validator.New()}
 
 	// Webサーバーをポート番号 8080 で起動する
-	router.Logger.Fatal(router.Start(":8080"))
+	port := os.Getenv("CONTAINER_PORT")
+	router.Logger.Fatal(router.Start(":" + port))
 }
 
 func connectDB() *sqlx.DB {
