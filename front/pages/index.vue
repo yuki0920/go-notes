@@ -1,9 +1,16 @@
 <template>
-  <Tutorial />
+  <p>{{ text }}</p>
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
+import { defineComponent } from '@nuxtjs/composition-api'
+export default defineComponent({
+  setup () {
+    const text = 'Hello, World!'
 
-export default Vue.extend({})
+    return {
+      text
+    }
+  }
+})
 </script>
