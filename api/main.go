@@ -92,6 +92,7 @@ func createMux() *echo.Echo {
 	e := echo.New()
 
 	// ミドルウェア設定
+	e.Use(middleware.CORSWithConfig(middleware.DefaultCORSConfig))
 	e.Use(middleware.Recover())
 	e.Use(middleware.Logger())
 	e.Use(middleware.Gzip())

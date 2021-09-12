@@ -1,16 +1,25 @@
 <template>
-  <p>{{ text }}</p>
+  <p>{{ article }}</p>
 </template>
 
 <script lang="ts">
-import { defineComponent } from '@nuxtjs/composition-api'
+import { defineComponent, ref, onMounted, useContext } from '@nuxtjs/composition-api'
+
 export default defineComponent({
+  name: 'TopPage',
   setup () {
-    const text = 'Hello, World!'
+    const article = ref(null)
+    const { $axios } = useContext()
+
+    onMounted(async () => {
+      const { data } = await $axios.get('/api/sample')
+      article.value = data
+    })
 
     return {
-      text
+      article
     }
-  }
+  },
+  head: {}
 })
 </script>
