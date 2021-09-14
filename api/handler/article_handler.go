@@ -183,8 +183,7 @@ type ArticleUpdateOutput struct {
 	ValidationErrors []string
 }
 
-// ArticleUpdate ...
-func ArticleUpdate(c echo.Context) error {
+func ArticleUpdateData(c echo.Context) error {
 	ref := c.Request().Referer()
 
 	refID := strings.Split(ref, "/")[4]
@@ -208,6 +207,36 @@ func ArticleUpdate(c echo.Context) error {
 	}
 
 	articleID, _ := strconv.Atoi(reqID)
+	article.ID = articleID
+
+	_, err := repository.ArticleUpdate(&article)
+	if err != nil {
+		out.Message = err.Error()
+
+		return c.JSON(http.StatusInternalServerError, out)
+	}
+
+	out.Article = &article
+
+	return c.JSON(http.StatusOK, out)
+}
+
+func ArticleUpdate(c echo.Context) error {
+	var article model.Article
+	var out ArticleUpdateOutput
+
+	// フォームの内容を構造体にバインドして構造体にないプロパティがあればエラーを返す
+	if err := c.Bind(&article); err != nil {
+		return c.JSON(http.StatusBadRequest, out)
+	}
+
+	// フォームの内容を検証する
+	if err := c.Validate(&article); err != nil {
+		out.ValidationErrors = article.ValidationErrors(err)
+		return c.JSON(http.StatusUnprocessableEntity, out)
+	}
+
+	articleID, _ := strconv.Atoi(c.Param("articleID"))
 	article.ID = articleID
 
 	_, err := repository.ArticleUpdate(&article)
