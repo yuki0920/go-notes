@@ -30,7 +30,7 @@ func main() {
 	router := server.Router(e)
 
 	// echoのインスタンスにカスタムバリデーターを登録する
-	router.Validator = &CustomValidator{validator: validator.New()}
+	router.Validator = &server.CustomValidator{Validator: validator.New()}
 
 	// Webサーバーをポート番号 8080 で起動する
 	port := os.Getenv("CONTAINER_PORT")
@@ -104,12 +104,4 @@ func createMux() *echo.Echo {
 
 	// インスタンス返却
 	return e
-}
-
-type CustomValidator struct {
-	validator *validator.Validate
-}
-
-func (cv *CustomValidator) Validate(i interface{}) error {
-	return cv.validator.Struct(i)
 }

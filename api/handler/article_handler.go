@@ -237,7 +237,7 @@ func ArticleUpdate(c echo.Context) error {
 	var article model.Article
 	var out ArticleUpdateOutput
 
-	// フォームの内容を構造体にバインドして構造体にないプロパティがあればエラーを返す
+	// フォームの内容を構造体にバインドする、構造体で設定した型と異なる場合はエラーになる
 	if err := c.Bind(&article); err != nil {
 		return c.JSON(http.StatusBadRequest, out)
 	}
