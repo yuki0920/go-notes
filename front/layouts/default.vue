@@ -1,23 +1,27 @@
 <template>
+  <div>
     <header>
       <div class="header">
-        <a class="header__logo" href="/">My Tech Blog</a>
+        <a class="header__logo" href="/">Go Notes</a>
       </div>
     </header>
     <nuxt />
     <footer>
       <div class="footer">
         <ul class="footer__menu">
-          <li class="footer__menu-item"><a href="">Twitter</a></li>
-          <li class="footer__menu-item"><a href="">GitHub</a></li>
-          <li class="footer__menu-item"><a href="">プライバシーポリシー</a></li>
-          <li class="footer__menu-item"><a href="">運営者</a></li>
+          <li class="footer__menu-item">
+            <a href="https://twitter.com/YukiWebTech">Twitter</a>
+          </li>
+          <li class="footer__menu-item">
+            <a href="https://github.com/yuki0920">GitHub</a>
+          </li>
         </ul>
         <div class="footer__copy-right">
-          © 2021 Go Blog
+          © 2021 Go Notes
         </div>
       </div>
     </footer>
+  </div>
 </template>
 
 <script lang="ts">
