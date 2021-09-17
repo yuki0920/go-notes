@@ -34,7 +34,7 @@
     "eslint-plugin-nuxt": "^2.0.0",
     "eslint-plugin-vue": "^7.12.1",
     "fibers": "^5.0.0",
-    "jest": "^27.0.5",
+    "jest": "^27.2.0",
     "sass": "^1.39.2",
     "sass-loader": "10",
     "ts-jest": "^27.0.3",
