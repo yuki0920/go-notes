@@ -65,7 +65,7 @@ export default defineComponent({
         await $axios.post('/api/articles', params)
         router.push('/articles')
       } catch (err) {
-        console.log(err)
+        // console.log(err)
       }
     }
 

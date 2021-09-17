@@ -70,7 +70,7 @@ export default defineComponent({
       try {
         await $axios.put(`/api/articles/${id}`, params)
       } catch (err) {
-        console.log(err)
+        // console.log(err)
       }
     }
 
