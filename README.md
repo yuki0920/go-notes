@@ -100,7 +100,8 @@ $ docker-compose up
 ### テスト実行
 
 ```sh
-$ docker-compose run --rm api go test ./handler
+# ./... で階層指定
+$ docker-compose run --rm api go test ./... -v
 ```
 
 - テスト対象のディレクトリか関数を指定する

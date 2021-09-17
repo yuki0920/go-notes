@@ -53,7 +53,7 @@ export default defineComponent({
       const { data } = await $axios.get('/api/articles', { params: { cursor: cursor.value } })
       articles.value.push(...data.articles)
       cursor.value = data.cursor
-      console.log('cursor.value', cursor.value)
+      // console.log('cursor.value', cursor.value)
     }
 
     onMounted(async () => {

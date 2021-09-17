@@ -1,0 +1,62 @@
+name: Go-CI
+
+on: [push]
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: set up
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.16
+        id: go
+      - name: check out
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.cache/go-build
+            ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
+
+  build:
+    needs: setup
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./api
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: get dependencies
+        run: go get -v -t -d ./...
+      - name: build
+        run: go build ./...
+  test:
+    needs: setup
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./api
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: get dependencies
+        run: go get -v -t -d ./...
+      - name: test
+        run: go test ./... -v
+  lint:
+    needs: setup
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./api
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: get dependencies
+        run: go get -v -t -d ./...
+      - name: go-vet
+        run: go vet ./...
