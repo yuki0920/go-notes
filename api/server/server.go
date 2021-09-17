@@ -4,6 +4,7 @@ import (
 	"yuki0920/go-blog/handler"
 
 	"github.com/labstack/echo/v4"
+	"gopkg.in/go-playground/validator.v9"
 )
 
 func Router(e *echo.Echo) *echo.Echo {
@@ -22,4 +23,12 @@ func Router(e *echo.Echo) *echo.Echo {
 	e.GET("/api/sample", handler.ArticleSample)
 
 	return e
+}
+
+type CustomValidator struct {
+	Validator *validator.Validate
+}
+
+func (cv *CustomValidator) Validate(i interface{}) error {
+	return cv.Validator.Struct(i)
 }
