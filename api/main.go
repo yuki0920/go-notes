@@ -29,6 +29,7 @@ func main() {
 
 	router := server.Router(e)
 
+	// echoのインスタンスにカスタムバリデーターを登録する
 	router.Validator = &CustomValidator{validator: validator.New()}
 
 	// Webサーバーをポート番号 8080 で起動する

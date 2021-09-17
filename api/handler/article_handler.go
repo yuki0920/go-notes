@@ -118,6 +118,7 @@ func ArticleCreate(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, out)
 	}
 
+	// バインド後にバリデーションを実行
 	if err := c.Validate(&article); err != nil {
 		c.Logger().Error(err.Error())
 
