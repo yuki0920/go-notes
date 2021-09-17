@@ -1,0 +1,10 @@
+version: 2
+updates:
+  - package-ecosystem: "gomod"
+    directory: "./api"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "npm"
+    directory: "./front"
+    schedule:
+      interval: "monthly"
