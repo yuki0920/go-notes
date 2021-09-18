@@ -58,7 +58,7 @@ export default defineComponent({
     const article = reactive({ title: null, body: null })
     const router = useRouter()
 
-    const submit = async (event) => {
+    const submit = async (event: any) => {
       event.preventDefault()
       const params = { title: article.title, body: article.body }
       try {
