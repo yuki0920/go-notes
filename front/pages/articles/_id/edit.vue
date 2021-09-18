@@ -50,23 +50,23 @@
 
 <script lang="ts">
 import { defineComponent, onMounted, useRoute, useContext, ref } from '@nuxtjs/composition-api'
-
+import { Article } from '~/types/article'
 export default defineComponent({
   name: 'Articles',
   setup () {
     const route = useRoute()
     const id = route.value.params.id
     const { $axios } = useContext()
-    const article = ref(null)
+    const article = ref<Article | null>(null)
 
     onMounted(async () => {
       const { data } = await $axios.get(`/api/articles/${id}`)
       if (data) { article.value = data }
     })
 
-    const submit = async (event) => {
+    const submit = async (event: any) => {
       event.preventDefault()
-      const params = { title: article.value.title, body: article.value.body }
+      const params = { title: article.value?.title, body: article.value?.body }
       try {
         await $axios.put(`/api/articles/${id}`, params)
       } catch (err) {

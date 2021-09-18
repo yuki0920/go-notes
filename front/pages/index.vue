@@ -42,15 +42,19 @@
 
 <script lang="ts">
 import { defineComponent, ref, onMounted, useContext } from '@nuxtjs/composition-api'
-
+import { Article } from '~/types/article'
 export default defineComponent({
   name: 'TopPage',
   setup () {
-    const articles = ref([])
     const { $axios } = useContext()
+    const articles = ref<Article[]>([])
     const cursor = ref(0)
+    type Data = {
+      articles: Article[],
+      cursor: number
+    }
     const load = async () => {
-      const { data } = await $axios.get('/api/articles', { params: { cursor: cursor.value } })
+      const { data }: { data: Data } = await $axios.get('/api/articles', { params: { cursor: cursor.value } })
       articles.value.push(...data.articles)
       cursor.value = data.cursor
       // console.log('cursor.value', cursor.value)
