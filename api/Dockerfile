@@ -16,5 +16,3 @@ RUN GOOS=linux GOARCH=amd64 go build -o /main
 
 RUN go get -u github.com/cosmtrek/air
 RUN go get -u github.com/pressly/goose/v3/cmd/goose
-
-ENTRYPOINT ["/main"]
