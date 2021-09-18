@@ -27,6 +27,7 @@
 
 <script lang="ts">
 import { defineComponent, onMounted, useRoute, useContext, ref } from '@nuxtjs/composition-api'
+// @ts-ignore # NOTE: 型定義ファイルがないため
 import vueRemarkable from 'vue-remarkable'
 
 export default defineComponent({
