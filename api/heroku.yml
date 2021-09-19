@@ -12,4 +12,4 @@ build:
   docker:
     web: Dockerfile
 run:
-  web: /main # webプロセスでの実行コマンド
+  web: sh -c "make db-migrate && air"
