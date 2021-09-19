@@ -16,9 +16,6 @@ import (
 	"gopkg.in/go-playground/validator.v9"
 )
 
-// main 実行前にグローバル定数を宣言する
-const tmplPath = "src/template/"
-
 // main 実行前にグローバル変数を宣言する
 var db *sqlx.DB
 var e = createMux()
@@ -33,7 +30,7 @@ func main() {
 	router.Validator = &server.CustomValidator{Validator: validator.New()}
 
 	// Webサーバーをポート番号 8080 で起動する
-	port := os.Getenv("CONTAINER_PORT")
+	port := os.Getenv("PORT")
 	router.Logger.Fatal(router.Start(":" + port))
 }
 
