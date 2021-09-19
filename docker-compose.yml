@@ -29,7 +29,7 @@ services:
       - .env
     depends_on:
       - db
-    command: air
+    command: sh -c "make db-migrate && air"
 
   front:
     build:

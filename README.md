@@ -72,6 +72,10 @@ $ go mod download
 ### マイグレーション
 
 ```sh
+$ make db-migrate
+```
+
+```sh
 # コンテナに入る
 $ docker-compose run --rm api bash
 
