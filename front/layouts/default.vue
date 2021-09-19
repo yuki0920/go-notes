@@ -1,26 +1,8 @@
 <template>
   <div>
-    <header>
-      <div class="header">
-        <a class="header__logo" href="/">Go Notes</a>
-      </div>
-    </header>
-    <nuxt />
-    <footer>
-      <div class="footer">
-        <ul class="footer__menu">
-          <li class="footer__menu-item">
-            <a href="https://twitter.com/YukiWebTech">Twitter</a>
-          </li>
-          <li class="footer__menu-item">
-            <a href="https://github.com/yuki0920">GitHub</a>
-          </li>
-        </ul>
-        <div class="footer__copy-right">
-          © 2021 Go Notes
-        </div>
-      </div>
-    </footer>
+    <nav-bar />
+    <nuxt class="main-content" />
+    <footer-bar />
   </div>
 </template>
 
@@ -32,5 +14,10 @@ export default defineComponent({
   }
 })
 </script>
+
 <style lang="scss">
+.main-content {
+  // NOTE: ヘッダー56px、フッター70pxを引いている
+  min-height: calc(100vh - 56px - 70px);
+}
 </style>

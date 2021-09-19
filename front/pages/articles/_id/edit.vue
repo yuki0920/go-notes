@@ -17,6 +17,7 @@
               id="form-body"
               v-model="article.body"
               class="article-form__input article-form__input--body"
+              rows="20"
               name="body"
             />
           </div>
@@ -49,7 +50,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, useRoute, useContext, ref } from '@nuxtjs/composition-api'
+import { defineComponent, onMounted, useRoute, useRouter, useContext, ref } from '@nuxtjs/composition-api'
 import { Article } from '~/types/article'
 export default defineComponent({
   name: 'Articles',
@@ -57,6 +58,7 @@ export default defineComponent({
     const route = useRoute()
     const id = route.value.params.id
     const { $axios } = useContext()
+    const router = useRouter()
     const article = ref<Article | null>(null)
 
     onMounted(async () => {
@@ -69,6 +71,7 @@ export default defineComponent({
       const params = { title: article.value?.title, body: article.value?.body }
       try {
         await $axios.put(`/api/articles/${id}`, params)
+        router.push(`../${article.value?.id}`)
       } catch (err) {
         // console.log(err)
       }

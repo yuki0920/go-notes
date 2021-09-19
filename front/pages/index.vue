@@ -10,28 +10,21 @@
       <div class="page__articles">
         <div class="articles">
           <article v-for="(article, index) in articles" :key="index">
-            <nuxt-link class="articles__item" :to="`/articles/${article.id}`">
-              <div class="articles__item-title">
-                {{ article.title }}
-              </div>
+            <div class="articles__item">
+              <nuxt-link :to="`/articles/${article.id}`">
+                <div class="articles__item-title">
+                  {{ article.title }}
+                </div>
+              </nuxt-link>
               <div class="articles__item-date">
                 {{ article.created }}
               </div>
-              <button class="articles__item-delete">
-                <i class="fas fa-trash-alt" />
+              <button class="articles__item-delete btn">
+                <b-icon-trash style="font-size: 2rem; color: red;" />
               </button>
-            </nuxt-link>
+            </div>
           </article>
         </div>
-      </div>
-      <div class="articles__item-tmpl" style="display: none">
-        <article>
-          <a class="articles__item" href="">
-            <div class="articles__item-title" />
-            <div class="articles__item-date" />
-            <button class="articles__item-delete"><i class="fas fa-trash-alt" /></button>
-          </a>
-        </article>
       </div>
       <div v-if="cursor !== 1" class="page__more" @click="load">
         もっとみる
@@ -143,12 +136,5 @@ export default defineComponent({
 
 .articles__item-delete {
   grid-area: delete;
-  align-self: center;
-  background: #fe4d08;
-  color: #fff;
-  height: 28px;
-  width: 28px;
-  font-size: 16px;
-  border-radius: 4px;
 }
 </style>
