@@ -15,3 +15,28 @@
     </div>
   </footer>
 </template>
+
+<style lang="scss" scoped>
+.footer {
+  background: #fff;
+  padding: 4px 10%;
+  color: #222;
+  font-size: 16px;
+}
+
+.footer__menu {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.footer__menu-item {
+  list-style: none;
+  padding: 2px 4px;
+}
+
+.footer__copy-right {
+  text-align: center;
+  color: #bbb;
+}
+</style>
