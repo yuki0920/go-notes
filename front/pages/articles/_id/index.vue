@@ -5,7 +5,9 @@
         <h1 class="article__title">
           {{ article.title }}
         </h1>
-        <a class="article__edit btn--info" :href="`/articles/${article.id}/edit`">編集</a>
+        <nuxt-link class="article__edit btn--info" :to="`/articles/${article.id}/edit`">
+          編集
+        </nuxt-link>
         <div class="article__date">
           <div class="article__updated">
             更新: {{ article.updated }}

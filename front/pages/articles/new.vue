@@ -34,7 +34,7 @@
 
           <div class="article-form__footer">
             <button class="article-form__cancel btn--info">
-              <nuxt-link to="/articles">
+              <nuxt-link to="/">
                 キャンセル
               </nuxt-link>
             </button>
