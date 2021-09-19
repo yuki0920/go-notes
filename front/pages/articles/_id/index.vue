@@ -1,7 +1,7 @@
 <template>
   <div v-if="article" class="l-col l-row l-v-padd">
     <div class="article">
-      <div class="article__header">
+      <div class="article__header px-3 pt-1">
         <h1 class="article__title">
           {{ article.title }}
         </h1>
@@ -17,7 +17,7 @@
           </div>
         </div>
       </div>
-      <div class="article-body">
+      <div class="article-body px-3">
         <vue-remarkable>
           {{ article.body }}
         </vue-remarkable>
@@ -71,7 +71,6 @@ export default defineComponent({
 
 .article__header {
   grid-area: header;
-  padding: 16px 4% 16px;
   display: grid;
   align-items: center;
   grid-auto-rows: max-content;
