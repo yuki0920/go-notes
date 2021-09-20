@@ -20,6 +20,7 @@ func Router(e *echo.Echo) *echo.Echo {
 	e.PATCH("/api/articles/:articleID", handler.ArticleUpdateData)
 	e.PUT("/api/articles/:articleID", handler.ArticleUpdate)
 	e.GET("/api/articles/:articleID", handler.ArticleShow)
+	e.POST("/api/login", handler.Login)
 	e.GET("/api/sample", handler.ArticleSample)
 
 	return e

@@ -28,3 +28,14 @@ func UserCreate(user *model.User) (sql.Result, error) {
 
 	return res, nil
 }
+
+func UserGetByName(name string) (*model.User, error) {
+	query := `SELECT * FROM users WHERE name = ?;`
+
+	var user model.User
+	if err := db.Get(&user, query, name); err != nil {
+		return nil, err
+	}
+
+	return &user, nil
+}
