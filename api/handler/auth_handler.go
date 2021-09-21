@@ -30,6 +30,14 @@ func Login(c echo.Context) error {
 		return err
 	}
 
+	cookie := &http.Cookie{
+		Name:     "jwt",
+		Value:    token,
+		Expires:  time.Now().Add(time.Hour * 72),
+		HttpOnly: true,
+	}
+	c.SetCookie(cookie)
+
 	return c.JSON(http.StatusOK, echo.Map{
 		"token": token,
 	})

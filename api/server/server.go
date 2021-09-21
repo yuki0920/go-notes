@@ -24,20 +24,16 @@ func Router(e *echo.Echo) *echo.Echo {
 	e.POST("/api/login", handler.Login)
 	e.GET("/api/sample", handler.ArticleSample)
 
-	// TODO: 署名用キーは環境変数から取得する
-	// restricted
 	secret := os.Getenv("JWT_SECRET_KEY")
 	config := middleware.JWTConfig{
 		Claims:     &jwt.StandardClaims{},
 		SigningKey: []byte(secret),
 	}
 
-	// TODO: ルーティングにPOSTも含めたい
-	g := e.Group("/api/articles/:articleID")
-	g.Use(middleware.JWTWithConfig(config))
-	e.POST("/api/articles", handler.ArticleCreate)
-	e.DELETE("/api/articles/:articleID", handler.ArticleDelete)
-	e.PUT("/api/articles/:articleID", handler.ArticleUpdate)
+	m := middleware.JWTWithConfig(config)
+	e.POST("/api/articles", handler.ArticleCreate, m)
+	e.DELETE("/api/articles/:articleID", handler.ArticleDelete, m)
+	e.PUT("/api/articles/:articleID", handler.ArticleUpdate, m)
 
 	return e
 }
