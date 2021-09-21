@@ -1,12 +1,10 @@
 package server
 
 import (
-	"os"
 	"yuki0920/go-blog/handler"
+	"yuki0920/go-blog/middleware"
 
-	"github.com/golang-jwt/jwt"
 	"github.com/labstack/echo/v4"
-	"github.com/labstack/echo/v4/middleware"
 	"gopkg.in/go-playground/validator.v9"
 )
 
@@ -24,16 +22,10 @@ func Router(e *echo.Echo) *echo.Echo {
 	e.POST("/api/login", handler.Login)
 	e.GET("/api/sample", handler.ArticleSample)
 
-	secret := os.Getenv("JWT_SECRET_KEY")
-	config := middleware.JWTConfig{
-		Claims:     &jwt.StandardClaims{},
-		SigningKey: []byte(secret),
-	}
-
-	m := middleware.JWTWithConfig(config)
-	e.POST("/api/articles", handler.ArticleCreate, m)
-	e.DELETE("/api/articles/:articleID", handler.ArticleDelete, m)
-	e.PUT("/api/articles/:articleID", handler.ArticleUpdate, m)
+	// NOTE: IsAuthenticatedのカスタムミドルウェアを利用してクッキー内のJWTトークンの検証をしている
+	e.POST("/api/articles", handler.ArticleCreate, middleware.IsAuthenticated)
+	e.DELETE("/api/articles/:articleID", handler.ArticleDelete, middleware.IsAuthenticated)
+	e.PUT("/api/articles/:articleID", handler.ArticleUpdate, middleware.IsAuthenticated)
 
 	return e
 }

@@ -6,11 +6,23 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
+	"time"
+	"yuki0920/go-blog/handler"
 
 	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/assert"
 	"gopkg.in/go-playground/validator.v9"
 )
+
+func setDummyCookie(c echo.Context) error {
+	cookie := &http.Cookie{}
+	cookie.Name = "jwt"
+	dummyToken, _ := handler.GenerateJwtToken("dummy")
+	cookie.Value = dummyToken
+	cookie.Expires = time.Now().Add(24 * time.Hour)
+	c.SetCookie(cookie)
+	return nil
+}
 
 func TestSample(t *testing.T) {
 	e := echo.New()
@@ -49,6 +61,9 @@ func TestPutUnknownType(t *testing.T) {
 	// http.NewRequestのの第3引数にはio.Readerを指定するため、バイト列を渡す
 	paramsJson := bytes.NewBuffer([]byte(jsonStr))
 	req, _ := http.NewRequest("PUT", ts.URL+"/api/articles/1", paramsJson)
+	if err := setDummyCookie(e.NewContext(req, httptest.NewRecorder())); err != nil {
+		t.Fatalf("setDummyCookie failed: %s", err)
+	}
 	req.Header.Set("Content-Type", "application/json")
 	client := &http.Client{}
 
@@ -71,6 +86,9 @@ func TestPutNonTitle(t *testing.T) {
 	// http.NewRequestのの第3引数にはio.Readerを指定するため、バイト列を渡す
 	paramsJson := bytes.NewBuffer([]byte(jsonStr))
 	req, _ := http.NewRequest("PUT", ts.URL+"/api/articles/1", paramsJson)
+	if err := setDummyCookie(e.NewContext(req, httptest.NewRecorder())); err != nil {
+		t.Fatalf("setDummyCookie failed: %s", err)
+	}
 	req.Header.Set("Content-Type", "application/json")
 	client := &http.Client{}
 

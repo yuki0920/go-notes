@@ -234,11 +234,13 @@ func ArticleUpdateData(c echo.Context) error {
 }
 
 func ArticleUpdate(c echo.Context) error {
-	var article model.Article
 	var out ArticleUpdateOutput
+	var article model.Article
 
 	// フォームの内容を構造体にバインドする、構造体で設定した型と異なる場合はエラーになる
 	if err := c.Bind(&article); err != nil {
+		out.Message = err.Error()
+
 		return c.JSON(http.StatusBadRequest, out)
 	}
 
