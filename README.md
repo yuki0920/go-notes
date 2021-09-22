@@ -246,7 +246,13 @@ if ok {
 ### バックエンド
 
 - Access-Control-Allow-Origin ヘッダーを指定する。ワイルドカードを指定すると失敗する
-- Access-Control-Allow-Credentials ヘッダーを true に指定する
+- Access-Control-Allow-Credentials ヘッダーを true を指定する
+- Access-Control-Allow-Methods ヘッダーには許可するHTTPメソッドを指定する
+- SetCookie ヘッダーの属性に、
+  - SameSite に `none` を指定する
+  - Path に `/` を指定する
+  - Secure に `true` を指定する
+  - HttpOnly に `true` を指定する
 
 ### フロントエンド
 
