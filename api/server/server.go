@@ -15,6 +15,7 @@ func Router(e *echo.Echo) *echo.Echo {
 	e.GET("/api/articles/:articleID", handler.ArticleShow)
 
 	// NOTE: IsAuthenticatedのカスタムミドルウェアを利用してクッキー内のJWTトークンの検証をしている
+	e.POST("/api/logout", handler.Logout, middleware.IsAuthenticated)
 	e.POST("/api/articles", handler.ArticleCreate, middleware.IsAuthenticated)
 	e.DELETE("/api/articles/:articleID", handler.ArticleDelete, middleware.IsAuthenticated)
 	e.PUT("/api/articles/:articleID", handler.ArticleUpdate, middleware.IsAuthenticated)

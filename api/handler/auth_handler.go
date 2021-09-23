@@ -47,6 +47,25 @@ func Login(c echo.Context) error {
 	c.SetCookie(cookie)
 
 	return c.JSON(http.StatusOK, echo.Map{
-		"token": token,
+		"message": "login success",
+		"token":   token,
+	})
+}
+
+func Logout(c echo.Context) error {
+	cookie := &http.Cookie{
+		Name:     "jwt",
+		Value:    "",
+		Expires:  time.Now().Add(time.Hour * -1),
+		SameSite: http.SameSiteNoneMode,
+		Path:     "/",
+		Secure:   true,
+		HttpOnly: true,
+	}
+
+	c.SetCookie(cookie)
+
+	return c.JSON(http.StatusOK, echo.Map{
+		"message": "logout success",
 	})
 }
