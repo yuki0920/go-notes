@@ -241,3 +241,19 @@ if ok {
 - ログイン時:
   - `bcrypt`を利用して入力値の平文のパスワードとDBに保存されたハッシュ化済みのパスワードを比較し、検証をする
   - ユーザーIDと秘密鍵により、トークンを生成し返却する
+
+## SPAにおけるクッキーの設定
+### バックエンド
+
+- Access-Control-Allow-Origin ヘッダーを指定する。ワイルドカードを指定すると失敗する
+- Access-Control-Allow-Credentials ヘッダーを true を指定する
+- Access-Control-Allow-Methods ヘッダーには許可するHTTPメソッドを指定する
+- SetCookie ヘッダーの属性に、
+  - SameSite に `none` を指定する
+  - Path に `/` を指定する
+  - Secure に `true` を指定する
+  - HttpOnly に `true` を指定する
+
+### フロントエンド
+
+- withCredentials でリクエスト時にクッキーをサーバーに送信する
