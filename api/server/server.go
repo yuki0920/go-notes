@@ -9,18 +9,10 @@ import (
 )
 
 func Router(e *echo.Echo) *echo.Echo {
-	// unused
-	e.GET("/", handler.ArticleIndex)
-	e.GET("/articles", handler.ArticleIndex)
-	e.GET("/articles/new", handler.ArticleNew)
-	e.GET("/articles/:articleID", handler.ArticleShowData)
-	e.GET("/articles/:articleID/edit", handler.ArticleEdit)
-	e.GET("/api/articles", handler.ArticleList)
-	e.PATCH("/api/articles/:articleID", handler.ArticleUpdateData)
-
-	e.GET("/api/articles/:articleID", handler.ArticleShow)
 	e.POST("/api/login", handler.Login)
 	e.GET("/api/sample", handler.ArticleSample)
+	e.GET("/api/articles", handler.ArticleIndex)
+	e.GET("/api/articles/:articleID", handler.ArticleShow)
 
 	// NOTE: IsAuthenticatedのカスタムミドルウェアを利用してクッキー内のJWTトークンの検証をしている
 	e.POST("/api/articles", handler.ArticleCreate, middleware.IsAuthenticated)
