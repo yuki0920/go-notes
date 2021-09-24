@@ -15,6 +15,7 @@ func Router(e *echo.Echo) *echo.Echo {
 	e.GET("/api/articles/:articleID", handler.ArticleShow)
 
 	// NOTE: IsAuthenticatedのカスタムミドルウェアを利用してクッキー内のJWTトークンの検証をしている
+	//       検証が失敗したら、エラーを返してhandlerが実行されないようにする
 	e.POST("/api/logout", handler.Logout, middleware.IsAuthenticated)
 	e.POST("/api/articles", handler.ArticleCreate, middleware.IsAuthenticated)
 	e.DELETE("/api/articles/:articleID", handler.ArticleDelete, middleware.IsAuthenticated)
