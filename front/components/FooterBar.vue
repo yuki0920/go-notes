@@ -8,12 +8,16 @@
         <li class="footer__menu-item">
           <a href="https://github.com/yuki0920" target="_blank" rel="noopener">GitHub</a>
         </li>
-        <li class="footer__menu-item">
-          <nuxt-link to="/login">Log in</nuxt-link>
-        </li>
-        <li class="footer__menu-item">
-          <a href="javascript:void(0)" @click="logout">Log out</a>
-        </li>
+        <template v-if="isAuthenticated">
+          <li class="footer__menu-item">
+            <nuxt-link to="/articles/new">
+              New Article
+            </nuxt-link>
+          </li>
+          <li class="footer__menu-item">
+            <a href="javascript:void(0)" @click="logout">Log out</a>
+          </li>
+        </template>
       </ul>
       <div class="footer__copy-right">
         © 2021 Go Notes
@@ -23,20 +27,31 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, useContext } from '@nuxtjs/composition-api'
+import { defineComponent, useContext, useRouter, ref } from '@nuxtjs/composition-api'
 export default defineComponent({
   name: 'FooterBar',
   setup () {
     const { $axios } = useContext()
+    const router = useRouter()
+
+    const isAuthenticated = ref<Boolean>(false)
+    const auth = async () => {
+      const { data } = await $axios.get('/api/auth')
+      isAuthenticated.value = data.IsAuthenticated
+    }
+    auth()
+
     const logout = async () => {
       try {
         await $axios.post('/api/logout')
+        router.push('/')
       } catch (err) {
         // console.error(err)
       }
     }
 
     return {
+      isAuthenticated,
       logout
     }
   }

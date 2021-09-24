@@ -19,9 +19,9 @@
               <div class="articles__item-date">
                 {{ article.created }}
               </div>
-              <button class="articles__item-delete btn">
+              <!-- <button class="articles__item-delete btn">
                 <b-icon-trash style="font-size: 2rem; color: red;" />
-              </button>
+              </button> -->
             </div>
           </article>
         </div>
@@ -117,8 +117,8 @@ export default defineComponent({
   grid-column-gap: 16px;
   grid-row-gap: 4px;
   grid-template-areas:
-    'title delete'
-    'date delete';
+    'title'
+    'date';
   background: #fff;
   padding: 12px;
 }
@@ -134,7 +134,7 @@ export default defineComponent({
   color: #999;
 }
 
-.articles__item-delete {
-  grid-area: delete;
-}
+// .articles__item-delete {
+//   grid-area: delete;
+// }
 </style>

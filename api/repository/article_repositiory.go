@@ -18,7 +18,7 @@ func ArticleListByCursor(cursor int) ([]*model.Article, error) {
 	FROM articles
 	WHERE id < ?
 	ORDER BY id desc
-	LIMIT 1`
+	LIMIT 5`
 
 	// クエリ結果を格納するスライスを初期化 10 件取得のため、サイズとキャパシティを指定
 	articles := make([]*model.Article, 0, 10)
