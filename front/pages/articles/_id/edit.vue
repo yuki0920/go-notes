@@ -42,6 +42,9 @@
             <button id="article-form__save" class="article-form__save btn--primary" @click="submit">
               保存
             </button>
+            <button class="articles__item-delete btn">
+              <b-icon-trash style="font-size: 2rem; color: red;" />
+            </button>
           </div>
         </form>
       </div>
@@ -59,11 +62,17 @@ export default defineComponent({
     const id = route.value.params.id
     const { $axios } = useContext()
     const router = useRouter()
+
+    const isAuthenticated = ref<Boolean>(false)
     const article = ref<Article | null>(null)
 
     onMounted(async () => {
-      const { data } = await $axios.get(`/api/articles/${id}`)
-      if (data) { article.value = data }
+      const { data: articleData } = await $axios.get(`/api/articles/${id}`)
+      if (articleData) { article.value = articleData }
+      const { data: authData } = await $axios.get('/api/auth')
+
+      isAuthenticated.value = authData.IsAuthenticated
+      if (isAuthenticated.value === false) { router.push(`../${article.value?.id}`) }
     })
 
     const submit = async (event: any) => {

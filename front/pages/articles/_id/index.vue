@@ -5,9 +5,6 @@
         <h1 class="article__title">
           {{ article.title }}
         </h1>
-        <nuxt-link class="article__edit btn--info" :to="`/articles/${article.id}/edit`">
-          編集
-        </nuxt-link>
         <div class="article__date">
           <div class="article__updated">
             更新: {{ article.updated }}
@@ -78,17 +75,13 @@ export default defineComponent({
   grid-column-gap: 12px;
   grid-row-gap: 12px;
   grid-template-areas:
-    'title edit'
+    'title title'
     'date date';
 }
 
 .article__title {
   grid-area: title;
   font-size: 28px;
-}
-
-.article__edit {
-  grid-area: edit;
 }
 
 .article__date {
