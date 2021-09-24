@@ -4,9 +4,6 @@
       <h1 class="page__title">
         記事一覧
       </h1>
-      <nuxt-link class="page__new btn btn-dark" to="/articles/new">
-        新規
-      </nuxt-link>
       <div class="page__articles">
         <div class="articles">
           <article v-for="(article, index) in articles" :key="index">
@@ -72,7 +69,7 @@ export default defineComponent({
   grid-column-gap: 16px;
   grid-row-gap: 16px;
   grid-template-areas:
-    'title new'
+    'title title'
     'list list'
     'more more';
   padding: 16px 0;
@@ -80,10 +77,6 @@ export default defineComponent({
 
 .page__title {
   grid-area: title;
-}
-
-.page__new {
-  grid-area: new;
 }
 
 .page__articles {
