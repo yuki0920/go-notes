@@ -33,12 +33,12 @@
           </div> -->
 
           <div class="article-form__footer">
-            <button class="article-form__cancel btn--info">
+            <button class="article-form__cancel btn btn-secondary">
               <nuxt-link to="/">
                 キャンセル
               </nuxt-link>
             </button>
-            <button id="article-form__save" class="article-form__save btn--primary" @click="submit">
+            <button id="article-form__save" class="article-form__save btn btn-dark" @click="submit">
               保存
             </button>
           </div>

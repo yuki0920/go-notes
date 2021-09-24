@@ -36,29 +36,6 @@ h6 {
   padding: 0;
 }
 
-.btn--info {
-  border-radius: 4px;
-  padding: 4px 8px;
-  font-size: 16px;
-  background: #eee;
-  border: 1px solid #bbb;
-  color: #444;
-}
-
-.btn--primary {
-  border-radius: 4px;
-  padding: 4px 8px;
-  font-size: 16px;
-  background: #2e82e8;
-  border: 1px solid #2e82e8;
-  color: #fff;
-}
-
-.btn--info:focus,
-.btn--primary:focus {
-  outline: none;
-}
-
 *,
 *:before,
 *:after {

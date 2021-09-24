@@ -4,7 +4,7 @@
       <h1 class="page__title">
         記事一覧
       </h1>
-      <nuxt-link class="page__new btn--primary" to="/articles/new">
+      <nuxt-link class="page__new btn btn-dark" to="/articles/new">
         新規
       </nuxt-link>
       <div class="page__articles">
@@ -19,16 +19,13 @@
               <div class="articles__item-date">
                 {{ article.created }}
               </div>
-              <!-- <button class="articles__item-delete btn">
-                <b-icon-trash style="font-size: 2rem; color: red;" />
-              </button> -->
             </div>
           </article>
         </div>
       </div>
-      <div v-if="cursor !== 1" class="page__more" @click="load">
+      <button v-if="cursor !== 1" class="page__more btn btn-dark" @click="load">
         もっとみる
-      </div>
+      </button>
     </div>
   </div>
 </template>
@@ -95,13 +92,6 @@ export default defineComponent({
 
 .page__more {
   grid-area: more;
-  background: #2e82e8;
-  color: #fff;
-  text-align: center;
-  border-radius: 10px;
-  padding: 8px 0;
-  font-size: 20px;
-  cursor: pointer;
 }
 
 .articles {
@@ -133,8 +123,4 @@ export default defineComponent({
   font-size: 12px;
   color: #999;
 }
-
-// .articles__item-delete {
-//   grid-area: delete;
-// }
 </style>
