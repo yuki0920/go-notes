@@ -42,7 +42,7 @@ func createMux() *echo.Echo {
 
 	// ミドルウェア設定
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
-		AllowOrigins:     []string{"http://localhost:8008"},
+		AllowOrigins:     []string{os.Getenv("FRONT_URL")},
 		AllowMethods:     []string{http.MethodGet, http.MethodHead, http.MethodPut, http.MethodPatch, http.MethodPost, http.MethodDelete},
 		AllowCredentials: true,
 	}))

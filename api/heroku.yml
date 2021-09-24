@@ -7,7 +7,7 @@ setup:
     DB_HOST: us-cdbr-east-04.cleardb.com
     DB_NAME: heroku_ffbe5224532d0c3
     DSN: b1ff2fbc65bd01:98939b4c@tcp(us-cdbr-east-04.cleardb.com:3306)/heroku_ffbe5224532d0c3?charset=utf8&parseTime=true&loc=Asia%2FTokyo
-    FRONT_DOMAIN: 'golang-notes.netlify.app'
+    FRONT_URL: 'https://golang-notes.netlify.app'
     # JWT_SECRET_KEY: secret
 build:
   docker:
