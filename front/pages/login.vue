@@ -15,7 +15,7 @@
             <input id="form-password" v-model="password" class="article-form__input" type="password" name="password">
           </div>
           <div class="article-form__footer">
-            <button id="article-form__save" class="article-form__save btn--primary" @click="submit">
+            <button id="article-form__save" class="article-form__save btn btn-dark" @click="submit">
               ログイン
             </button>
           </div>
