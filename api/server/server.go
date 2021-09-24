@@ -10,6 +10,7 @@ import (
 
 func Router(e *echo.Echo) *echo.Echo {
 	e.POST("/api/login", handler.Login)
+	e.GET("/api/auth", handler.Auth)
 	e.GET("/api/sample", handler.ArticleSample)
 	e.GET("/api/articles", handler.ArticleIndex)
 	e.GET("/api/articles/:articleID", handler.ArticleShow)

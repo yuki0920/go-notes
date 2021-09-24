@@ -69,3 +69,21 @@ func Logout(c echo.Context) error {
 		"message": "logout success",
 	})
 }
+
+type AuthOutput struct {
+	IsAuthenticated bool
+}
+
+func Auth(c echo.Context) error {
+	var out AuthOutput
+	out.IsAuthenticated = true
+
+	cookie, err := c.Cookie("jwt")
+	if err != nil {
+		out.IsAuthenticated = false
+	} else if err := util.ParseJwt(cookie.Value); err != nil {
+		out.IsAuthenticated = false
+	}
+
+	return c.JSON(http.StatusOK, out)
+}
