@@ -62,8 +62,9 @@ export default defineComponent({
       event.preventDefault()
       const params = { title: article.title, body: article.body }
       try {
-        await $axios.post('/api/articles', params)
-        router.push('/')
+        const { data } = await $axios.post('/api/articles', params)
+        const id = data.Article.id
+        router.push(`/articles/${id}`)
       } catch (err) {
         // console.log(err)
       }

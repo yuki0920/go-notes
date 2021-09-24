@@ -12,6 +12,9 @@
           <div class="article__published">
             公開: {{ article.created }}
           </div>
+          <nuxt-link v-if="isAuthenticated" :to="`/articles/${articleId}/edit`">
+            編集
+          </nuxt-link>
         </div>
       </div>
       <div class="article-body px-3">
@@ -36,16 +39,23 @@ export default defineComponent({
   },
   setup () {
     const route = useRoute()
-    const id = route.value.params.id
     const { $axios } = useContext()
+
+    const articleId = route.value.params.id
+    const isAuthenticated = ref(false)
     const article = ref(null)
 
     onMounted(async () => {
-      const { data } = await $axios.get(`/api/articles/${id}`)
-      if (data) { article.value = data }
+      const { data: authData } = await $axios.get('/api/auth')
+      isAuthenticated.value = authData.IsAuthenticated
+
+      const { data: articleData } = await $axios.get(`/api/articles/${articleId}`)
+      if (articleData) { article.value = articleData }
     })
 
     return {
+      articleId,
+      isAuthenticated,
       article
     }
   }
