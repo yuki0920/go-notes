@@ -37,6 +37,8 @@ jobs:
   test:
     needs: setup
     runs-on: ubuntu-latest
+    env:
+      JWT_SECRET_KEY: secret
     defaults:
       run:
         working-directory: ./api
