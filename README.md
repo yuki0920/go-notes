@@ -15,7 +15,7 @@ Dockerfile で用意している
 $ go version
 go version go1.16.1 darwin/amd64
 $ mysql --version
-mysql  Ver 14.14 Distrib 5.6.51, for osx10.16 (x86_64) using  EditLine wrapper
+mysql  Ver 8.0.26 for Linux on x86_64 (MySQL Community Server - GPL)
 ```
 
 ## マイグレーションツール
