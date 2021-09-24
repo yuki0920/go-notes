@@ -54,7 +54,6 @@ export default defineComponent({
 
 <style lang='scss' scoped>
 .article {
-  background: #fff;
   overflow: hidden;
   width: 100%;
   display: grid;
