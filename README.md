@@ -1,72 +1,5 @@
 # Go製ブログサイト
 
-## 環境構築
-
-### VS Code用ツール群インストール
-
-1.  `command + shift + P` でコマンドパレットを表示
-2. コマンドパレットに go tool と入力して `Go: Install/Update Tools` を選択し、インストール
-
-## 言語、ミドルウェア
-
-Dockerfile で用意している
-
-```sh
-$ go version
-go version go1.16.1 darwin/amd64
-$ mysql --version
-mysql  Ver 8.0.26 for Linux on x86_64 (MySQL Community Server - GPL)
-```
-
-## マイグレーションツール
-
-```
-$ go get -u github.com/pressly/goose/v3/cmd/goose
-$ which goose
-/Users/yuki.watanabe/.goenv/shims/goose
-```
-
-## ホットリロードツール
-
-```sh
-$ go get -u github.com/cosmtrek/air
-$ which air
-/Users/yuki.watanabe/.goenv/shims/air
-# 初期化
-$ air init
-```
-
-## パッケージ管理
-
-
-### 初期化
-
-```sh
-$  go mod init $(git config user.name)/$(basename `pwd`)
-```
-
-### 依存管理
-
-
-参照しているパケージを整理する
-
-```sh
-$  go mod tidy
-```
-
-- ソースコードを検査して、どのような外部パッケージを利用しているかを判定する
-- ソースコード内で利用されている外部パッケージは go.mod と go.sum というファイルに書き出される
-- 直接的に利用しているパッケージは go.mod に、間接的に利用しているパッケージは go.sum に記載される
-- indirect というコメントは、直接依存しているモジュールではないことを表現している
-
-### ダウンロード
-
-```sh
-$ go mod download
-```
-
-- ダウンロードされた外部パッケージのソースコードは `$HOME/go/pkg/mod/` に配置される
-
 ## 起動
 
 ### マイグレーション
@@ -134,20 +67,94 @@ $ heroku git:remote -a app_name # herokuリポジトリをgit登録
 $ heroku addons:add cleardb:ignite # mysqlのアドオンを追加
 $ heroku config # CLEARDB_DATABASE_URLが登録されていることを確認
 $ heroku config:set DB_USER=b1ff2fbc65bd01 # その他、DB_PASSWORD,DB_PORT,DB_HOST,DB_NAMEも同様
-$ heroku stack:set container # heroku.ymlを使う時はこれがいるぽい
+$ heroku stack:set container # heroku.ymlを使う時に必要
 $ git push heroku master # デプロイ
 ```
 
 - `CLEARDB_DATABASE_URL` を DSN の型似合わせるため、ユーザー名などを環境変数として定義する
 - デプロイ後に `db/migrations` に移動して、環境変数 `DSN` を利用しマイグレーションを実行する `goose mysql $DSN up`
+## 開発環境構築準備
 
-## ディレクトリ構成
+### VS Code用ツール群インストール
+
+1.  `command + shift + P` でコマンドパレットを表示
+2. コマンドパレットに go tool と入力して `Go: Install/Update Tools` を選択し、インストール
+
+### 関数の定義ジャンプ
+
+- アプリケーションのソースコードだけでなく標準ライブラリも定義ジャンプできる
+
+## 言語、ミドルウェア
+
+Dockerfile で用意している
+
+```sh
+$ go version
+go version go1.16.1 darwin/amd64
+$ mysql --version
+mysql  Ver 8.0.26 for Linux on x86_64 (MySQL Community Server - GPL)
+```
+
+## マイグレーションツール
+
+```
+$ go get -u github.com/pressly/goose/v3/cmd/goose
+$ which goose
+/Users/yuki.watanabe/.goenv/shims/goose
+```
+
+## ホットリロードツール
+
+```sh
+$ go get -u github.com/cosmtrek/air
+$ which air
+/Users/yuki.watanabe/.goenv/shims/air
+# 初期化
+$ air init
+```
+
+## パッケージ管理
+
+
+### 初期化
+
+```sh
+$  go mod init $(git config user.name)/$(basename `pwd`)
+```
+
+### 依存管理
+
+
+参照しているパケージを整理する
+
+```sh
+$  go mod tidy
+```
+
+- ソースコードを検査して、どのような外部パッケージを利用しているかを判定する
+- ソースコード内で利用されている外部パッケージは go.mod と go.sum というファイルに書き出される
+- 直接的に利用しているパッケージは go.mod に、間接的に利用しているパッケージは go.sum に記載される
+- indirect というコメントは、直接依存しているモジュールではないことを表現している
+
+### ダウンロード
+
+```sh
+$ go mod download
+```
+
+- ダウンロードされた外部パッケージのソースコードは `$HOME/go/pkg/mod/` に配置される
+
+
+
+## ディレクトリ構成、設計
 
 - db: DB用の設定ファイルやマイグレーションスクリプトを配置する
 - model: データベースに保管されたデータをプログラム上においてどのようなデータ構造で利用するかを記述する
 - repository: データストアからデータを取得するための処理を記述する。クエリ結果をモデルに(GoのStruct)にマッピングし、モデルを返す
 - handler: ハンドラ関数(リクエストを受け取りレスポンスを返す関数)を記述する
-
+- server: リクエストとハンドラのマッピングをする(ルーティングの役割)
+- middleware: カスタムのミドルウェアを設定する
+- util: ドメインモデルとは関連のないヘルパー関数を配置する
 
 ## リクエストからレスポンスの流れ
 
@@ -217,25 +224,25 @@ if ok {
 
 ## JWTについて
 
-### 構成
+### JWTの構成
 
 - ヘッダ、ペイロード、署名からなり、 `ヘッダ.ペイロード.署名` となる
 - ヘッダ: 暗号アルゴリズムとトークンタイプ
 - ペイロード: JWT発行時刻、識別子
 - 署名: 署名なしトークン(`ヘッダ.ペイロード`)を暗号アルゴリズムと秘密鍵によって生成
 
-## 検証
+### 検証
 
 - JWTを署名なしトークンと署名に分離する
 - 署名なしトークンを復号化した値と署名を比較する
 
-## 認証での利用
+### 認証での利用
 
 - ユーザー登録時
   - `bcrypt`を利用してパスワードはハッシュ化してDBに保存する
   - APIはユーザーIDと秘密鍵により、トークンを生成し返却する
 - ユーザー情報取得時:
-  - ブラウザは`Authorization`ヘッダーにJWTを設定し、APIにリクエストする
+  - ブラウザはクッキーにJWTを入れAPIへのリクエスト時に送信する(`Authorization`ヘッダーにJWTを設定し、APIにリクエストする場合もある)
   - APIは秘密鍵を用いてトークンを検証する
   - トークンからユーザーIDを取得し、DBに問い合わせ、返却する
 - ログイン時:
