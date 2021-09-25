@@ -34,17 +34,17 @@
           </div> -->
 
           <div class="article-form__footer">
-            <button class="article-form__cancel btn btn-secondary">
+            <a href="javascript:void(0)" class="article-form__cancel btn btn-secondary">
               <nuxt-link :to="`../${article.id}`">
                 キャンセル
               </nuxt-link>
-            </button>
-            <button id="article-form__save" class="article-form__save btn btn-dark" @click="submit">
+            </a>
+            <a href="javascript:void(0)" id="article-form__save" class="article-form__save btn btn-dark" @click="submit">
               保存
-            </button>
-            <button class="articles__item-delete btn">
+            </a>
+            <a href="javascript:void(0)" class="articles__item-delete btn" @click="deleteArticle">
               <b-icon-trash style="font-size: 2rem; color: red;" />
-            </button>
+            </a>
           </div>
         </form>
       </div>
@@ -69,11 +69,20 @@ export default defineComponent({
     onMounted(async () => {
       const { data: articleData } = await $axios.get(`/api/articles/${id}`)
       if (articleData) { article.value = articleData }
-      const { data: authData } = await $axios.get('/api/auth')
 
+      const { data: authData } = await $axios.get('/api/auth')
       isAuthenticated.value = authData.IsAuthenticated
       if (isAuthenticated.value === false) { router.push(`../${article.value?.id}`) }
     })
+
+    const deleteArticle = async () => {
+      try {
+        await $axios.delete(`/api/articles/${id}`)
+        router.push('../../')
+      } catch (err) {
+        // console.error(err)
+      }
+    }
 
     const submit = async (event: any) => {
       event.preventDefault()
@@ -88,7 +97,8 @@ export default defineComponent({
 
     return {
       article,
-      submit
+      submit,
+      deleteArticle
     }
   }
 })
