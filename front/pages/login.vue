@@ -1,21 +1,19 @@
 <template>
   <div class="l-col l-row l-v-padd">
-    <div class="article-new l-row">
-      <div class="article-new__form l-row">
-        <!-- TODO: 入力フォームと共通化したい -->
-        <form class="article-form l-row" name="article-form" @submit.prevent>
-          <!-- TODO: TODO: エラーを表示したい -->
-          <div class="article-form__title">
-            <label class="article-form__label" for="form-name">名前</label>
-            <input id="form-name" v-model="name" class="article-form__input" type="text" name="name">
+    <div class="l-row">
+      <div class="l-row">
+        <form class="l-row" name="form" @submit.prevent>
+          <div>
+            <label for="form-name">名前</label>
+            <input id="form-name" v-model="name" type="text" name="name">
           </div>
 
-          <div class="article-form__body">
-            <label class="article-form__label" for="form-password">パスワード</label>
-            <input id="form-password" v-model="password" class="article-form__input" type="password" name="password">
+          <div>
+            <label for="form-password">パスワード</label>
+            <input id="form-password" v-model="password" type="password" name="password">
           </div>
-          <div class="article-form__footer">
-            <button id="article-form__save" class="article-form__save btn btn-dark" @click="submit">
+          <div>
+            <button id="form__save" class="btn btn-dark" @click="submit">
               ログイン
             </button>
           </div>

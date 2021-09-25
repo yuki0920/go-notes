@@ -1,21 +1,43 @@
 name: ESLint
 on: [push]
 jobs:
-  lint:
-    name: Run eslint
-    runs-on: ubuntu-latest
+  ci:
+    runs-on: ${{ matrix.os }}
     defaults:
       run:
         working-directory: ./front
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        node: [14]
     steps:
-      - uses: actions/checkout@v2
-      - name: yarn install
-        run: yarn install
-      - name: eslint review
-        uses: reviewdog/action-eslint@v1
+      - name: Checkout 🛎
+        uses: actions/checkout@master
+
+      - name: Setup node env 🏗
+        uses: actions/setup-node@v2.1.5
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          reporter: github-pr-review
-          eslint_flags: './**/*.{vue,ts,js}'
-      - name: Run eslint
+          node-version: ${{ matrix.node }}
+          check-latest: true
+
+      - name: Get yarn cache directory path 🛠
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+
+      - name: Cache node_modules 📦
+        uses: actions/cache@v2.1.4
+        id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      - name: Install dependencies 👨🏻‍💻
+        run: yarn
+
+      - name: Run linter 👀
         run: yarn lint
+
+      # - name: Run tests 🧪
+      #   run: yarn test
