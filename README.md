@@ -58,6 +58,8 @@ $ docker-compose run --rm api go test ./... -v
 $ make generate-api
 ```
 
+---以下、記事用のまとめ---
+
 ## Herokuへのデプロイについて
 
 ```sh
@@ -73,6 +75,7 @@ $ git push heroku master # デプロイ
 
 - `CLEARDB_DATABASE_URL` を DSN の型似合わせるため、ユーザー名などを環境変数として定義する
 - デプロイ後に `db/migrations` に移動して、環境変数 `DSN` を利用しマイグレーションを実行する `goose mysql $DSN up`
+
 ## 開発環境構築準備
 
 ### VS Code用ツール群インストール
@@ -83,6 +86,15 @@ $ git push heroku master # デプロイ
 ### 関数の定義ジャンプ
 
 - アプリケーションのソースコードだけでなく標準ライブラリも定義ジャンプできる
+
+### Repl
+
+```sh
+git clone https://github.com/x-motemen/gore.git
+cd gore
+docker build -t gore .
+docker run -it --rm gore --autoimport
+```
 
 ## 言語、ミドルウェア
 
