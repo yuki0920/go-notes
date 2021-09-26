@@ -13,7 +13,7 @@
             公開: {{ article.created }}
           </div>
         </div>
-        <nuxt-link class="text-muted" v-if="isAuthenticated" :to="`/articles/${articleId}/edit`">
+        <nuxt-link v-if="isAuthenticated" class="text-muted" :to="`/articles/${articleId}/edit`">
           編集
         </nuxt-link>
       </div>
