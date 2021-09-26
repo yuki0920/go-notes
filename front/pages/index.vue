@@ -18,7 +18,7 @@
           </div>
         </div>
       </article>
-      <button v-if="cursor !== 1" class="btn btn-dark" @click="load">
+      <button v-if="!finished" class="btn btn-dark" @click="load">
         もっとみる
       </button>
     </div>
@@ -34,15 +34,21 @@ export default defineComponent({
     const { $axios } = useContext()
     const articles = ref<Article[]>([])
     const cursor = ref(0)
+    const finished = ref(false)
+
     type Data = {
       articles: Article[],
       cursor: number
     }
     const load = async () => {
       const { data }: { data: Data } = await $axios.get('/api/articles', { params: { cursor: cursor.value } })
-      articles.value.push(...data.articles)
+      if (cursor.value === data.cursor) {
+        finished.value = true
+        return
+      }
+
       cursor.value = data.cursor
-      // console.log('cursor.value', cursor.value)
+      articles.value.push(...data.articles)
     }
 
     onMounted(async () => {
@@ -52,7 +58,8 @@ export default defineComponent({
     return {
       articles,
       cursor,
-      load
+      load,
+      finished
     }
   },
   head: {}
