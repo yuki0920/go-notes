@@ -1,26 +1,24 @@
 <template>
   <div class="l-col">
-    <div class="page">
-      <h1 class="page__title">
+    <div class="d-flex flex-column">
+      <h1>
         記事一覧
       </h1>
-      <div class="page__articles">
-        <div class="articles">
-          <article v-for="(article, index) in articles" :key="index">
-            <div class="articles__item">
-              <nuxt-link :to="`/articles/${article.id}`">
-                <div class="articles__item-title">
-                  {{ article.title }}
-                </div>
-              </nuxt-link>
-              <div class="articles__item-date">
-                {{ article.created }}
-              </div>
-            </div>
-          </article>
+      <article v-for="(article, index) in articles" :key="index">
+        <div class="p-2">
+          <nuxt-link :to="`/articles/${article.id}`">
+            <p class="h3">
+              {{ article.title }}
+            </p>
+          </nuxt-link>
+          <div>
+            <small class="text-muted">
+              {{ article.created }}
+            </small>
+          </div>
         </div>
-      </div>
-      <button v-if="cursor !== 1" class="page__more btn btn-dark" @click="load">
+      </article>
+      <button v-if="cursor !== 1" class="btn btn-dark" @click="load">
         もっとみる
       </button>
     </div>
@@ -61,59 +59,4 @@ export default defineComponent({
 })
 </script>
 <style lang="scss" scoped>
-.page {
-  display: grid;
-  align-items: center;
-  grid-auto-rows: max-content;
-  grid-template-columns: 1fr max-content;
-  grid-column-gap: 16px;
-  grid-row-gap: 16px;
-  grid-template-areas:
-    'title title'
-    'list list'
-    'more more';
-  padding: 16px 0;
-}
-
-.page__title {
-  grid-area: title;
-}
-
-.page__articles {
-  grid-area: list;
-}
-
-.page__more {
-  grid-area: more;
-}
-
-.articles {
-  display: grid;
-  grid-auto-rows: 1fr;
-  grid-row-gap: 16px;
-}
-
-.articles__item {
-  display: grid;
-  grid-auto-rows: max-content;
-  grid-template-columns: 1fr max-content;
-  grid-column-gap: 16px;
-  grid-row-gap: 4px;
-  grid-template-areas:
-    'title'
-    'date';
-  background: #fff;
-  padding: 12px;
-}
-
-.articles__item-title {
-  grid-area: title;
-  font-size: 20px;
-}
-
-.articles__item-date {
-  grid-area: date;
-  font-size: 12px;
-  color: #999;
-}
 </style>

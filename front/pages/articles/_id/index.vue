@@ -1,29 +1,28 @@
 <template>
   <div v-if="article" class="l-col l-row l-v-padd">
-    <div class="article">
-      <div class="article__header px-3 pt-1">
-        <h1 class="article__title">
+    <div>
+      <div class="px-3 pt-1 pb-3">
+        <h1>
           {{ article.title }}
         </h1>
-        <div class="article__date">
-          <div class="article__updated">
+        <div class="d-flex">
+          <div class="text-muted">
             更新: {{ article.updated }}
           </div>
-          <div class="article__published">
+          <div class="text-muted">
             公開: {{ article.created }}
           </div>
-          <nuxt-link v-if="isAuthenticated" :to="`/articles/${articleId}/edit`">
-            編集
-          </nuxt-link>
         </div>
+        <nuxt-link v-if="isAuthenticated" class="text-muted" :to="`/articles/${articleId}/edit`">
+          編集
+        </nuxt-link>
       </div>
-      <div class="article-body px-3">
+      <div class="px-3">
         <vue-remarkable>
           {{ article.body }}
         </vue-remarkable>
       </div>
     </div>
-    <div class="article-footer" />
   </div>
 </template>
 
@@ -63,47 +62,4 @@ export default defineComponent({
 </script>
 
 <style lang='scss' scoped>
-.article {
-  overflow: hidden;
-  width: 100%;
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: repeat(2, max-content);
-  grid-template-areas:
-    'header'
-    'body';
-  grid-row-gap: 36px;
-}
-
-.article__header {
-  grid-area: header;
-  display: grid;
-  align-items: center;
-  grid-auto-rows: max-content;
-  grid-template-columns: 1fr max-content;
-  grid-column-gap: 12px;
-  grid-row-gap: 12px;
-  grid-template-areas:
-    'title title'
-    'date date';
-}
-
-.article__title {
-  grid-area: title;
-  font-size: 28px;
-}
-
-.article__date {
-  grid-area: date;
-  display: grid;
-  grid-auto-rows: max-content;
-  grid-template-columns: max-content max-content;
-  grid-column-gap: 12px;
-  color: #777;
-  font-size: 12px;
-}
-
-.article__body {
-  grid-area: body;
-}
 </style>
