@@ -1,6 +1,6 @@
 <template>
-  <div class="header">
-    <nuxt-link class="header__logo" to="/">
+  <div class="bg-dark p-2">
+    <nuxt-link class="navbar-brand text-white" to="/">
       Go Notes
     </nuxt-link>
   </div>
@@ -14,13 +14,4 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.header {
-  background: #222;
-  padding: 16px;
-  color: #fff;
-}
-
-.header__logo {
-  color: #fff;
-}
 </style>
