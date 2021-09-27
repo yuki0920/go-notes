@@ -107,3 +107,8 @@ func ArticleUpdate(article *model.Article) (sql.Result, error) {
 
 	return res, nil
 }
+
+// 実装の詳細は infra パッケージ
+type ArticleRepository interface {
+	GetByID(id int) (*model.Article, error)
+}
