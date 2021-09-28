@@ -1,7 +1,6 @@
 package util
 
 import (
-	"fmt"
 	"os"
 	"time"
 
@@ -26,7 +25,7 @@ func ParseJwt(claim string) error {
 	_, err := jwt.ParseWithClaims(claim, &jwt.StandardClaims{}, func(token *jwt.Token) (interface{}, error) {
 		return []byte(os.Getenv("JWT_SECRET_KEY")), nil
 	})
-	fmt.Println(claim)
+
 	if err != nil {
 		return err
 	}

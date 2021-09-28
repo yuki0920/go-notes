@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"fmt"
 	"net/http"
 	"yuki0920/go-blog/util"
 
@@ -11,14 +12,20 @@ func IsAuthenticated(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		cookie, err := c.Cookie("jwt")
 		if err != nil {
+			message := "cookie is empty"
+			fmt.Println(message, err)
+
 			return c.JSON(http.StatusUnauthorized, echo.Map{
-				"message": "cookie is empty",
+				"message": message,
 			})
 		}
 
 		if err := util.ParseJwt(cookie.Value); err != nil {
+			message := "cookie parse failed"
+			fmt.Println(message, err)
+
 			return c.JSON(http.StatusUnauthorized, echo.Map{
-				"message": "cookie parse failed",
+				"message": message,
 			})
 		}
 
