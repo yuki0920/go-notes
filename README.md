@@ -173,9 +173,12 @@ $ go mod download
 ### 移行後
 
 - domain/model: ドメインモデル(構造体)、ドメインに即したメソッドを実装する
-- domain/repository: モデルの永続化を行うリポジトリ。インターフェースのみを実装する
+- domain/repository/{article,user}: usecaseから呼び出される。モデルの永続化を行うリポジトリ。インターフェースのみを実装する
 - infra/{article,user}: domain層のRepositoryで定義したinterfaceを満たすメソッドを実装する
-- infra/sqlhandler: データベースとのコネクション
+- infra/sqlhandler: データベースとのコネクションを生成する
+- usecase/{article,user}: handlerから呼び出される。ドメイン層で定義されたメソッドを呼び出すためのユースケース記述レベルの抽象度の高いコードを記載
+- handler/{article,user}: routerから呼び出される。リクエストで渡されたデータをusecase層へ渡す
+- injector: 各層に依存性を注入する。オブジェクトのコンストラクタを呼び出し、他のinject関数を使って注入する
 
 ## リクエストからレスポンスの流れ
 
