@@ -5,8 +5,8 @@ import (
 	"os"
 
 	database "yuki0920/go-blog/db"
+	"yuki0920/go-blog/handler"
 	"yuki0920/go-blog/repository"
-	"yuki0920/go-blog/server"
 
 	_ "github.com/go-sql-driver/mysql" // MySQLのドライバーを使う
 	"github.com/labstack/echo/v4"
@@ -26,10 +26,10 @@ func main() {
 
 	repository.SetDB(db)
 
-	router := server.Router(e)
+	router := handler.Router(e)
 
 	// echoのインスタンスにカスタムバリデーターを登録する
-	router.Validator = &server.CustomValidator{Validator: validator.New()}
+	router.Validator = &handler.CustomValidator{Validator: validator.New()}
 
 	// Webサーバーをポート番号 8080 で起動する
 	port := os.Getenv("PORT")
