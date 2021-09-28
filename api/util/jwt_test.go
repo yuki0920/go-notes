@@ -15,7 +15,7 @@ func TestGenerateJwtToken(t *testing.T) {
 }
 
 func TestParseJwtWithValidToken(t *testing.T) {
-	cookie := "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MzI3Mjk3NjEsImlzcyI6InVzZXIifQ.9NlQvzKYioB2um6NvB_ZpdKf9og5nRDb9oUzNAjkohk"
+	cookie := "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ1c2VyIn0.l5OzH8D-jhBGpWOaTICi65_Njdgq78TV6t_z-5JymtQ"
 
 	err := ParseJwt(cookie)
 	if err != nil {

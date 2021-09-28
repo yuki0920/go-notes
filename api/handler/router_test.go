@@ -74,7 +74,7 @@ func TestGetAuthWithCookie(t *testing.T) {
 
 	req, _ := http.NewRequest("GET", ts.URL+"/api/auth", nil)
 	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("Cookie", "jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MzI3Mjk3NjEsImlzcyI6InVzZXIifQ.9NlQvzKYioB2um6NvB_ZpdKf9og5nRDb9oUzNAjkohk;")
+	req.Header.Set("Cookie", "jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ1c2VyIn0.l5OzH8D-jhBGpWOaTICi65_Njdgq78TV6t_z-5JymtQ;")
 	client := &http.Client{}
 
 	res, err := client.Do(req)
@@ -125,7 +125,7 @@ func TestCreateArticleWithUnknownType(t *testing.T) {
 	paramsJson := bytes.NewBuffer([]byte(jsonStr))
 	req, _ := http.NewRequest("POST", ts.URL+"/api/articles", paramsJson)
 	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("Cookie", "jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MzI3Mjk3NjEsImlzcyI6InVzZXIifQ.9NlQvzKYioB2um6NvB_ZpdKf9og5nRDb9oUzNAjkohk;")
+	req.Header.Set("Cookie", "jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ1c2VyIn0.l5OzH8D-jhBGpWOaTICi65_Njdgq78TV6t_z-5JymtQ;")
 	client := &http.Client{}
 
 	res, err := client.Do(req)
@@ -148,7 +148,7 @@ func TestCreateArticleWithoutTitle(t *testing.T) {
 	paramsJson := bytes.NewBuffer([]byte(jsonStr))
 	req, _ := http.NewRequest("POST", ts.URL+"/api/articles", paramsJson)
 	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("Cookie", "jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MzI3Mjk3NjEsImlzcyI6InVzZXIifQ.9NlQvzKYioB2um6NvB_ZpdKf9og5nRDb9oUzNAjkohk;")
+	req.Header.Set("Cookie", "jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ1c2VyIn0.l5OzH8D-jhBGpWOaTICi65_Njdgq78TV6t_z-5JymtQ;")
 	client := &http.Client{}
 
 	res, err := client.Do(req)
@@ -189,7 +189,7 @@ func TestUpdateArticleWithUnknownType(t *testing.T) {
 	paramsJson := bytes.NewBuffer([]byte(jsonStr))
 	req, _ := http.NewRequest("PUT", ts.URL+"/api/articles/1", paramsJson)
 	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("Cookie", "jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MzI3Mjk3NjEsImlzcyI6InVzZXIifQ.9NlQvzKYioB2um6NvB_ZpdKf9og5nRDb9oUzNAjkohk;")
+	req.Header.Set("Cookie", "jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ1c2VyIn0.l5OzH8D-jhBGpWOaTICi65_Njdgq78TV6t_z-5JymtQ;")
 	client := &http.Client{}
 
 	res, err := client.Do(req)
@@ -212,7 +212,7 @@ func TestUpdateArticleWithoutTitle(t *testing.T) {
 	paramsJson := bytes.NewBuffer([]byte(jsonStr))
 	req, _ := http.NewRequest("PUT", ts.URL+"/api/articles/1", paramsJson)
 	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("Cookie", "jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MzI3Mjk3NjEsImlzcyI6InVzZXIifQ.9NlQvzKYioB2um6NvB_ZpdKf9og5nRDb9oUzNAjkohk;")
+	req.Header.Set("Cookie", "jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ1c2VyIn0.l5OzH8D-jhBGpWOaTICi65_Njdgq78TV6t_z-5JymtQ;")
 	client := &http.Client{}
 
 	res, err := client.Do(req)
