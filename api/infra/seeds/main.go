@@ -3,15 +3,15 @@ package main
 import (
 	"log"
 	"os"
-	database "yuki0920/go-blog/db"
 	"yuki0920/go-blog/domain/model"
+	"yuki0920/go-blog/infra"
 	"yuki0920/go-blog/repository"
 
 	_ "github.com/go-sql-driver/mysql" // MySQLのドライバーを使う
 )
 
 func main() {
-	db, err := database.ConnectDB()
+	db, err := infra.ConnectDB()
 	if err != nil {
 		log.Fatalf("db connection failed %v", err)
 	} else {

@@ -14,7 +14,8 @@ import (
 
 func TestSample(t *testing.T) {
 	e := echo.New()
-	ts := httptest.NewServer(Router(e))
+	Router(e)
+	ts := httptest.NewServer(e)
 	defer ts.Close()
 
 	res, err := http.Get(ts.URL + "/api/sample")
@@ -42,7 +43,8 @@ func TestSample(t *testing.T) {
 
 func TestGetAuthWithoutCookie(t *testing.T) {
 	e := echo.New()
-	ts := httptest.NewServer(Router(e))
+	Router(e)
+	ts := httptest.NewServer(e)
 	defer ts.Close()
 
 	req, _ := http.NewRequest("GET", ts.URL+"/api/auth", nil)
@@ -69,7 +71,8 @@ func TestGetAuthWithoutCookie(t *testing.T) {
 
 func TestGetAuthWithCookie(t *testing.T) {
 	e := echo.New()
-	ts := httptest.NewServer(Router(e))
+	Router(e)
+	ts := httptest.NewServer(e)
 	defer ts.Close()
 
 	req, _ := http.NewRequest("GET", ts.URL+"/api/auth", nil)
@@ -97,7 +100,8 @@ func TestGetAuthWithCookie(t *testing.T) {
 
 func TestCreateArticleWithoutCookie(t *testing.T) {
 	e := echo.New()
-	ts := httptest.NewServer(Router(e))
+	Router(e)
+	ts := httptest.NewServer(e)
 	defer ts.Close()
 
 	jsonStr := `{"title":"タイトル","body":"ボディ"}`
@@ -117,7 +121,8 @@ func TestCreateArticleWithoutCookie(t *testing.T) {
 
 func TestCreateArticleWithUnknownType(t *testing.T) {
 	e := echo.New()
-	ts := httptest.NewServer(Router(e))
+	Router(e)
+	ts := httptest.NewServer(e)
 	defer ts.Close()
 
 	jsonStr := `{"title":"タイトル","body":["ABC", "DEF"]}`
@@ -140,7 +145,8 @@ func TestCreateArticleWithoutTitle(t *testing.T) {
 	e := echo.New()
 	// アプリケーションサーバーの設定をテスト用サーバーでも設定しないと未定義で落ちる
 	e.Validator = &CustomValidator{Validator: validator.New()}
-	ts := httptest.NewServer(Router(e))
+	Router(e)
+	ts := httptest.NewServer(e)
 	defer ts.Close()
 
 	jsonStr := `{"title":"","body":"ボディ"}`
@@ -161,7 +167,8 @@ func TestCreateArticleWithoutTitle(t *testing.T) {
 
 func TestUpdateArticleWithoutCookie(t *testing.T) {
 	e := echo.New()
-	ts := httptest.NewServer(Router(e))
+	Router(e)
+	ts := httptest.NewServer(e)
 	defer ts.Close()
 
 	jsonStr := `{"title":"タイトル","body":"ボディ"}`
@@ -181,7 +188,8 @@ func TestUpdateArticleWithoutCookie(t *testing.T) {
 
 func TestUpdateArticleWithUnknownType(t *testing.T) {
 	e := echo.New()
-	ts := httptest.NewServer(Router(e))
+	Router(e)
+	ts := httptest.NewServer(e)
 	defer ts.Close()
 
 	jsonStr := `{"title":"タイトル","body":["ABC", "DEF"]}`
@@ -204,7 +212,8 @@ func TestUpdateArticleWithoutTitle(t *testing.T) {
 	e := echo.New()
 	// アプリケーションサーバーの設定をテスト用サーバーでも設定しないと未定義で落ちる
 	e.Validator = &CustomValidator{Validator: validator.New()}
-	ts := httptest.NewServer(Router(e))
+	Router(e)
+	ts := httptest.NewServer(e)
 	defer ts.Close()
 
 	jsonStr := `{"title":"","body":"ボディ"}`
@@ -225,7 +234,8 @@ func TestUpdateArticleWithoutTitle(t *testing.T) {
 
 func TestDeleteArticleWithoutCookie(t *testing.T) {
 	e := echo.New()
-	ts := httptest.NewServer(Router(e))
+	Router(e)
+	ts := httptest.NewServer(e)
 	defer ts.Close()
 
 	req, _ := http.NewRequest("DELETE", ts.URL+"/api/articles/1", nil)
