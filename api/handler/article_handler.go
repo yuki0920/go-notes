@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"strconv"
 
-	"yuki0920/go-blog/model"
-	"yuki0920/go-blog/repository"
+	"yuki0920/go-blog/domain/model"
+	"yuki0920/go-blog/infra"
 
 	"github.com/labstack/echo/v4"
 )
@@ -18,7 +18,7 @@ func ArticleIndex(c echo.Context) error {
 	cursor, _ = strconv.Atoi(c.QueryParam("cursor"))
 
 	// 引数にカーソルの値を渡して、ID のどの位置から 10 件取得するかを指定
-	articles, err := repository.ArticleListByCursor(cursor)
+	articles, err := infra.ArticleListByCursor(cursor)
 	if err != nil {
 		c.Logger().Error(err.Error())
 
@@ -42,7 +42,7 @@ func ArticleIndex(c echo.Context) error {
 func ArticleShow(c echo.Context) error {
 	id, _ := strconv.Atoi(c.Param("articleID"))
 
-	article, err := repository.ArticleGetByID(id)
+	article, err := infra.ArticleGetByID(id)
 	if err != nil {
 		c.Logger().Error(err.Error())
 
@@ -82,7 +82,7 @@ func ArticleCreate(c echo.Context) error {
 	}
 
 	// repository を呼び出して保存処理を実行
-	res, err := repository.ArticleCreate(&article)
+	res, err := infra.ArticleCreate(&article)
 	if err != nil {
 		c.Logger().Error(err.Error())
 
@@ -128,7 +128,7 @@ func ArticleUpdate(c echo.Context) error {
 	articleID, _ := strconv.Atoi(c.Param("articleID"))
 	article.ID = articleID
 
-	_, err := repository.ArticleUpdate(&article)
+	_, err := infra.ArticleUpdate(&article)
 	if err != nil {
 		out.Message = err.Error()
 
@@ -145,7 +145,7 @@ func ArticleDelete(c echo.Context) error {
 	// 文字列型で取得されるので、strconv パッケージを利用して数値型にキャスト
 	id, _ := strconv.Atoi(c.Param("articleID"))
 
-	if err := repository.ArticleDelete(id); err != nil {
+	if err := infra.ArticleDelete(id); err != nil {
 		c.Logger().Error(err.Error())
 
 		return c.JSON(http.StatusInternalServerError, "")

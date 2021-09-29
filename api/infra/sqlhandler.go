@@ -1,4 +1,4 @@
-package db
+package infra
 
 import (
 	"errors"
@@ -8,22 +8,32 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
-func ConnectDB() (*sqlx.DB, error) {
+type SqlHandler struct {
+	Conn *sqlx.DB
+}
+
+func NewSqlHandler() *SqlHandler {
 	// DSN(Data Source Name)は環境変数として定義している
 	dsn, err := dsn()
 	if err != nil {
-		return nil, err
+		panic(err.Error)
 	}
 
 	db, err := sqlx.Open("mysql", dsn)
 	if err != nil {
-		return nil, err
+		panic(err.Error)
 	}
 	if err := db.Ping(); err != nil {
-		return nil, err
+		panic(err.Error)
 	}
 
-	return db, nil
+	return &SqlHandler{Conn: db}
+}
+
+func ConnectDB() (*sqlx.DB, error) {
+	handler := NewSqlHandler()
+
+	return handler.Conn, nil
 }
 
 func dsn() (string, error) {

@@ -1,4 +1,4 @@
-package server
+package handler
 
 import (
 	"bytes"
@@ -14,7 +14,8 @@ import (
 
 func TestSample(t *testing.T) {
 	e := echo.New()
-	ts := httptest.NewServer(Router(e))
+	Router(e)
+	ts := httptest.NewServer(e)
 	defer ts.Close()
 
 	res, err := http.Get(ts.URL + "/api/sample")
@@ -42,7 +43,8 @@ func TestSample(t *testing.T) {
 
 func TestGetAuthWithoutCookie(t *testing.T) {
 	e := echo.New()
-	ts := httptest.NewServer(Router(e))
+	Router(e)
+	ts := httptest.NewServer(e)
 	defer ts.Close()
 
 	req, _ := http.NewRequest("GET", ts.URL+"/api/auth", nil)
@@ -69,12 +71,13 @@ func TestGetAuthWithoutCookie(t *testing.T) {
 
 func TestGetAuthWithCookie(t *testing.T) {
 	e := echo.New()
-	ts := httptest.NewServer(Router(e))
+	Router(e)
+	ts := httptest.NewServer(e)
 	defer ts.Close()
 
 	req, _ := http.NewRequest("GET", ts.URL+"/api/auth", nil)
 	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("Cookie", "jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MzI3Mjk3NjEsImlzcyI6InVzZXIifQ.9NlQvzKYioB2um6NvB_ZpdKf9og5nRDb9oUzNAjkohk;")
+	req.Header.Set("Cookie", "jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ1c2VyIn0.l5OzH8D-jhBGpWOaTICi65_Njdgq78TV6t_z-5JymtQ;")
 	client := &http.Client{}
 
 	res, err := client.Do(req)
@@ -97,7 +100,8 @@ func TestGetAuthWithCookie(t *testing.T) {
 
 func TestCreateArticleWithoutCookie(t *testing.T) {
 	e := echo.New()
-	ts := httptest.NewServer(Router(e))
+	Router(e)
+	ts := httptest.NewServer(e)
 	defer ts.Close()
 
 	jsonStr := `{"title":"タイトル","body":"ボディ"}`
@@ -117,7 +121,8 @@ func TestCreateArticleWithoutCookie(t *testing.T) {
 
 func TestCreateArticleWithUnknownType(t *testing.T) {
 	e := echo.New()
-	ts := httptest.NewServer(Router(e))
+	Router(e)
+	ts := httptest.NewServer(e)
 	defer ts.Close()
 
 	jsonStr := `{"title":"タイトル","body":["ABC", "DEF"]}`
@@ -125,7 +130,7 @@ func TestCreateArticleWithUnknownType(t *testing.T) {
 	paramsJson := bytes.NewBuffer([]byte(jsonStr))
 	req, _ := http.NewRequest("POST", ts.URL+"/api/articles", paramsJson)
 	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("Cookie", "jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MzI3Mjk3NjEsImlzcyI6InVzZXIifQ.9NlQvzKYioB2um6NvB_ZpdKf9og5nRDb9oUzNAjkohk;")
+	req.Header.Set("Cookie", "jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ1c2VyIn0.l5OzH8D-jhBGpWOaTICi65_Njdgq78TV6t_z-5JymtQ;")
 	client := &http.Client{}
 
 	res, err := client.Do(req)
@@ -140,7 +145,8 @@ func TestCreateArticleWithoutTitle(t *testing.T) {
 	e := echo.New()
 	// アプリケーションサーバーの設定をテスト用サーバーでも設定しないと未定義で落ちる
 	e.Validator = &CustomValidator{Validator: validator.New()}
-	ts := httptest.NewServer(Router(e))
+	Router(e)
+	ts := httptest.NewServer(e)
 	defer ts.Close()
 
 	jsonStr := `{"title":"","body":"ボディ"}`
@@ -148,7 +154,7 @@ func TestCreateArticleWithoutTitle(t *testing.T) {
 	paramsJson := bytes.NewBuffer([]byte(jsonStr))
 	req, _ := http.NewRequest("POST", ts.URL+"/api/articles", paramsJson)
 	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("Cookie", "jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MzI3Mjk3NjEsImlzcyI6InVzZXIifQ.9NlQvzKYioB2um6NvB_ZpdKf9og5nRDb9oUzNAjkohk;")
+	req.Header.Set("Cookie", "jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ1c2VyIn0.l5OzH8D-jhBGpWOaTICi65_Njdgq78TV6t_z-5JymtQ;")
 	client := &http.Client{}
 
 	res, err := client.Do(req)
@@ -161,7 +167,8 @@ func TestCreateArticleWithoutTitle(t *testing.T) {
 
 func TestUpdateArticleWithoutCookie(t *testing.T) {
 	e := echo.New()
-	ts := httptest.NewServer(Router(e))
+	Router(e)
+	ts := httptest.NewServer(e)
 	defer ts.Close()
 
 	jsonStr := `{"title":"タイトル","body":"ボディ"}`
@@ -181,7 +188,8 @@ func TestUpdateArticleWithoutCookie(t *testing.T) {
 
 func TestUpdateArticleWithUnknownType(t *testing.T) {
 	e := echo.New()
-	ts := httptest.NewServer(Router(e))
+	Router(e)
+	ts := httptest.NewServer(e)
 	defer ts.Close()
 
 	jsonStr := `{"title":"タイトル","body":["ABC", "DEF"]}`
@@ -189,7 +197,7 @@ func TestUpdateArticleWithUnknownType(t *testing.T) {
 	paramsJson := bytes.NewBuffer([]byte(jsonStr))
 	req, _ := http.NewRequest("PUT", ts.URL+"/api/articles/1", paramsJson)
 	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("Cookie", "jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MzI3Mjk3NjEsImlzcyI6InVzZXIifQ.9NlQvzKYioB2um6NvB_ZpdKf9og5nRDb9oUzNAjkohk;")
+	req.Header.Set("Cookie", "jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ1c2VyIn0.l5OzH8D-jhBGpWOaTICi65_Njdgq78TV6t_z-5JymtQ;")
 	client := &http.Client{}
 
 	res, err := client.Do(req)
@@ -204,7 +212,8 @@ func TestUpdateArticleWithoutTitle(t *testing.T) {
 	e := echo.New()
 	// アプリケーションサーバーの設定をテスト用サーバーでも設定しないと未定義で落ちる
 	e.Validator = &CustomValidator{Validator: validator.New()}
-	ts := httptest.NewServer(Router(e))
+	Router(e)
+	ts := httptest.NewServer(e)
 	defer ts.Close()
 
 	jsonStr := `{"title":"","body":"ボディ"}`
@@ -212,7 +221,7 @@ func TestUpdateArticleWithoutTitle(t *testing.T) {
 	paramsJson := bytes.NewBuffer([]byte(jsonStr))
 	req, _ := http.NewRequest("PUT", ts.URL+"/api/articles/1", paramsJson)
 	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("Cookie", "jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MzI3Mjk3NjEsImlzcyI6InVzZXIifQ.9NlQvzKYioB2um6NvB_ZpdKf9og5nRDb9oUzNAjkohk;")
+	req.Header.Set("Cookie", "jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ1c2VyIn0.l5OzH8D-jhBGpWOaTICi65_Njdgq78TV6t_z-5JymtQ;")
 	client := &http.Client{}
 
 	res, err := client.Do(req)
@@ -225,7 +234,8 @@ func TestUpdateArticleWithoutTitle(t *testing.T) {
 
 func TestDeleteArticleWithoutCookie(t *testing.T) {
 	e := echo.New()
-	ts := httptest.NewServer(Router(e))
+	Router(e)
+	ts := httptest.NewServer(e)
 	defer ts.Close()
 
 	req, _ := http.NewRequest("DELETE", ts.URL+"/api/articles/1", nil)

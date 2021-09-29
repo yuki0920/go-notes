@@ -3,7 +3,7 @@ package handler
 import (
 	"net/http"
 	"time"
-	"yuki0920/go-blog/repository"
+	"yuki0920/go-blog/infra"
 	"yuki0920/go-blog/util"
 
 	"github.com/labstack/echo/v4"
@@ -20,7 +20,7 @@ func Login(c echo.Context) error {
 	if err := c.Bind(&userParam); err != nil {
 		return c.JSON(http.StatusBadRequest, err)
 	}
-	user, err := repository.UserGetByName(userParam.Name)
+	user, err := infra.UserGetByName(userParam.Name)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, err)
 	}

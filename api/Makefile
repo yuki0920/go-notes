@@ -1,4 +1,4 @@
 ## db migrate
 db-migrate:
-	cd ./db/migrations
+	cd ./infra/migrations
 	goose mysql "${DSN}" up

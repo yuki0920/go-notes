@@ -4,9 +4,8 @@ import (
 	"net/http"
 	"os"
 
-	database "yuki0920/go-blog/db"
-	"yuki0920/go-blog/repository"
-	"yuki0920/go-blog/server"
+	"yuki0920/go-blog/handler"
+	"yuki0920/go-blog/infra"
 
 	_ "github.com/go-sql-driver/mysql" // MySQLのドライバーを使う
 	"github.com/labstack/echo/v4"
@@ -17,23 +16,22 @@ import (
 func main() {
 	e := createMux()
 
-	db, err := database.ConnectDB()
+	db, err := infra.ConnectDB()
 	if err != nil {
 		e.Logger.Fatal(err)
 	} else {
 		e.Logger.Info("db connection established")
 	}
 
-	repository.SetDB(db)
-
-	router := server.Router(e)
+	infra.SetDB(db)
+	handler.Router(e)
 
 	// echoのインスタンスにカスタムバリデーターを登録する
-	router.Validator = &server.CustomValidator{Validator: validator.New()}
+	e.Validator = &handler.CustomValidator{Validator: validator.New()}
 
 	// Webサーバーをポート番号 8080 で起動する
 	port := os.Getenv("PORT")
-	router.Logger.Fatal(router.Start(":" + port))
+	e.Logger.Fatal(e.Start(":" + port))
 }
 
 func createMux() *echo.Echo {

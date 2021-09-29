@@ -1,11 +1,10 @@
-package repository
+package infra
 
 import (
 	"database/sql"
 	"math"
 	"time"
-
-	"yuki0920/go-blog/model"
+	"yuki0920/go-blog/domain/model"
 )
 
 func ArticleListByCursor(cursor int) ([]*model.Article, error) {
