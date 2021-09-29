@@ -6,7 +6,6 @@ import (
 
 	"yuki0920/go-blog/handler"
 	"yuki0920/go-blog/infra"
-	"yuki0920/go-blog/repository"
 
 	_ "github.com/go-sql-driver/mysql" // MySQLのドライバーを使う
 	"github.com/labstack/echo/v4"
@@ -24,7 +23,7 @@ func main() {
 		e.Logger.Info("db connection established")
 	}
 
-	repository.SetDB(db)
+	infra.SetDB(db)
 	handler.Router(e)
 
 	// echoのインスタンスにカスタムバリデーターを登録する
