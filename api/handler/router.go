@@ -7,7 +7,7 @@ import (
 	"gopkg.in/go-playground/validator.v9"
 )
 
-func Router(e *echo.Echo) *echo.Echo {
+func Router(e *echo.Echo) {
 	e.POST("/api/login", Login)
 	e.GET("/api/auth", Auth)
 	e.GET("/api/sample", ArticleSample)
@@ -20,8 +20,6 @@ func Router(e *echo.Echo) *echo.Echo {
 	e.POST("/api/articles", ArticleCreate, middleware.IsAuthenticated)
 	e.DELETE("/api/articles/:articleID", ArticleDelete, middleware.IsAuthenticated)
 	e.PUT("/api/articles/:articleID", ArticleUpdate, middleware.IsAuthenticated)
-
-	return e
 }
 
 type CustomValidator struct {

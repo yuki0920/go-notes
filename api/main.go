@@ -25,15 +25,14 @@ func main() {
 	}
 
 	repository.SetDB(db)
-
-	router := handler.Router(e)
+	handler.Router(e)
 
 	// echoのインスタンスにカスタムバリデーターを登録する
-	router.Validator = &handler.CustomValidator{Validator: validator.New()}
+	e.Validator = &handler.CustomValidator{Validator: validator.New()}
 
 	// Webサーバーをポート番号 8080 で起動する
 	port := os.Getenv("PORT")
-	router.Logger.Fatal(router.Start(":" + port))
+	e.Logger.Fatal(e.Start(":" + port))
 }
 
 func createMux() *echo.Echo {
