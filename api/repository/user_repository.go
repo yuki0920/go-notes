@@ -3,8 +3,7 @@ package repository
 import (
 	"database/sql"
 	"time"
-
-	"yuki0920/go-blog/model"
+	"yuki0920/go-blog/domain/model"
 )
 
 func UserCreate(user *model.User) (sql.Result, error) {

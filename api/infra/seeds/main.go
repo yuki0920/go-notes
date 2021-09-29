@@ -4,7 +4,7 @@ import (
 	"log"
 	"os"
 	database "yuki0920/go-blog/db"
-	"yuki0920/go-blog/model"
+	"yuki0920/go-blog/domain/model"
 	"yuki0920/go-blog/repository"
 
 	_ "github.com/go-sql-driver/mysql" // MySQLのドライバーを使う

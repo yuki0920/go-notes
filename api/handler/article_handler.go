@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"strconv"
 
-	"yuki0920/go-blog/model"
+	"yuki0920/go-blog/domain/model"
 	"yuki0920/go-blog/repository"
 
 	"github.com/labstack/echo/v4"
