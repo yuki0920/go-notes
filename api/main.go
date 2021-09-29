@@ -4,8 +4,8 @@ import (
 	"net/http"
 	"os"
 
-	database "yuki0920/go-blog/db"
 	"yuki0920/go-blog/handler"
+	"yuki0920/go-blog/infra"
 	"yuki0920/go-blog/repository"
 
 	_ "github.com/go-sql-driver/mysql" // MySQLのドライバーを使う
@@ -17,7 +17,7 @@ import (
 func main() {
 	e := createMux()
 
-	db, err := database.ConnectDB()
+	db, err := infra.ConnectDB()
 	if err != nil {
 		e.Logger.Fatal(err)
 	} else {
