@@ -7,6 +7,7 @@ import (
 
 	"yuki0920/go-blog/domain/model"
 	"yuki0920/go-blog/infra"
+	"yuki0920/go-blog/usecase"
 
 	"github.com/labstack/echo/v4"
 )
@@ -162,4 +163,28 @@ func ArticleSample(c echo.Context) error {
 	article.Body = "Sample Article Body"
 
 	return c.JSON(http.StatusOK, article)
+}
+
+type ArticleHandler struct {
+	articleUsecase usecase.ArticleUsecase
+}
+
+func NewArticleHandler(articleUsecase usecase.ArticleUsecase) ArticleHandler {
+	return ArticleHandler{
+		articleUsecase: articleUsecase,
+	}
+}
+
+func (handler *ArticleHandler) Show() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		id, _ := strconv.Atoi(c.Param("articleID"))
+		article, err := handler.articleUsecase.GetById(id)
+		if err != nil {
+			c.Logger().Error(err.Error())
+
+			return c.JSON(http.StatusNoContent, err)
+		}
+
+		return c.JSON(http.StatusOK, article)
+	}
 }

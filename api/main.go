@@ -6,6 +6,7 @@ import (
 
 	"yuki0920/go-blog/handler"
 	"yuki0920/go-blog/infra"
+	"yuki0920/go-blog/injector"
 
 	_ "github.com/go-sql-driver/mysql" // MySQLのドライバーを使う
 	"github.com/labstack/echo/v4"
@@ -25,6 +26,9 @@ func main() {
 
 	infra.SetDB(db)
 	handler.Router(e)
+
+	articleHandler := injector.InjectArticleHandler()
+	handler.InitRouting(e, articleHandler)
 
 	// echoのインスタンスにカスタムバリデーターを登録する
 	e.Validator = &handler.CustomValidator{Validator: validator.New()}

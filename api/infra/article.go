@@ -5,6 +5,7 @@ import (
 	"math"
 	"time"
 	"yuki0920/go-blog/domain/model"
+	"yuki0920/go-blog/domain/repository"
 )
 
 func ArticleListByCursor(cursor int) ([]*model.Article, error) {
@@ -105,4 +106,27 @@ func ArticleUpdate(article *model.Article) (sql.Result, error) {
 	tx.Commit()
 
 	return res, nil
+}
+
+type ArticleRepository struct {
+	SqlHandler
+}
+
+func NewArticleRepository(sqlHandler SqlHandler) repository.ArticleRepository {
+	return &ArticleRepository{
+		SqlHandler: sqlHandler,
+	}
+}
+
+func (articleRepository *ArticleRepository) GetByID(id int) (*model.Article, error) {
+	query := `SELECT *
+	FROM articles
+	WHERE id = ?;`
+
+	var article model.Article
+	if err := articleRepository.SqlHandler.Conn.Get(&article, query, id); err != nil {
+		return nil, err
+	}
+
+	return &article, nil
 }

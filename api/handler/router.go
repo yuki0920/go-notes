@@ -29,3 +29,7 @@ type CustomValidator struct {
 func (cv *CustomValidator) Validate(i interface{}) error {
 	return cv.Validator.Struct(i)
 }
+
+func InitRouting(e *echo.Echo, articleHandler ArticleHandler) {
+	e.GET("/api/v2/articles/:articleID", articleHandler.Show())
+}
