@@ -118,7 +118,7 @@ func NewArticleRepository(sqlHandler SqlHandler) repository.ArticleRepository {
 	}
 }
 
-func (articleRepository *ArticleRepository) GetByID(id int) (*model.Article, error) {
+func (articleRepository *ArticleRepository) GetById(id int) (*model.Article, error) {
 	query := `SELECT *
 	FROM articles
 	WHERE id = ?;`
