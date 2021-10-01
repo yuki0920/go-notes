@@ -21,7 +21,7 @@ func NewArticleUsecase(articleRepo repository.ArticleRepository) ArticleUsecase 
 }
 
 func (usecase *articleUsecase) GetById(id int) (article *model.Article, err error) {
-	article, err = usecase.articleRepo.GetByID(id)
+	article, err = usecase.articleRepo.GetById(id)
 	if err != nil {
 		return nil, err
 	}
