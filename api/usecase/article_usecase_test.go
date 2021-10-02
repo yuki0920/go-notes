@@ -2,7 +2,7 @@ package usecase
 
 import (
 	"testing"
-	"yuki0920/go-blog/domain/model"
+	"yuki0920/go-notes/domain/model"
 
 	"github.com/bxcodec/faker"
 	"github.com/stretchr/testify/assert"

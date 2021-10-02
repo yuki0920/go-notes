@@ -1,4 +1,4 @@
-# go-blog
+# go-notes
 
 ## Build Setup
 

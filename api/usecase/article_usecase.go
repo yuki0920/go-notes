@@ -1,8 +1,8 @@
 package usecase
 
 import (
-	"yuki0920/go-blog/domain/model"
-	"yuki0920/go-blog/domain/repository"
+	"yuki0920/go-notes/domain/model"
+	"yuki0920/go-notes/domain/repository"
 )
 
 type ArticleUsecase interface {
