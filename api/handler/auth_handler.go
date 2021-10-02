@@ -3,8 +3,8 @@ package handler
 import (
 	"net/http"
 	"time"
-	"yuki0920/go-blog/infra"
-	"yuki0920/go-blog/util"
+	"yuki0920/go-notes/infra"
+	"yuki0920/go-notes/util"
 
 	"github.com/labstack/echo/v4"
 )

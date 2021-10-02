@@ -3,7 +3,7 @@ package infra
 import (
 	"database/sql"
 	"time"
-	"yuki0920/go-blog/domain/model"
+	"yuki0920/go-notes/domain/model"
 )
 
 func UserCreate(user *model.User) (sql.Result, error) {

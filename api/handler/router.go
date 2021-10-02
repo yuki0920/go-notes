@@ -1,7 +1,7 @@
 package handler
 
 import (
-	"yuki0920/go-blog/middleware"
+	"yuki0920/go-notes/middleware"
 
 	"github.com/labstack/echo/v4"
 	"gopkg.in/go-playground/validator.v9"

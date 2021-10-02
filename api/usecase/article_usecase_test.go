@@ -2,30 +2,25 @@ package usecase
 
 import (
 	"testing"
-	"yuki0920/go-blog/domain/model"
+	"yuki0920/go-notes/domain/model"
+
+	"github.com/bxcodec/faker"
+	"github.com/stretchr/testify/assert"
 )
 
 type mockRepository struct {}
 
 func (mockRepo *mockRepository) GetById(id int) (*model.Article, error) {
-	article := model.Article{
-		ID: id,
-		Title: "test",
-		Body: "test",
-	}
-	return &article, nil
+	var mockArticle model.Article
+	faker.FakeData(&mockArticle)
+
+	return &mockArticle, nil
 }
 
 func TestGetById(t *testing.T) {
 	mockRepo := &mockRepository{}
 	articleUsecase := NewArticleUsecase(mockRepo)
 
-	article, err := articleUsecase.GetById(10)
-	if err != nil {
-		t.Error(err)
-	}
-
-	if article.ID != 10 {
-		t.Error("title is not 10")
-	}
+	_, err := articleUsecase.GetById(10)
+	assert.NoError(t, err)
 }

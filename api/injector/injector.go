@@ -1,10 +1,10 @@
 package injector
 
 import (
-	"yuki0920/go-blog/domain/repository"
-	"yuki0920/go-blog/handler"
-	"yuki0920/go-blog/infra"
-	"yuki0920/go-blog/usecase"
+	"yuki0920/go-notes/domain/repository"
+	"yuki0920/go-notes/handler"
+	"yuki0920/go-notes/infra"
+	"yuki0920/go-notes/usecase"
 )
 
 func InjectDB() infra.SqlHandler {

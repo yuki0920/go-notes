@@ -3,7 +3,7 @@ package middleware
 import (
 	"fmt"
 	"net/http"
-	"yuki0920/go-blog/util"
+	"yuki0920/go-notes/util"
 
 	"github.com/labstack/echo/v4"
 )
