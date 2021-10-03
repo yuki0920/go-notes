@@ -32,4 +32,5 @@ func (cv *CustomValidator) Validate(i interface{}) error {
 
 func InitRouting(e *echo.Echo, articleHandler ArticleHandler) {
 	e.GET("/api/v2/articles/:articleID", articleHandler.Show())
+	e.GET("/api/v2/articles", articleHandler.Index())
 }
