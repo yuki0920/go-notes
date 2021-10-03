@@ -1,8 +1,9 @@
-package usecase
+package usecase_test
 
 import (
 	"testing"
 	"yuki0920/go-notes/domain/model"
+	"yuki0920/go-notes/usecase"
 
 	"github.com/bxcodec/faker"
 	"github.com/stretchr/testify/assert"
@@ -29,7 +30,7 @@ func (mockRepo *mockRepository) ListByCursor(cursor int) ([]*model.Article, erro
 
 func TestGetById(t *testing.T) {
 	mockRepo := &mockRepository{}
-	articleUsecase := NewArticleUsecase(mockRepo)
+	articleUsecase := usecase.NewArticleUsecase(mockRepo)
 
 	article, err := articleUsecase.GetById(10)
 	assert.NoError(t, err)
@@ -38,7 +39,7 @@ func TestGetById(t *testing.T) {
 
 func TestListByCursor(t *testing.T) {
 	mockRepo := &mockRepository{}
-	articleUsecase := NewArticleUsecase(mockRepo)
+	articleUsecase := usecase.NewArticleUsecase(mockRepo)
 
 	articles, err := articleUsecase.ListByCursor(10)
 	assert.NoError(t, err)
