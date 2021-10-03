@@ -12,47 +12,6 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-// ハンドラ関数という MVCにおけるコントローラーのアクションの位置づけ
-func ArticleIndex(c echo.Context) error {
-	var cursor int
-	// 文字列型で取得できるので strconv パッケージを用いて数値型にキャスト
-	cursor, _ = strconv.Atoi(c.QueryParam("cursor"))
-
-	// 引数にカーソルの値を渡して、ID のどの位置から 10 件取得するかを指定
-	articles, err := infra.ArticleListByCursor(cursor)
-	if err != nil {
-		c.Logger().Error(err.Error())
-
-		return c.JSON(http.StatusInternalServerError, "")
-	}
-
-	// 取得できた最後の記事の ID をカーソルとして設定
-	if len(articles) != 0 {
-		cursor = articles[len(articles)-1].ID
-	}
-
-	// キーはstring,値が配列とintなのでinterface{}にしている
-	data := map[string]interface{}{
-		"articles": articles,
-		"cursor":   cursor,
-	}
-
-	return c.JSON(http.StatusOK, data)
-}
-
-func ArticleShow(c echo.Context) error {
-	id, _ := strconv.Atoi(c.Param("articleID"))
-
-	article, err := infra.ArticleGetByID(id)
-	if err != nil {
-		c.Logger().Error(err.Error())
-
-		return c.NoContent(http.StatusInternalServerError)
-	}
-
-	return c.JSON(http.StatusOK, article)
-}
-
 type ArticleCreateOutput struct {
 	Article          *model.Article
 	Message          string
