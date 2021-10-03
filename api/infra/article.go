@@ -112,6 +112,8 @@ type ArticleRepository struct {
 	SqlHandler
 }
 
+// repository.ArticleRepository のインターフェースを返すことのみを保証している
+// つまり、インターフェースさえあれば、sqlHandler を使わず、DB に依存しないでモックすることが可能になる
 func NewArticleRepository(sqlHandler SqlHandler) repository.ArticleRepository {
 	return &ArticleRepository{
 		SqlHandler: sqlHandler,
@@ -129,4 +131,25 @@ func (articleRepository *ArticleRepository) GetById(id int) (*model.Article, err
 	}
 
 	return &article, nil
+}
+
+func (articleRepository *ArticleRepository) ListByCursor(cursor int) ([]*model.Article, error) {
+	// 引数で渡されたカーソルの値が 0 以下の場合は、代わりに int 型の最大値で置き換える
+	if cursor <= 0 {
+		cursor = math.MaxInt32
+	}
+
+	query := `SELECT *
+	FROM articles
+	WHERE id < ?
+	ORDER BY id desc
+	LIMIT 5`
+
+	// クエリ結果を格納するスライスを初期化 5 件取得のため、サイズとキャパシティを指定
+	articles := make([]*model.Article, 0, 5)
+	if err := articleRepository.SqlHandler.Conn.Select(&articles, query, cursor); err != nil {
+		return nil, err
+	}
+
+	return articles, nil
 }
