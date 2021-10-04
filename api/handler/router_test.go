@@ -209,10 +209,10 @@ func (usecase *mockArticleUsecase) Create(article *model.Article) (id int64, err
 
 func TestShow(t *testing.T) {
 	e := echo.New()
-	handler := ArticleHandler{
-		articleUsecase: &mockArticleUsecase{},
-	}
+	e.Validator = &CustomValidator{Validator: validator.New()}
+	handler := ArticleHandler{articleUsecase: &mockArticleUsecase{}}
 	InitRouting(e, handler)
+
 	ts := httptest.NewServer(e)
 	defer ts.Close()
 
@@ -230,10 +230,10 @@ func TestShow(t *testing.T) {
 
 func TestIndex(t *testing.T) {
 	e := echo.New()
-	handler := ArticleHandler{
-		articleUsecase: &mockArticleUsecase{},
-	}
+	e.Validator = &CustomValidator{Validator: validator.New()}
+	handler := ArticleHandler{articleUsecase: &mockArticleUsecase{}}
 	InitRouting(e, handler)
+
 	ts := httptest.NewServer(e)
 	defer ts.Close()
 
