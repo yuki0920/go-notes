@@ -153,3 +153,34 @@ func (articleRepository *ArticleRepository) ListByCursor(cursor int) ([]*model.A
 
 	return articles, nil
 }
+
+func (articleRepository *ArticleRepository) Create(article *model.Article) (int64, error) {
+	now := time.Now()
+
+	article.Created = now
+	article.Updated = now
+
+	query := `INSERT INTO articles (title, body, created, updated)
+	VALUES (:title, :body, :created, :updated);`
+
+	// トランザクションを開始
+	tx := articleRepository.SqlHandler.Conn.MustBegin()
+
+	// クエリ文字列内の「:title」「:body」「:created」「:updated」は構造体の値で置換される
+	// 構造体タグで指定してあるフィールドが対象となる ex)`db:"title"`
+	res, err := tx.NamedExec(query, article)
+	if err != nil {
+		tx.Rollback()
+
+		return 0, err
+	}
+
+	tx.Commit()
+
+	id, err := res.LastInsertId()
+	if err != nil {
+		return 0, err
+	}
+
+	return id, nil
+}

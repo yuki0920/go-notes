@@ -270,6 +270,10 @@ func (usecase *mockArticleUsecase) ListByCursor(cursor int) (articles []*model.A
 	return articles, err
 }
 
+func (usecase *mockArticleUsecase) Create(article *model.Article) (id int64, err error) {
+	return int64(article.ID), err
+}
+
 func TestShow(t *testing.T) {
 	e := echo.New()
 	handler := ArticleHandler{
