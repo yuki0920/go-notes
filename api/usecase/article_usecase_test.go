@@ -28,6 +28,10 @@ func (mockRepo *mockRepository) ListByCursor(cursor int) ([]*model.Article, erro
 	return mockArticles, nil
 }
 
+func (mockRepo *mockRepository) Create(article *model.Article) (int64, error) {
+	return int64(article.ID), nil
+}
+
 func TestGetById(t *testing.T) {
 	mockRepo := &mockRepository{}
 	articleUsecase := usecase.NewArticleUsecase(mockRepo)
@@ -44,4 +48,16 @@ func TestListByCursor(t *testing.T) {
 	articles, err := articleUsecase.ListByCursor(10)
 	assert.NoError(t, err)
 	assert.NotEmpty(t, articles)
+}
+
+func TestCreate(t *testing.T) {
+	mockRepo := &mockRepository{}
+	articleUsecase := usecase.NewArticleUsecase(mockRepo)
+
+	article := model.Article{}
+	faker.FakeData(&article)
+
+	id, err := articleUsecase.Create(&article)
+	assert.NoError(t, err)
+	assert.Equal(t, id, int64(article.ID))
 }
