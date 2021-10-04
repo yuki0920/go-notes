@@ -12,56 +12,6 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-type ArticleCreateOutput struct {
-	Article          *model.Article
-	Message          string
-	ValidationErrors []string
-}
-
-func ArticleCreate(c echo.Context) error {
-	// 送信されてくるフォームの内容を格納する構造体を宣言
-	var article model.Article
-
-	// レスポンスとして返却する構造体を宣言
-	var out ArticleCreateOutput
-
-	// フォームの内容を構造体にバインド
-	if err := c.Bind(&article); err != nil {
-		c.Logger().Error(err.Error())
-
-		return c.JSON(http.StatusBadRequest, out)
-	}
-
-	// バインド後にバリデーションを実行
-	if err := c.Validate(&article); err != nil {
-		c.Logger().Error(err.Error())
-
-		out.ValidationErrors = article.ValidationErrors(err)
-
-		return c.JSON(http.StatusUnprocessableEntity, out)
-	}
-
-	// repository を呼び出して保存処理を実行
-	res, err := infra.ArticleCreate(&article)
-	if err != nil {
-		c.Logger().Error(err.Error())
-
-		return c.JSON(http.StatusInternalServerError, out)
-	}
-
-	// SQL 実行結果から作成されたレコードの ID を取得
-	id, _ := res.LastInsertId()
-
-	// 構造体に ID をセット
-	article.ID = int(id)
-
-	// レスポンスの構造体に保存した記事のデータを格納
-	out.Article = &article
-
-	// JSONにパースしてレスポンスを返却
-	return c.JSON(http.StatusOK, out)
-}
-
 type ArticleUpdateOutput struct {
 	Article          *model.Article
 	Message          string
@@ -174,5 +124,55 @@ func (handler *ArticleHandler) Index() echo.HandlerFunc {
 		}
 
 		return c.JSON(http.StatusOK, data)
+	}
+}
+
+type ArticleCreateOutput struct {
+	Article          *model.Article
+	Message          string
+	ValidationErrors []string
+}
+
+func (handler *ArticleHandler) Create() echo.HandlerFunc {
+	return func (c echo.Context) error {
+		// 送信されてくるフォームの内容を格納する構造体を宣言
+		var article model.Article
+
+		// レスポンスとして返却する構造体を宣言
+		var out ArticleCreateOutput
+
+		// フォームの内容を構造体にバインド
+		if err := c.Bind(&article); err != nil {
+			c.Logger().Error(err.Error())
+
+			return c.JSON(http.StatusBadRequest, out)
+		}
+
+		// バインド後にバリデーションを実行
+		if err := c.Validate(&article); err != nil {
+			c.Logger().Error(err.Error())
+
+			out.ValidationErrors = article.ValidationErrors(err)
+
+			return c.JSON(http.StatusUnprocessableEntity, out)
+		}
+
+		// repository を呼び出して保存処理を実行
+		id, err := handler.articleUsecase.Create(&article)
+		if err != nil {
+			c.Logger().Error(err.Error())
+
+			return c.JSON(http.StatusInternalServerError, out)
+		}
+
+		// 構造体に ID をセット
+		article.ID = int(id)
+
+		// レスポンスの構造体に保存した記事のデータを格納
+		out.Article = &article
+
+		// JSONにパースしてレスポンスを返却
+		return c.JSON(http.StatusOK, out)
+
 	}
 }

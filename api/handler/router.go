@@ -15,7 +15,6 @@ func Router(e *echo.Echo) {
 	// NOTE: IsAuthenticatedのカスタムミドルウェアを利用してクッキー内のJWTトークンの検証をしている
 	//       検証が失敗したら、エラーを返して実行されないようにする
 	e.POST("/api/logout", Logout, middleware.IsAuthenticated)
-	e.POST("/api/articles", ArticleCreate, middleware.IsAuthenticated)
 	e.DELETE("/api/articles/:articleID", ArticleDelete, middleware.IsAuthenticated)
 	e.PUT("/api/articles/:articleID", ArticleUpdate, middleware.IsAuthenticated)
 }
@@ -31,4 +30,8 @@ func (cv *CustomValidator) Validate(i interface{}) error {
 func InitRouting(e *echo.Echo, articleHandler ArticleHandler) {
 	e.GET("/api/articles/:articleID", articleHandler.Show())
 	e.GET("/api/articles", articleHandler.Index())
+
+	// NOTE: IsAuthenticatedのカスタムミドルウェアを利用してクッキー内のJWTトークンの検証をしている
+	//       検証が失敗したら、エラーを返して実行されないようにする
+	e.POST("/api/articles", articleHandler.Create(), middleware.IsAuthenticated)
 }
