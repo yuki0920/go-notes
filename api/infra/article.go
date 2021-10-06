@@ -184,3 +184,27 @@ func (articleRepository *ArticleRepository) Create(article *model.Article) (int6
 
 	return id, nil
 }
+
+func (articleRepository *ArticleRepository) Update(article *model.Article) error {
+	now := time.Now()
+	article.Updated = now
+
+	query := `UPDATE articles
+	SET title = :title,
+			body = :body,
+			updated = :updated
+	WHERE id = :id;`
+
+	tx := articleRepository.SqlHandler.Conn.MustBegin()
+
+	// クエリ文字列内の :title, :body, :id には、第 2 引数の Article 構造体の Title, Body, ID が bind される
+	if _, err := tx.NamedExec(query, article); err != nil {
+		tx.Rollback()
+
+		return err
+	}
+
+	tx.Commit()
+
+	return nil
+}

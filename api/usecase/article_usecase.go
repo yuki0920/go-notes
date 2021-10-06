@@ -9,6 +9,7 @@ type ArticleUsecase interface {
 	GetById(id int) (article *model.Article, err error)
 	ListByCursor(cursor int) (articles []*model.Article, err error)
 	Create(article *model.Article) (int64, error)
+	Update(article *model.Article) error
 }
 
 // リポジトリを参照するのはユースケースからのみのため、小文字始まりのstructを作成
@@ -47,4 +48,13 @@ func (usecase *articleUsecase) Create(article *model.Article) (int64, error) {
 	}
 
 	return id, err
+}
+
+func (usecase *articleUsecase) Update(article *model.Article) error {
+	err := usecase.articleRepo.Update(article)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
