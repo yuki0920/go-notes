@@ -11,7 +11,18 @@
 - https://developers.freee.co.jp/entry/clean-architecture
 - https://nrslib.com/clean-architecture/
 
+## パターン
+
+### 知識集約
+
+- 値オブジェクト: システム固有の値を表現するために定義されたオブジェクト
+
 ## 用語
+
+### ドメイン
+
+- ドメインモデル: 概念の抽出
+- ドメインオブジェクト: ドメインモデルをソフトウェアで動作するモジュールとして表現したもの
 
 ### ユビキタス言語
 
