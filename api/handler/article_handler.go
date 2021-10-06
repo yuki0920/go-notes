@@ -12,44 +12,6 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-type ArticleUpdateOutput struct {
-	Article          *model.Article
-	Message          string
-	ValidationErrors []string
-}
-
-func ArticleUpdate(c echo.Context) error {
-	var out ArticleUpdateOutput
-	var article model.Article
-
-	// フォームの内容を構造体にバインドする、構造体で設定した型と異なる場合はエラーになる
-	if err := c.Bind(&article); err != nil {
-		out.Message = err.Error()
-
-		return c.JSON(http.StatusBadRequest, out)
-	}
-
-	// フォームの内容を検証する
-	if err := c.Validate(&article); err != nil {
-		out.ValidationErrors = article.ValidationErrors(err)
-		return c.JSON(http.StatusUnprocessableEntity, out)
-	}
-
-	articleID, _ := strconv.Atoi(c.Param("articleID"))
-	article.ID = articleID
-
-	_, err := infra.ArticleUpdate(&article)
-	if err != nil {
-		out.Message = err.Error()
-
-		return c.JSON(http.StatusInternalServerError, out)
-	}
-
-	out.Article = &article
-
-	return c.JSON(http.StatusOK, out)
-}
-
 func ArticleDelete(c echo.Context) error {
 	// パスパラメータから記事 ID を取得
 	// 文字列型で取得されるので、strconv パッケージを利用して数値型にキャスト
@@ -134,7 +96,7 @@ type ArticleCreateOutput struct {
 }
 
 func (handler *ArticleHandler) Create() echo.HandlerFunc {
-	return func (c echo.Context) error {
+	return func(c echo.Context) error {
 		// 送信されてくるフォームの内容を格納する構造体を宣言
 		var article model.Article
 
@@ -175,4 +137,45 @@ func (handler *ArticleHandler) Create() echo.HandlerFunc {
 		return c.JSON(http.StatusOK, out)
 
 	}
+}
+
+type ArticleUpdateOutput struct {
+	Article          *model.Article
+	Message          string
+	ValidationErrors []string
+}
+
+func (handler *ArticleHandler) Update() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		var out ArticleUpdateOutput
+		var article model.Article
+
+		// フォームの内容を構造体にバインドする、構造体で設定した型と異なる場合はエラーになる
+		if err := c.Bind(&article); err != nil {
+			out.Message = err.Error()
+
+			return c.JSON(http.StatusBadRequest, out)
+		}
+
+		// フォームの内容を検証する
+		if err := c.Validate(&article); err != nil {
+			out.ValidationErrors = article.ValidationErrors(err)
+			return c.JSON(http.StatusUnprocessableEntity, out)
+		}
+
+		articleID, _ := strconv.Atoi(c.Param("articleID"))
+		article.ID = articleID
+
+		err := handler.articleUsecase.Update(&article)
+		if err != nil {
+			out.Message = err.Error()
+
+			return c.JSON(http.StatusInternalServerError, out)
+		}
+
+		out.Article = &article
+
+		return c.JSON(http.StatusOK, out)
+	}
+
 }

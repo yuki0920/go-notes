@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-type mockRepository struct {}
+type mockRepository struct{}
 
 func (mockRepo *mockRepository) GetById(id int) (*model.Article, error) {
 	var mockArticle model.Article
@@ -30,6 +30,10 @@ func (mockRepo *mockRepository) ListByCursor(cursor int) ([]*model.Article, erro
 
 func (mockRepo *mockRepository) Create(article *model.Article) (int64, error) {
 	return int64(article.ID), nil
+}
+
+func (mockRepo *mockRepository) Update(article *model.Article) error {
+	return nil
 }
 
 func TestGetById(t *testing.T) {
@@ -60,4 +64,15 @@ func TestCreate(t *testing.T) {
 	id, err := articleUsecase.Create(&article)
 	assert.NoError(t, err)
 	assert.Equal(t, id, int64(article.ID))
+}
+
+func TestUpdate(t *testing.T) {
+	mockRepo := &mockRepository{}
+	articleUsecase := usecase.NewArticleUsecase(mockRepo)
+
+	article := model.Article{}
+	faker.FakeData(&article)
+
+	err := articleUsecase.Update(&article)
+	assert.NoError(t, err)
 }
