@@ -48,3 +48,26 @@ using (var connection = new SqlConnection(connectionString))
   // do something
 }
 ```
+
+## メソッド
+
+```c#
+class User
+{
+  private string name;
+
+  public User (string name) {
+    // ChangeName をパブリックメソッドとして公開
+    ChangeName
+  }
+
+  // 副作用のある関数
+  public void ChangeName(string nmae)
+  {
+    if (name == null) throw new ArgumentNullException(nameof(name));
+
+    this.name = name;
+  }
+
+}
+```
