@@ -1,31 +1,90 @@
-package usecase
+package usecase_test
 
 import (
 	"testing"
-	"yuki0920/go-blog/domain/model"
+	"yuki0920/go-notes/domain/model"
+	"yuki0920/go-notes/usecase"
+
+	"github.com/bxcodec/faker"
+	"github.com/stretchr/testify/assert"
 )
 
-type mockRepository struct {}
+type mockRepository struct{}
 
 func (mockRepo *mockRepository) GetById(id int) (*model.Article, error) {
-	article := model.Article{
-		ID: id,
-		Title: "test",
-		Body: "test",
-	}
-	return &article, nil
+	var mockArticle model.Article
+	faker.FakeData(&mockArticle)
+
+	return &mockArticle, nil
+}
+
+func (mockRepo *mockRepository) ListByCursor(cursor int) ([]*model.Article, error) {
+	var mockArticle model.Article
+	faker.FakeData(&mockArticle)
+
+	mockArticles := make([]*model.Article, 0)
+	mockArticles = append(mockArticles, &mockArticle)
+
+	return mockArticles, nil
+}
+
+func (mockRepo *mockRepository) Create(article *model.Article) (int64, error) {
+	return int64(article.ID), nil
+}
+
+func (mockRepo *mockRepository) Update(article *model.Article) error {
+	return nil
+}
+
+func (mockRepo *mockRepository) Delete(id int) error {
+	return nil
 }
 
 func TestGetById(t *testing.T) {
 	mockRepo := &mockRepository{}
-	articleUsecase := NewArticleUsecase(mockRepo)
+	articleUsecase := usecase.NewArticleUsecase(mockRepo)
 
 	article, err := articleUsecase.GetById(10)
-	if err != nil {
-		t.Error(err)
-	}
+	assert.NoError(t, err)
+	assert.NotNil(t, article)
+}
 
-	if article.ID != 10 {
-		t.Error("title is not 10")
-	}
+func TestListByCursor(t *testing.T) {
+	mockRepo := &mockRepository{}
+	articleUsecase := usecase.NewArticleUsecase(mockRepo)
+
+	articles, err := articleUsecase.ListByCursor(10)
+	assert.NoError(t, err)
+	assert.NotEmpty(t, articles)
+}
+
+func TestCreate(t *testing.T) {
+	mockRepo := &mockRepository{}
+	articleUsecase := usecase.NewArticleUsecase(mockRepo)
+
+	article := model.Article{}
+	faker.FakeData(&article)
+
+	id, err := articleUsecase.Create(&article)
+	assert.NoError(t, err)
+	assert.Equal(t, id, int64(article.ID))
+}
+
+func TestUpdate(t *testing.T) {
+	mockRepo := &mockRepository{}
+	articleUsecase := usecase.NewArticleUsecase(mockRepo)
+
+	article := model.Article{}
+	faker.FakeData(&article)
+
+	err := articleUsecase.Update(&article)
+	assert.NoError(t, err)
+}
+
+func TestDelete(t *testing.T) {
+	mockRepo := &mockRepository{}
+	articleUsecase := usecase.NewArticleUsecase(mockRepo)
+
+	err := articleUsecase.Delete(1)
+	assert.NoError(t, err)
 }

@@ -4,9 +4,9 @@ import (
 	"net/http"
 	"os"
 
-	"yuki0920/go-blog/handler"
-	"yuki0920/go-blog/infra"
-	"yuki0920/go-blog/injector"
+	"yuki0920/go-notes/handler"
+	"yuki0920/go-notes/infra"
+	"yuki0920/go-notes/injector"
 
 	_ "github.com/go-sql-driver/mysql" // MySQLのドライバーを使う
 	"github.com/labstack/echo/v4"

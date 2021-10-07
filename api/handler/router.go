@@ -1,7 +1,7 @@
 package handler
 
 import (
-	"yuki0920/go-blog/middleware"
+	"yuki0920/go-notes/middleware"
 
 	"github.com/labstack/echo/v4"
 	"gopkg.in/go-playground/validator.v9"
@@ -10,16 +10,10 @@ import (
 func Router(e *echo.Echo) {
 	e.POST("/api/login", Login)
 	e.GET("/api/auth", Auth)
-	e.GET("/api/sample", ArticleSample)
-	e.GET("/api/articles", ArticleIndex)
-	e.GET("/api/articles/:articleID", ArticleShow)
 
 	// NOTE: IsAuthenticatedのカスタムミドルウェアを利用してクッキー内のJWTトークンの検証をしている
 	//       検証が失敗したら、エラーを返して実行されないようにする
 	e.POST("/api/logout", Logout, middleware.IsAuthenticated)
-	e.POST("/api/articles", ArticleCreate, middleware.IsAuthenticated)
-	e.DELETE("/api/articles/:articleID", ArticleDelete, middleware.IsAuthenticated)
-	e.PUT("/api/articles/:articleID", ArticleUpdate, middleware.IsAuthenticated)
 }
 
 type CustomValidator struct {
@@ -31,5 +25,12 @@ func (cv *CustomValidator) Validate(i interface{}) error {
 }
 
 func InitRouting(e *echo.Echo, articleHandler ArticleHandler) {
-	e.GET("/api/v2/articles/:articleID", articleHandler.Show())
+	e.GET("/api/articles/:articleID", articleHandler.Show())
+	e.GET("/api/articles", articleHandler.Index())
+
+	// NOTE: IsAuthenticatedのカスタムミドルウェアを利用してクッキー内のJWTトークンの検証をしている
+	//       検証が失敗したら、エラーを返して実行されないようにする
+	e.POST("/api/articles", articleHandler.Create(), middleware.IsAuthenticated)
+	e.PUT("/api/articles/:articleID", articleHandler.Update(), middleware.IsAuthenticated)
+	e.DELETE("/api/articles/:articleID", articleHandler.Delete(), middleware.IsAuthenticated)
 }
