@@ -11,16 +11,6 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func ArticleSample(c echo.Context) error {
-	var article model.Article
-
-	article.ID = 1
-	article.Title = "Sample Article"
-	article.Body = "Sample Article Body"
-
-	return c.JSON(http.StatusOK, article)
-}
-
 type ArticleHandler struct {
 	articleUsecase usecase.ArticleUsecase
 }

@@ -10,7 +10,6 @@ import (
 func Router(e *echo.Echo) {
 	e.POST("/api/login", Login)
 	e.GET("/api/auth", Auth)
-	e.GET("/api/sample", ArticleSample)
 
 	// NOTE: IsAuthenticatedのカスタムミドルウェアを利用してクッキー内のJWTトークンの検証をしている
 	//       検証が失敗したら、エラーを返して実行されないようにする
