@@ -6,25 +6,10 @@ import (
 	"strconv"
 
 	"yuki0920/go-notes/domain/model"
-	"yuki0920/go-notes/infra"
 	"yuki0920/go-notes/usecase"
 
 	"github.com/labstack/echo/v4"
 )
-
-func ArticleDelete(c echo.Context) error {
-	// パスパラメータから記事 ID を取得
-	// 文字列型で取得されるので、strconv パッケージを利用して数値型にキャスト
-	id, _ := strconv.Atoi(c.Param("articleID"))
-
-	if err := infra.ArticleDelete(id); err != nil {
-		c.Logger().Error(err.Error())
-
-		return c.JSON(http.StatusInternalServerError, "")
-	}
-
-	return c.JSON(http.StatusOK, fmt.Sprintf("Article %d is deleted.", id))
-}
 
 func ArticleSample(c echo.Context) error {
 	var article model.Article
@@ -178,4 +163,20 @@ func (handler *ArticleHandler) Update() echo.HandlerFunc {
 		return c.JSON(http.StatusOK, out)
 	}
 
+}
+
+func (handler *ArticleHandler) Delete() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		// パスパラメータから記事 ID を取得
+		// 文字列型で取得されるので、strconv パッケージを利用して数値型にキャスト
+		id, _ := strconv.Atoi(c.Param("articleID"))
+
+		if err := handler.articleUsecase.Delete(id); err != nil {
+			c.Logger().Error(err.Error())
+
+			return c.JSON(http.StatusInternalServerError, "")
+		}
+
+		return c.JSON(http.StatusOK, fmt.Sprintf("Article %d is deleted.", id))
+	}
 }

@@ -15,7 +15,6 @@ func Router(e *echo.Echo) {
 	// NOTE: IsAuthenticatedのカスタムミドルウェアを利用してクッキー内のJWTトークンの検証をしている
 	//       検証が失敗したら、エラーを返して実行されないようにする
 	e.POST("/api/logout", Logout, middleware.IsAuthenticated)
-	e.DELETE("/api/articles/:articleID", ArticleDelete, middleware.IsAuthenticated)
 }
 
 type CustomValidator struct {
@@ -34,4 +33,5 @@ func InitRouting(e *echo.Echo, articleHandler ArticleHandler) {
 	//       検証が失敗したら、エラーを返して実行されないようにする
 	e.POST("/api/articles", articleHandler.Create(), middleware.IsAuthenticated)
 	e.PUT("/api/articles/:articleID", articleHandler.Update(), middleware.IsAuthenticated)
+	e.DELETE("/api/articles/:articleID", articleHandler.Delete(), middleware.IsAuthenticated)
 }

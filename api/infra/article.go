@@ -208,3 +208,17 @@ func (articleRepository *ArticleRepository) Update(article *model.Article) error
 
 	return nil
 }
+
+func (articleRepository *ArticleRepository) Delete(idn int) error {
+	query := `DELETE FROM articles WHERE id = ?;`
+
+	tx := articleRepository.SqlHandler.Conn.MustBegin()
+
+	if _, err := tx.Exec(query, idn); err != nil {
+		tx.Rollback()
+
+		return err
+	}
+
+	return tx.Commit()
+}

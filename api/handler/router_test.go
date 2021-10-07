@@ -100,24 +100,6 @@ func TestGetAuthWithCookie(t *testing.T) {
 	assert.JSONEq(t, authJSON, string(body))
 }
 
-func TestDeleteArticleWithoutCookie(t *testing.T) {
-	e := echo.New()
-	Router(e)
-	ts := httptest.NewServer(e)
-	defer ts.Close()
-
-	req, _ := http.NewRequest("DELETE", ts.URL+"/api/articles/1", nil)
-	req.Header.Set("Content-Type", "application/json")
-	client := &http.Client{}
-
-	res, err := client.Do(req)
-	if err != nil {
-		t.Fatalf("http.Put failed: %s", err)
-	}
-
-	assert.Equal(t, http.StatusUnauthorized, res.StatusCode)
-}
-
 type mockArticleUsecase struct{}
 
 func (usecase *mockArticleUsecase) GetById(id int) (article *model.Article, err error) {
@@ -141,6 +123,10 @@ func (usecase *mockArticleUsecase) Create(article *model.Article) (id int64, err
 }
 
 func (usecase *mockArticleUsecase) Update(article *model.Article) (err error) {
+	return err
+}
+
+func (usecase *mockArticleUsecase) Delete(id int) (err error) {
 	return err
 }
 
@@ -379,4 +365,43 @@ func TestUpdateArticleWithoutTitle(t *testing.T) {
 	}
 
 	assert.Equal(t, http.StatusUnprocessableEntity, res.StatusCode)
+}
+
+func TestDelete(t *testing.T) {
+	e := echo.New()
+	e.Validator = &CustomValidator{Validator: validator.New()}
+	handler := ArticleHandler{articleUsecase: &mockArticleUsecase{}}
+	InitRouting(e, handler)
+
+	ts := httptest.NewServer(e)
+	defer ts.Close()
+
+	req, _ := http.NewRequest("DELETE", ts.URL+"/api/articles/1", nil)
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Cookie", "jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ1c2VyIn0.l5OzH8D-jhBGpWOaTICi65_Njdgq78TV6t_z-5JymtQ;")
+	client := &http.Client{}
+
+	res, err := client.Do(req)
+
+	assert.NoError(t, err)
+	assert.Equal(t, http.StatusOK, res.StatusCode)
+}
+
+func TestDeleteArticleWithoutCookie(t *testing.T) {
+	e := echo.New()
+	e.Validator = &CustomValidator{Validator: validator.New()}
+	handler := ArticleHandler{articleUsecase: &mockArticleUsecase{}}
+	InitRouting(e, handler)
+
+	ts := httptest.NewServer(e)
+	defer ts.Close()
+
+	req, _ := http.NewRequest("DELETE", ts.URL+"/api/articles/1", nil)
+	req.Header.Set("Content-Type", "application/json")
+	client := &http.Client{}
+
+	res, err := client.Do(req)
+
+	assert.NoError(t, err)
+	assert.Equal(t, http.StatusUnauthorized, res.StatusCode)
 }
