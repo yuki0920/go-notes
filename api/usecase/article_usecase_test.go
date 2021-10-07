@@ -36,6 +36,10 @@ func (mockRepo *mockRepository) Update(article *model.Article) error {
 	return nil
 }
 
+func (mockRepo *mockRepository) Delete(id int) error {
+	return nil
+}
+
 func TestGetById(t *testing.T) {
 	mockRepo := &mockRepository{}
 	articleUsecase := usecase.NewArticleUsecase(mockRepo)
@@ -74,5 +78,13 @@ func TestUpdate(t *testing.T) {
 	faker.FakeData(&article)
 
 	err := articleUsecase.Update(&article)
+	assert.NoError(t, err)
+}
+
+func TestDelete(t *testing.T) {
+	mockRepo := &mockRepository{}
+	articleUsecase := usecase.NewArticleUsecase(mockRepo)
+
+	err := articleUsecase.Delete(1)
 	assert.NoError(t, err)
 }
