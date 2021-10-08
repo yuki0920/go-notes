@@ -71,3 +71,21 @@ class User
 
 }
 ```
+
+```c#
+public class UserApplicationService
+{
+  // IUserRepositoryのインターフェースを満たしたuserRepositoryをプライベードに定義
+  private readonly IUserRepository userRepository;
+
+  //do something
+
+  // Userクラスのインスタンスを返すGetメソッドを定義する
+  public User Get(string userId)
+  {
+    var targetId = new UserId(userId);
+    var user = userRepository.Find(targetId);
+    return user;
+  }
+}
+```
