@@ -27,9 +27,7 @@ func main() {
 	infra.SetDB(db)
 	handler.Router(e)
 
-	articleHandler := injector.InjectArticleHandler()
-	handler.InitRouting(e, articleHandler)
-
+	setupRouting(e)
 	// echoのインスタンスにカスタムバリデーターを登録する
 	e.Validator = &handler.CustomValidator{Validator: validator.New()}
 
@@ -54,4 +52,9 @@ func createMux() *echo.Echo {
 
 	// インスタンス返却
 	return e
+}
+
+func setupRouting(e *echo.Echo) {
+	articleHandler := injector.InjectArticleHandler()
+	handler.InitArticleRouting(e, articleHandler)
 }

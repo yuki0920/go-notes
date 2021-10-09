@@ -24,7 +24,7 @@ func (cv *CustomValidator) Validate(i interface{}) error {
 	return cv.Validator.Struct(i)
 }
 
-func InitRouting(e *echo.Echo, articleHandler ArticleHandler) {
+func InitArticleRouting(e *echo.Echo, articleHandler ArticleHandler) {
 	e.GET("/api/articles/:articleID", articleHandler.Show())
 	e.GET("/api/articles", articleHandler.Index())
 
