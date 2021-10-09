@@ -57,4 +57,7 @@ func createMux() *echo.Echo {
 func setupRouting(e *echo.Echo) {
 	articleHandler := injector.InjectArticleHandler()
 	handler.InitArticleRouting(e, articleHandler)
+
+	authHandler := injector.InjectAuthHandler()
+	handler.InitAuthRouting(e, authHandler)
 }

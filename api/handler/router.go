@@ -8,7 +8,6 @@ import (
 )
 
 func Router(e *echo.Echo) {
-	e.POST("/api/login", Login)
 	e.GET("/api/auth", Auth)
 
 	// NOTE: IsAuthenticatedのカスタムミドルウェアを利用してクッキー内のJWTトークンの検証をしている
@@ -33,4 +32,8 @@ func InitArticleRouting(e *echo.Echo, articleHandler ArticleHandler) {
 	e.POST("/api/articles", articleHandler.Create(), middleware.IsAuthenticated)
 	e.PUT("/api/articles/:articleID", articleHandler.Update(), middleware.IsAuthenticated)
 	e.DELETE("/api/articles/:articleID", articleHandler.Delete(), middleware.IsAuthenticated)
+}
+
+func InitAuthRouting(e *echo.Echo, authHandler AuthHandler) {
+	e.POST("/api/login", authHandler.Create())
 }
