@@ -25,18 +25,12 @@ func TestGetAuthWithoutCookie(t *testing.T) {
 	client := &http.Client{}
 
 	res, err := client.Do(req)
-	if err != nil {
-		t.Fatalf("http.Put failed: %s", err)
-	}
-
+	assert.NoError(t, err)
 	assert.Equal(t, http.StatusOK, res.StatusCode)
 
 	body, err := ioutil.ReadAll(res.Body)
 	res.Body.Close()
-	if err != nil {
-		t.Fatalf("ioutil.ReadAll body failed: %s", err)
-	}
-
+	assert.NoError(t, err)
 	authJSON := `{"IsAuthenticated":false}`
 
 	assert.JSONEq(t, authJSON, string(body))
@@ -54,18 +48,12 @@ func TestGetAuthWithCookie(t *testing.T) {
 	client := &http.Client{}
 
 	res, err := client.Do(req)
-	if err != nil {
-		t.Fatalf("http.Put failed: %s", err)
-	}
-
+	assert.NoError(t, err)
 	assert.Equal(t, http.StatusOK, res.StatusCode)
 
 	body, err := ioutil.ReadAll(res.Body)
 	res.Body.Close()
-	if err != nil {
-		t.Fatalf("ioutil.ReadAll body failed: %s", err)
-	}
-
+	assert.NoError(t, err)
 	authJSON := `{"IsAuthenticated":true}`
 
 	assert.JSONEq(t, authJSON, string(body))
@@ -185,7 +173,6 @@ func TestArticleCreate(t *testing.T) {
 	handler := ArticleHandler{articleUsecase: &mockArticleUsecase{}}
 	InitArticleRouting(e, handler)
 
-	InitArticleRouting(e, handler)
 	ts := httptest.NewServer(e)
 	defer ts.Close()
 
@@ -220,10 +207,7 @@ func TestArticleCreateArticleWithoutCookie(t *testing.T) {
 	client := &http.Client{}
 
 	res, err := client.Do(req)
-	if err != nil {
-		t.Fatalf("http.Post failed: %s", err)
-	}
-
+	assert.NoError(t, err)
 	assert.Equal(t, http.StatusUnauthorized, res.StatusCode)
 }
 
@@ -245,10 +229,7 @@ func TestArticleCreateArticleWithUnknownType(t *testing.T) {
 	client := &http.Client{}
 
 	res, err := client.Do(req)
-	if err != nil {
-		t.Fatalf("http.Post failed: %s", err)
-	}
-
+	assert.NoError(t, err)
 	assert.Equal(t, http.StatusBadRequest, res.StatusCode)
 }
 
@@ -270,10 +251,7 @@ func TestArticleCreateArticleWithoutTitle(t *testing.T) {
 	client := &http.Client{}
 
 	res, err := client.Do(req)
-	if err != nil {
-		t.Fatalf("http.Post failed: %s", err)
-	}
-
+	assert.NoError(t, err)
 	assert.Equal(t, http.StatusUnprocessableEntity, res.StatusCode)
 }
 
@@ -317,10 +295,7 @@ func TestArticleUpdateArticleWithoutCookie(t *testing.T) {
 	client := &http.Client{}
 
 	res, err := client.Do(req)
-	if err != nil {
-		t.Fatalf("http.Put failed: %s", err)
-	}
-
+	assert.NoError(t, err)
 	assert.Equal(t, http.StatusUnauthorized, res.StatusCode)
 }
 
@@ -342,10 +317,7 @@ func TestArticleUpdateArticleWithUnknownType(t *testing.T) {
 	client := &http.Client{}
 
 	res, err := client.Do(req)
-	if err != nil {
-		t.Fatalf("http.Put failed: %s", err)
-	}
-
+	assert.NoError(t, err)
 	assert.Equal(t, http.StatusBadRequest, res.StatusCode)
 }
 
@@ -367,10 +339,7 @@ func TestArticleUpdateArticleWithoutTitle(t *testing.T) {
 	client := &http.Client{}
 
 	res, err := client.Do(req)
-	if err != nil {
-		t.Fatalf("http.Put failed: %s", err)
-	}
-
+	assert.NoError(t, err)
 	assert.Equal(t, http.StatusUnprocessableEntity, res.StatusCode)
 }
 
