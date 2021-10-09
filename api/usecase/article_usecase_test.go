@@ -9,16 +9,16 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-type mockRepository struct{}
+type mockArticleRepository struct{}
 
-func (mockRepo *mockRepository) GetById(id int) (*model.Article, error) {
+func (mockRepo *mockArticleRepository) GetById(id int) (*model.Article, error) {
 	var mockArticle model.Article
 	faker.FakeData(&mockArticle)
 
 	return &mockArticle, nil
 }
 
-func (mockRepo *mockRepository) ListByCursor(cursor int) ([]*model.Article, error) {
+func (mockRepo *mockArticleRepository) ListByCursor(cursor int) ([]*model.Article, error) {
 	var mockArticle model.Article
 	faker.FakeData(&mockArticle)
 
@@ -28,20 +28,20 @@ func (mockRepo *mockRepository) ListByCursor(cursor int) ([]*model.Article, erro
 	return mockArticles, nil
 }
 
-func (mockRepo *mockRepository) Create(article *model.Article) (int64, error) {
+func (mockRepo *mockArticleRepository) Create(article *model.Article) (int64, error) {
 	return int64(article.ID), nil
 }
 
-func (mockRepo *mockRepository) Update(article *model.Article) error {
+func (mockRepo *mockArticleRepository) Update(article *model.Article) error {
 	return nil
 }
 
-func (mockRepo *mockRepository) Delete(id int) error {
+func (mockRepo *mockArticleRepository) Delete(id int) error {
 	return nil
 }
 
-func TestGetById(t *testing.T) {
-	mockRepo := &mockRepository{}
+func TestArticleGetById(t *testing.T) {
+	mockRepo := &mockArticleRepository{}
 	articleUsecase := usecase.NewArticleUsecase(mockRepo)
 
 	article, err := articleUsecase.GetById(10)
@@ -49,8 +49,8 @@ func TestGetById(t *testing.T) {
 	assert.NotNil(t, article)
 }
 
-func TestListByCursor(t *testing.T) {
-	mockRepo := &mockRepository{}
+func TestArticleListByCursor(t *testing.T) {
+	mockRepo := &mockArticleRepository{}
 	articleUsecase := usecase.NewArticleUsecase(mockRepo)
 
 	articles, err := articleUsecase.ListByCursor(10)
@@ -58,8 +58,8 @@ func TestListByCursor(t *testing.T) {
 	assert.NotEmpty(t, articles)
 }
 
-func TestCreate(t *testing.T) {
-	mockRepo := &mockRepository{}
+func TestArticleCreate(t *testing.T) {
+	mockRepo := &mockArticleRepository{}
 	articleUsecase := usecase.NewArticleUsecase(mockRepo)
 
 	article := model.Article{}
@@ -70,8 +70,8 @@ func TestCreate(t *testing.T) {
 	assert.Equal(t, id, int64(article.ID))
 }
 
-func TestUpdate(t *testing.T) {
-	mockRepo := &mockRepository{}
+func TestArticleUpdate(t *testing.T) {
+	mockRepo := &mockArticleRepository{}
 	articleUsecase := usecase.NewArticleUsecase(mockRepo)
 
 	article := model.Article{}
@@ -81,8 +81,8 @@ func TestUpdate(t *testing.T) {
 	assert.NoError(t, err)
 }
 
-func TestDelete(t *testing.T) {
-	mockRepo := &mockRepository{}
+func TestArticleDelete(t *testing.T) {
+	mockRepo := &mockArticleRepository{}
 	articleUsecase := usecase.NewArticleUsecase(mockRepo)
 
 	err := articleUsecase.Delete(1)
