@@ -40,7 +40,7 @@ $ docker-compose up
 - コマンド引数にユーザー名、パスワードを渡す
 
 ```sh
-$ docker-compose run --rm api go run db/seeds/main.go <user_name> <password>
+$ docker-compose run --rm api go run infra/seeds/main.go <user_name> <password>
 ```
 
 ### テスト実行
