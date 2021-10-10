@@ -65,6 +65,26 @@ func (authHandler *AuthHandler) Create() echo.HandlerFunc {
 	}
 }
 
+func (authHandler *AuthHandler) Delete() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		cookie := &http.Cookie{
+			Name:     "jwt",
+			Value:    "",
+			Expires:  time.Now().Add(time.Hour * -1),
+			SameSite: http.SameSiteNoneMode,
+			Path:     "/",
+			Secure:   true,
+			HttpOnly: true,
+		}
+
+		c.SetCookie(cookie)
+
+		return c.JSON(http.StatusOK, echo.Map{
+			"message": "logout success",
+		})
+	}
+}
+
 // レスポンスの型は明示しなくて良い
 func Login(c echo.Context) error {
 	var userParam UserParam

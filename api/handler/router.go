@@ -36,4 +36,5 @@ func InitArticleRouting(e *echo.Echo, articleHandler ArticleHandler) {
 
 func InitAuthRouting(e *echo.Echo, authHandler AuthHandler) {
 	e.POST("/api/login", authHandler.Create())
+	e.POST("/api/logout", authHandler.Delete(), middleware.IsAuthenticated)
 }

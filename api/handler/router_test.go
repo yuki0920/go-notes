@@ -95,6 +95,47 @@ func TestLogin(t *testing.T) {
 	assert.Equal(t, http.StatusOK, res.StatusCode)
 }
 
+func TestLogout(t *testing.T) {
+	e := echo.New()
+	e.Validator = &CustomValidator{Validator: validator.New()}
+	handler := AuthHandler{userUsecase: &mockUserUsecase{}}
+	InitAuthRouting(e, handler)
+
+	ts := httptest.NewServer(e)
+	defer ts.Close()
+
+	req, _ := http.NewRequest(echo.POST, ts.URL+"/api/logout", nil)
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Cookie", "jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ1c2VyIn0.l5OzH8D-jhBGpWOaTICi65_Njdgq78TV6t_z-5JymtQ;")
+
+	client := &http.Client{}
+
+	res, err := client.Do(req)
+
+	assert.NoError(t, err)
+	assert.Equal(t, http.StatusOK, res.StatusCode)
+}
+
+func TestLogoutWithoutCookie(t *testing.T) {
+	e := echo.New()
+	e.Validator = &CustomValidator{Validator: validator.New()}
+	handler := AuthHandler{userUsecase: &mockUserUsecase{}}
+	InitAuthRouting(e, handler)
+
+	ts := httptest.NewServer(e)
+	defer ts.Close()
+
+	req, _ := http.NewRequest(echo.POST, ts.URL+"/api/logout", nil)
+	req.Header.Set("Content-Type", "application/json")
+
+	client := &http.Client{}
+
+	res, err := client.Do(req)
+
+	assert.NoError(t, err)
+	assert.Equal(t, http.StatusUnauthorized, res.StatusCode)
+}
+
 type mockArticleUsecase struct{}
 
 func (usecase *mockArticleUsecase) GetById(id int) (article *model.Article, err error) {
