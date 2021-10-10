@@ -4,20 +4,13 @@ import (
 	"log"
 	"os"
 	"yuki0920/go-notes/domain/model"
-	"yuki0920/go-notes/infra"
+	"yuki0920/go-notes/injector"
 
 	_ "github.com/go-sql-driver/mysql" // MySQLのドライバーを使う
 )
 
 func main() {
-	db, err := infra.ConnectDB()
-	if err != nil {
-		log.Fatalf("db connection failed %v", err)
-	} else {
-		log.Println("db connection established")
-	}
-
-	infra.SetDB(db)
+	userRepo := injector.InjectUserRepository()
 
 	user := &model.User{}
 
@@ -28,7 +21,7 @@ func main() {
 		log.Fatalf("Set password failed %v", err)
 	}
 
-	if _, err := infra.UserCreate(user); err != nil {
+	if err := userRepo.Create(user); err != nil {
 		log.Fatalf("User create failed %v", err)
 	}
 

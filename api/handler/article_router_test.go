@@ -2,7 +2,6 @@ package handler
 
 import (
 	"bytes"
-	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -13,63 +12,6 @@ import (
 	"github.com/stretchr/testify/assert"
 	"gopkg.in/go-playground/validator.v9"
 )
-
-func TestGetAuthWithoutCookie(t *testing.T) {
-	e := echo.New()
-	Router(e)
-	ts := httptest.NewServer(e)
-	defer ts.Close()
-
-	req, _ := http.NewRequest("GET", ts.URL+"/api/auth", nil)
-	req.Header.Set("Content-Type", "application/json")
-	client := &http.Client{}
-
-	res, err := client.Do(req)
-	if err != nil {
-		t.Fatalf("http.Put failed: %s", err)
-	}
-
-	assert.Equal(t, http.StatusOK, res.StatusCode)
-
-	body, err := ioutil.ReadAll(res.Body)
-	res.Body.Close()
-	if err != nil {
-		t.Fatalf("ioutil.ReadAll body failed: %s", err)
-	}
-
-	authJSON := `{"IsAuthenticated":false}`
-
-	assert.JSONEq(t, authJSON, string(body))
-}
-
-func TestGetAuthWithCookie(t *testing.T) {
-	e := echo.New()
-	Router(e)
-	ts := httptest.NewServer(e)
-	defer ts.Close()
-
-	req, _ := http.NewRequest("GET", ts.URL+"/api/auth", nil)
-	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("Cookie", "jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ1c2VyIn0.l5OzH8D-jhBGpWOaTICi65_Njdgq78TV6t_z-5JymtQ;")
-	client := &http.Client{}
-
-	res, err := client.Do(req)
-	if err != nil {
-		t.Fatalf("http.Put failed: %s", err)
-	}
-
-	assert.Equal(t, http.StatusOK, res.StatusCode)
-
-	body, err := ioutil.ReadAll(res.Body)
-	res.Body.Close()
-	if err != nil {
-		t.Fatalf("ioutil.ReadAll body failed: %s", err)
-	}
-
-	authJSON := `{"IsAuthenticated":true}`
-
-	assert.JSONEq(t, authJSON, string(body))
-}
 
 type mockArticleUsecase struct{}
 
@@ -101,11 +43,11 @@ func (usecase *mockArticleUsecase) Delete(id int) (err error) {
 	return err
 }
 
-func TestShow(t *testing.T) {
+func TestArticleShow(t *testing.T) {
 	e := echo.New()
 	e.Validator = &CustomValidator{Validator: validator.New()}
 	handler := ArticleHandler{articleUsecase: &mockArticleUsecase{}}
-	InitRouting(e, handler)
+	InitArticleRouting(e, handler)
 
 	ts := httptest.NewServer(e)
 	defer ts.Close()
@@ -122,11 +64,11 @@ func TestShow(t *testing.T) {
 	assert.Equal(t, http.StatusOK, res.StatusCode)
 }
 
-func TestIndex(t *testing.T) {
+func TestArticleIndex(t *testing.T) {
 	e := echo.New()
 	e.Validator = &CustomValidator{Validator: validator.New()}
 	handler := ArticleHandler{articleUsecase: &mockArticleUsecase{}}
-	InitRouting(e, handler)
+	InitArticleRouting(e, handler)
 
 	ts := httptest.NewServer(e)
 	defer ts.Close()
@@ -143,13 +85,12 @@ func TestIndex(t *testing.T) {
 	assert.Equal(t, http.StatusOK, res.StatusCode)
 }
 
-func TestCreate(t *testing.T) {
+func TestArticleCreate(t *testing.T) {
 	e := echo.New()
 	e.Validator = &CustomValidator{Validator: validator.New()}
 	handler := ArticleHandler{articleUsecase: &mockArticleUsecase{}}
-	InitRouting(e, handler)
+	InitArticleRouting(e, handler)
 
-	InitRouting(e, handler)
 	ts := httptest.NewServer(e)
 	defer ts.Close()
 
@@ -167,11 +108,11 @@ func TestCreate(t *testing.T) {
 	assert.Equal(t, http.StatusOK, res.StatusCode)
 }
 
-func TestCreateArticleWithoutCookie(t *testing.T) {
+func TestArticleCreateArticleWithoutCookie(t *testing.T) {
 	e := echo.New()
 	e.Validator = &CustomValidator{Validator: validator.New()}
 	handler := ArticleHandler{articleUsecase: &mockArticleUsecase{}}
-	InitRouting(e, handler)
+	InitArticleRouting(e, handler)
 
 	ts := httptest.NewServer(e)
 	defer ts.Close()
@@ -184,18 +125,15 @@ func TestCreateArticleWithoutCookie(t *testing.T) {
 	client := &http.Client{}
 
 	res, err := client.Do(req)
-	if err != nil {
-		t.Fatalf("http.Post failed: %s", err)
-	}
-
+	assert.NoError(t, err)
 	assert.Equal(t, http.StatusUnauthorized, res.StatusCode)
 }
 
-func TestCreateArticleWithUnknownType(t *testing.T) {
+func TestArticleCreateArticleWithUnknownType(t *testing.T) {
 	e := echo.New()
 	e.Validator = &CustomValidator{Validator: validator.New()}
 	handler := ArticleHandler{articleUsecase: &mockArticleUsecase{}}
-	InitRouting(e, handler)
+	InitArticleRouting(e, handler)
 
 	ts := httptest.NewServer(e)
 	defer ts.Close()
@@ -209,18 +147,15 @@ func TestCreateArticleWithUnknownType(t *testing.T) {
 	client := &http.Client{}
 
 	res, err := client.Do(req)
-	if err != nil {
-		t.Fatalf("http.Post failed: %s", err)
-	}
-
+	assert.NoError(t, err)
 	assert.Equal(t, http.StatusBadRequest, res.StatusCode)
 }
 
-func TestCreateArticleWithoutTitle(t *testing.T) {
+func TestArticleCreateArticleWithoutTitle(t *testing.T) {
 	e := echo.New()
 	e.Validator = &CustomValidator{Validator: validator.New()}
 	handler := ArticleHandler{articleUsecase: &mockArticleUsecase{}}
-	InitRouting(e, handler)
+	InitArticleRouting(e, handler)
 
 	ts := httptest.NewServer(e)
 	defer ts.Close()
@@ -234,18 +169,15 @@ func TestCreateArticleWithoutTitle(t *testing.T) {
 	client := &http.Client{}
 
 	res, err := client.Do(req)
-	if err != nil {
-		t.Fatalf("http.Post failed: %s", err)
-	}
-
+	assert.NoError(t, err)
 	assert.Equal(t, http.StatusUnprocessableEntity, res.StatusCode)
 }
 
-func TestUpdate(t *testing.T) {
+func TestArticleUpdate(t *testing.T) {
 	e := echo.New()
 	e.Validator = &CustomValidator{Validator: validator.New()}
 	handler := ArticleHandler{articleUsecase: &mockArticleUsecase{}}
-	InitRouting(e, handler)
+	InitArticleRouting(e, handler)
 
 	ts := httptest.NewServer(e)
 	defer ts.Close()
@@ -264,11 +196,11 @@ func TestUpdate(t *testing.T) {
 	assert.Equal(t, http.StatusOK, res.StatusCode)
 }
 
-func TestUpdateArticleWithoutCookie(t *testing.T) {
+func TestArticleUpdateArticleWithoutCookie(t *testing.T) {
 	e := echo.New()
 	e.Validator = &CustomValidator{Validator: validator.New()}
 	handler := ArticleHandler{articleUsecase: &mockArticleUsecase{}}
-	InitRouting(e, handler)
+	InitArticleRouting(e, handler)
 
 	ts := httptest.NewServer(e)
 	defer ts.Close()
@@ -281,18 +213,15 @@ func TestUpdateArticleWithoutCookie(t *testing.T) {
 	client := &http.Client{}
 
 	res, err := client.Do(req)
-	if err != nil {
-		t.Fatalf("http.Put failed: %s", err)
-	}
-
+	assert.NoError(t, err)
 	assert.Equal(t, http.StatusUnauthorized, res.StatusCode)
 }
 
-func TestUpdateArticleWithUnknownType(t *testing.T) {
+func TestArticleUpdateArticleWithUnknownType(t *testing.T) {
 	e := echo.New()
 	e.Validator = &CustomValidator{Validator: validator.New()}
 	handler := ArticleHandler{articleUsecase: &mockArticleUsecase{}}
-	InitRouting(e, handler)
+	InitArticleRouting(e, handler)
 
 	ts := httptest.NewServer(e)
 	defer ts.Close()
@@ -306,18 +235,15 @@ func TestUpdateArticleWithUnknownType(t *testing.T) {
 	client := &http.Client{}
 
 	res, err := client.Do(req)
-	if err != nil {
-		t.Fatalf("http.Put failed: %s", err)
-	}
-
+	assert.NoError(t, err)
 	assert.Equal(t, http.StatusBadRequest, res.StatusCode)
 }
 
-func TestUpdateArticleWithoutTitle(t *testing.T) {
+func TestArticleUpdateArticleWithoutTitle(t *testing.T) {
 	e := echo.New()
 	e.Validator = &CustomValidator{Validator: validator.New()}
 	handler := ArticleHandler{articleUsecase: &mockArticleUsecase{}}
-	InitRouting(e, handler)
+	InitArticleRouting(e, handler)
 
 	ts := httptest.NewServer(e)
 	defer ts.Close()
@@ -331,18 +257,15 @@ func TestUpdateArticleWithoutTitle(t *testing.T) {
 	client := &http.Client{}
 
 	res, err := client.Do(req)
-	if err != nil {
-		t.Fatalf("http.Put failed: %s", err)
-	}
-
+	assert.NoError(t, err)
 	assert.Equal(t, http.StatusUnprocessableEntity, res.StatusCode)
 }
 
-func TestDelete(t *testing.T) {
+func TestArticleDelete(t *testing.T) {
 	e := echo.New()
 	e.Validator = &CustomValidator{Validator: validator.New()}
 	handler := ArticleHandler{articleUsecase: &mockArticleUsecase{}}
-	InitRouting(e, handler)
+	InitArticleRouting(e, handler)
 
 	ts := httptest.NewServer(e)
 	defer ts.Close()
@@ -358,11 +281,11 @@ func TestDelete(t *testing.T) {
 	assert.Equal(t, http.StatusOK, res.StatusCode)
 }
 
-func TestDeleteArticleWithoutCookie(t *testing.T) {
+func TestArticleDeleteArticleWithoutCookie(t *testing.T) {
 	e := echo.New()
 	e.Validator = &CustomValidator{Validator: validator.New()}
 	handler := ArticleHandler{articleUsecase: &mockArticleUsecase{}}
-	InitRouting(e, handler)
+	InitArticleRouting(e, handler)
 
 	ts := httptest.NewServer(e)
 	defer ts.Close()
