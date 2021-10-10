@@ -8,11 +8,8 @@ import (
 )
 
 func Router(e *echo.Echo) {
-	e.GET("/api/auth", Auth)
-
 	// NOTE: IsAuthenticatedのカスタムミドルウェアを利用してクッキー内のJWTトークンの検証をしている
 	//       検証が失敗したら、エラーを返して実行されないようにする
-	e.POST("/api/logout", Logout, middleware.IsAuthenticated)
 }
 
 type CustomValidator struct {
@@ -35,6 +32,7 @@ func InitArticleRouting(e *echo.Echo, articleHandler ArticleHandler) {
 }
 
 func InitAuthRouting(e *echo.Echo, authHandler AuthHandler) {
+	e.GET("/api/auth", authHandler.Get())
 	e.POST("/api/login", authHandler.Create())
 	e.POST("/api/logout", authHandler.Delete(), middleware.IsAuthenticated)
 }

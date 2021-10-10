@@ -14,51 +14,6 @@ import (
 	"gopkg.in/go-playground/validator.v9"
 )
 
-func TestGetAuthWithoutCookie(t *testing.T) {
-	e := echo.New()
-	Router(e)
-	ts := httptest.NewServer(e)
-	defer ts.Close()
-
-	req, _ := http.NewRequest("GET", ts.URL+"/api/auth", nil)
-	req.Header.Set("Content-Type", "application/json")
-	client := &http.Client{}
-
-	res, err := client.Do(req)
-	assert.NoError(t, err)
-	assert.Equal(t, http.StatusOK, res.StatusCode)
-
-	body, err := ioutil.ReadAll(res.Body)
-	res.Body.Close()
-	assert.NoError(t, err)
-	authJSON := `{"IsAuthenticated":false}`
-
-	assert.JSONEq(t, authJSON, string(body))
-}
-
-func TestGetAuthWithCookie(t *testing.T) {
-	e := echo.New()
-	Router(e)
-	ts := httptest.NewServer(e)
-	defer ts.Close()
-
-	req, _ := http.NewRequest("GET", ts.URL+"/api/auth", nil)
-	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("Cookie", "jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ1c2VyIn0.l5OzH8D-jhBGpWOaTICi65_Njdgq78TV6t_z-5JymtQ;")
-	client := &http.Client{}
-
-	res, err := client.Do(req)
-	assert.NoError(t, err)
-	assert.Equal(t, http.StatusOK, res.StatusCode)
-
-	body, err := ioutil.ReadAll(res.Body)
-	res.Body.Close()
-	assert.NoError(t, err)
-	authJSON := `{"IsAuthenticated":true}`
-
-	assert.JSONEq(t, authJSON, string(body))
-}
-
 type mockUserUsecase struct{}
 
 func (usecase *mockUserUsecase) GetByName(name string) (user *model.User, err error) {
@@ -134,6 +89,57 @@ func TestLogoutWithoutCookie(t *testing.T) {
 
 	assert.NoError(t, err)
 	assert.Equal(t, http.StatusUnauthorized, res.StatusCode)
+}
+
+func TestGetAuthWithoutCookie(t *testing.T) {
+	e := echo.New()
+	e.Validator = &CustomValidator{Validator: validator.New()}
+	handler := AuthHandler{userUsecase: &mockUserUsecase{}}
+	InitAuthRouting(e, handler)
+
+	ts := httptest.NewServer(e)
+	defer ts.Close()
+
+	req, _ := http.NewRequest("GET", ts.URL+"/api/auth", nil)
+	req.Header.Set("Content-Type", "application/json")
+	client := &http.Client{}
+
+	res, err := client.Do(req)
+	assert.NoError(t, err)
+	assert.Equal(t, http.StatusOK, res.StatusCode)
+
+	body, err := ioutil.ReadAll(res.Body)
+	res.Body.Close()
+	assert.NoError(t, err)
+	authJSON := `{"IsAuthenticated":false}`
+
+	assert.JSONEq(t, authJSON, string(body))
+}
+
+func TestGetAuthWithCookie(t *testing.T) {
+	e := echo.New()
+	e.Validator = &CustomValidator{Validator: validator.New()}
+	handler := AuthHandler{userUsecase: &mockUserUsecase{}}
+	InitAuthRouting(e, handler)
+
+	ts := httptest.NewServer(e)
+	defer ts.Close()
+
+	req, _ := http.NewRequest("GET", ts.URL+"/api/auth", nil)
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Cookie", "jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ1c2VyIn0.l5OzH8D-jhBGpWOaTICi65_Njdgq78TV6t_z-5JymtQ;")
+	client := &http.Client{}
+
+	res, err := client.Do(req)
+	assert.NoError(t, err)
+	assert.Equal(t, http.StatusOK, res.StatusCode)
+
+	body, err := ioutil.ReadAll(res.Body)
+	res.Body.Close()
+	assert.NoError(t, err)
+	authJSON := `{"IsAuthenticated":true}`
+
+	assert.JSONEq(t, authJSON, string(body))
 }
 
 type mockArticleUsecase struct{}

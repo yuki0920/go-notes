@@ -85,6 +85,26 @@ func (authHandler *AuthHandler) Delete() echo.HandlerFunc {
 	}
 }
 
+type AuthOutput struct {
+	IsAuthenticated bool
+}
+
+func (authHandler *AuthHandler) Get() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		var out AuthOutput
+		out.IsAuthenticated = true
+
+		cookie, err := c.Cookie("jwt")
+		if err != nil {
+			out.IsAuthenticated = false
+		} else if err := util.ParseJwt(cookie.Value); err != nil {
+			out.IsAuthenticated = false
+		}
+
+		return c.JSON(http.StatusOK, out)
+	}
+}
+
 // レスポンスの型は明示しなくて良い
 func Login(c echo.Context) error {
 	var userParam UserParam
@@ -139,10 +159,6 @@ func Logout(c echo.Context) error {
 	return c.JSON(http.StatusOK, echo.Map{
 		"message": "logout success",
 	})
-}
-
-type AuthOutput struct {
-	IsAuthenticated bool
 }
 
 func Auth(c echo.Context) error {
