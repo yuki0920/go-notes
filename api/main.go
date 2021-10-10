@@ -5,7 +5,6 @@ import (
 	"os"
 
 	"yuki0920/go-notes/handler"
-	"yuki0920/go-notes/infra"
 	"yuki0920/go-notes/injector"
 
 	_ "github.com/go-sql-driver/mysql" // MySQLのドライバーを使う
@@ -16,17 +15,6 @@ import (
 
 func main() {
 	e := createMux()
-
-	db, err := infra.ConnectDB()
-	if err != nil {
-		e.Logger.Fatal(err)
-	} else {
-		e.Logger.Info("db connection established")
-	}
-
-	infra.SetDB(db)
-	handler.Router(e)
-
 	setupRouting(e)
 	// echoのインスタンスにカスタムバリデーターを登録する
 	e.Validator = &handler.CustomValidator{Validator: validator.New()}

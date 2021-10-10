@@ -7,11 +7,6 @@ import (
 	"gopkg.in/go-playground/validator.v9"
 )
 
-func Router(e *echo.Echo) {
-	// NOTE: IsAuthenticatedのカスタムミドルウェアを利用してクッキー内のJWTトークンの検証をしている
-	//       検証が失敗したら、エラーを返して実行されないようにする
-}
-
 type CustomValidator struct {
 	Validator *validator.Validate
 }
