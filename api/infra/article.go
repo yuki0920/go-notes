@@ -53,6 +53,37 @@ func (articleRepository *ArticleRepository) ListByCursor(cursor int) ([]*model.A
 	return articles, nil
 }
 
+func (articleRepository *ArticleRepository) ListByPage(page int) ([]*model.Article, int, error) {
+	selectQuery := `SELECT *
+	FROM articles
+	ORDER BY id desc
+	LIMIT 5
+	OFFSET ?`
+
+	// クエリ結果を格納するスライスを初期化 5 件取得のため、サイズとキャパシティを指定
+	articles := make([]*model.Article, 0, 5)
+	offset := 5*(page-1) + 1
+	if err := articleRepository.SqlHandler.Conn.Select(&articles, selectQuery, offset); err != nil {
+		return nil, 0, err
+	}
+
+	var count int
+	countQuery := `SELECT
+	COUNT(*)
+	FROM articles
+	`
+
+	rows := articleRepository.SqlHandler.Conn.QueryRow(countQuery)
+	err := rows.Scan(&count)
+	if err != nil {
+		return nil, 0, err
+	}
+
+	totalPage := count/5 + 1
+
+	return articles, totalPage, nil
+}
+
 func (articleRepository *ArticleRepository) Create(article *model.Article) (int64, error) {
 	now := time.Now()
 

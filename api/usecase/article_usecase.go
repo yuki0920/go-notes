@@ -8,6 +8,7 @@ import (
 type ArticleUsecase interface {
 	GetById(id int) (article *model.Article, err error)
 	ListByCursor(cursor int) (articles []*model.Article, err error)
+	ListByPage(page int) ([]*model.Article, int, error)
 	Create(article *model.Article) (int64, error)
 	Update(article *model.Article) error
 	Delete(id int) error
@@ -40,6 +41,15 @@ func (usecase *articleUsecase) ListByCursor(cursor int) (articles []*model.Artic
 	}
 
 	return articles, err
+}
+
+func (usecase *articleUsecase) ListByPage(page int) (articles []*model.Article, totalPage int, err error) {
+	articles, totalPage, err = usecase.articleRepo.ListByPage(page)
+	if err != nil {
+		return nil, 0, err
+	}
+
+	return articles, totalPage, err
 }
 
 func (usecase *articleUsecase) Create(article *model.Article) (int64, error) {

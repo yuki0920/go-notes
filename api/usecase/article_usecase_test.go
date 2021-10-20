@@ -28,6 +28,16 @@ func (mockRepo *mockArticleRepository) ListByCursor(cursor int) ([]*model.Articl
 	return mockArticles, nil
 }
 
+func (mockRepo *mockArticleRepository) ListByPage(page int) ([]*model.Article, int, error) {
+	var mockArticle model.Article
+	faker.FakeData(&mockArticle)
+
+	mockArticles := make([]*model.Article, 0)
+	mockArticles = append(mockArticles, &mockArticle)
+
+	return mockArticles, page, nil
+}
+
 func (mockRepo *mockArticleRepository) Create(article *model.Article) (int64, error) {
 	return int64(article.ID), nil
 }
@@ -54,6 +64,15 @@ func TestArticleListByCursor(t *testing.T) {
 	articleUsecase := usecase.NewArticleUsecase(mockRepo)
 
 	articles, err := articleUsecase.ListByCursor(10)
+	assert.NoError(t, err)
+	assert.NotEmpty(t, articles)
+}
+
+func TestArticleListByPage(t *testing.T) {
+	mockRepo := &mockArticleRepository{}
+	articleUsecase := usecase.NewArticleUsecase(mockRepo)
+
+	articles, _, err := articleUsecase.ListByPage(2)
 	assert.NoError(t, err)
 	assert.NotEmpty(t, articles)
 }

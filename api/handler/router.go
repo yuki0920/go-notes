@@ -18,6 +18,7 @@ func (cv *CustomValidator) Validate(i interface{}) error {
 func InitArticleRouting(e *echo.Echo, articleHandler ArticleHandler) {
 	e.GET("/api/articles/:articleID", articleHandler.Show())
 	e.GET("/api/articles", articleHandler.Index())
+	e.GET("/api/v2/articles", articleHandler.List())
 
 	// NOTE: IsAuthenticatedのカスタムミドルウェアを利用してクッキー内のJWTトークンの検証をしている
 	//       検証が失敗したら、エラーを返して実行されないようにする
