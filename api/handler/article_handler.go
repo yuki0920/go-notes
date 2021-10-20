@@ -64,6 +64,29 @@ func (handler *ArticleHandler) Index() echo.HandlerFunc {
 	}
 }
 
+func (handler *ArticleHandler) List() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		var page int
+		// 文字列型で取得できるので strconv パッケージを用いて数値型にキャスト
+		page, _ = strconv.Atoi(c.QueryParam("page"))
+
+		articles, totalPage, err := handler.articleUsecase.ListByPage(page)
+		if err != nil {
+			c.Logger().Error(err.Error())
+
+			return c.JSON(http.StatusInternalServerError, err)
+		}
+
+		// キーはstring,値が配列とintなのでinterface{}にしている
+		data := map[string]interface{}{
+			"articles":  articles,
+			"totalPage": totalPage,
+		}
+
+		return c.JSON(http.StatusOK, data)
+	}
+}
+
 type ArticleCreateOutput struct {
 	Article          *model.Article
 	Message          string
