@@ -65,3 +65,16 @@ h5, h6 {
   -ms-box-sizing: border-box;
   box-sizing: border-box;
 }
+
+.pagination {
+  li > a,
+  li > a:focus,
+  li > a:hover{
+    color: #343a40;
+  }
+
+  .page-item.active > .page-link {
+    border-color: #dee2e6;
+    background-color: #343a40;
+  }
+}

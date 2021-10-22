@@ -57,6 +57,7 @@ export default {
 
   bootstrapVue: {
     componentPlugins: [
+      'PaginationNavPlugin'
     ],
     components: [
       'BIconTrash'
