@@ -18,16 +18,6 @@ func (mockRepo *mockArticleRepository) GetById(id int) (*model.Article, error) {
 	return &mockArticle, nil
 }
 
-func (mockRepo *mockArticleRepository) ListByCursor(cursor int) ([]*model.Article, error) {
-	var mockArticle model.Article
-	faker.FakeData(&mockArticle)
-
-	mockArticles := make([]*model.Article, 0)
-	mockArticles = append(mockArticles, &mockArticle)
-
-	return mockArticles, nil
-}
-
 func (mockRepo *mockArticleRepository) ListByPage(page int) ([]*model.Article, int, error) {
 	var mockArticle model.Article
 	faker.FakeData(&mockArticle)
@@ -57,15 +47,6 @@ func TestArticleGetById(t *testing.T) {
 	article, err := articleUsecase.GetById(10)
 	assert.NoError(t, err)
 	assert.NotNil(t, article)
-}
-
-func TestArticleListByCursor(t *testing.T) {
-	mockRepo := &mockArticleRepository{}
-	articleUsecase := usecase.NewArticleUsecase(mockRepo)
-
-	articles, err := articleUsecase.ListByCursor(10)
-	assert.NoError(t, err)
-	assert.NotEmpty(t, articles)
 }
 
 func TestArticleListByPage(t *testing.T) {

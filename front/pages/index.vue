@@ -4,7 +4,7 @@
       <h1>
         記事一覧
       </h1>
-      <template v-if="articles.length > 1">
+      <template v-if="articles.length > 0">
         <article v-for="(article, index) in articles" :key="index">
           <div class="p-2">
             <nuxt-link :to="`/articles/${article.id}`">
@@ -19,9 +19,9 @@
             </div>
           </div>
         </article>
-        <button v-if="!finished" class="btn btn-dark" @click="load">
-          もっとみる
-        </button>
+        <div class="overflow-auto">
+          <b-pagination-nav :link-gen="linkGen" :number-of-pages="totalPage" use-router />
+        </div>
       </template>
       <div v-else class="d-flex justify-content-center align-items-center">
         <div class="spinner-border mr-2" style="width: 2rem; height: 2rem;" role="status" />
@@ -33,40 +33,48 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted, useContext } from '@nuxtjs/composition-api'
+import { defineComponent, ref, onMounted, useContext, useRouter } from '@nuxtjs/composition-api'
 import { Article } from '~/types/article'
 export default defineComponent({
   name: 'TopPage',
   setup () {
     const { $axios } = useContext()
     const articles = ref<Article[]>([])
-    const cursor = ref(0)
-    const finished = ref(false)
+    const totalPage = ref(0)
 
     type Data = {
       articles: Article[],
-      cursor: number
+      totalPage: number
     }
-    const load = async () => {
-      const { data }: { data: Data } = await $axios.get('/api/articles', { params: { cursor: cursor.value } })
-      if (cursor.value === data.cursor) {
-        finished.value = true
-        return
-      }
 
-      cursor.value = data.cursor
-      articles.value.push(...data.articles)
+    const load = async (pageNum = 1) => {
+      const { data }: { data: Data } = await $axios.get(`/api/articles?page=${pageNum}`)
+      articles.value = data.articles
+      totalPage.value = data.totalPage
+    }
+
+    const linkGen = (pageNum: number) => {
+      return pageNum === 1 ? '' : `?page=${pageNum}`
     }
 
     onMounted(async () => {
-      await load()
+      await load(1)
+    })
+
+    const router = useRouter()
+    router.beforeEach((to, from, next) => {
+      if (to.name === from.name && (typeof to.query.page === 'string' || to.query.page === undefined)) {
+        load(parseInt(to.query.page, 10) || 1)
+        scrollTo(0, 0)
+      }
+      next()
     })
 
     return {
       articles,
-      cursor,
+      totalPage,
       load,
-      finished
+      linkGen
     }
   },
   head: {}

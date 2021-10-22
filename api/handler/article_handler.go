@@ -37,35 +37,6 @@ func (handler *ArticleHandler) Show() echo.HandlerFunc {
 
 func (handler *ArticleHandler) Index() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		var cursor int
-		// 文字列型で取得できるので strconv パッケージを用いて数値型にキャスト
-		cursor, _ = strconv.Atoi(c.QueryParam("cursor"))
-
-		// 引数にカーソルの値を渡して、ID のどの位置から 10 件取得するかを指定
-		articles, err := handler.articleUsecase.ListByCursor(cursor)
-		if err != nil {
-			c.Logger().Error(err.Error())
-
-			return c.JSON(http.StatusInternalServerError, err)
-		}
-
-		// 取得できた最後の記事の ID をカーソルとして設定
-		if len(articles) != 0 {
-			cursor = articles[len(articles)-1].ID
-		}
-
-		// キーはstring,値が配列とintなのでinterface{}にしている
-		data := map[string]interface{}{
-			"articles": articles,
-			"cursor":   cursor,
-		}
-
-		return c.JSON(http.StatusOK, data)
-	}
-}
-
-func (handler *ArticleHandler) List() echo.HandlerFunc {
-	return func(c echo.Context) error {
 		var page int
 		// 文字列型で取得できるので strconv パッケージを用いて数値型にキャスト
 		page, _ = strconv.Atoi(c.QueryParam("page"))
