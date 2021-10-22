@@ -94,27 +94,6 @@ func TestArticleIndex(t *testing.T) {
 	assert.Equal(t, http.StatusOK, res.StatusCode)
 }
 
-func TestArticleList(t *testing.T) {
-	e := echo.New()
-	e.Validator = &CustomValidator{Validator: validator.New()}
-	handler := ArticleHandler{articleUsecase: &mockArticleUsecase{}}
-	InitArticleRouting(e, handler)
-
-	ts := httptest.NewServer(e)
-	defer ts.Close()
-
-	req, err := http.NewRequest(echo.GET, ts.URL+"/api/v2/articles", nil)
-	assert.NoError(t, err)
-
-	req.Header.Set("Content-Type", "application/json")
-	client := &http.Client{}
-
-	res, err := client.Do(req)
-
-	assert.NoError(t, err)
-	assert.Equal(t, http.StatusOK, res.StatusCode)
-}
-
 func TestArticleCreate(t *testing.T) {
 	e := echo.New()
 	e.Validator = &CustomValidator{Validator: validator.New()}

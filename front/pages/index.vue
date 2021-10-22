@@ -48,7 +48,7 @@ export default defineComponent({
     }
 
     const load = async (pageNum = 1) => {
-      const { data }: { data: Data } = await $axios.get(`/api/v2/articles?page=${pageNum}`)
+      const { data }: { data: Data } = await $axios.get(`/api/articles?page=${pageNum}`)
       articles.value = data.articles
       totalPage.value = data.totalPage
     }
