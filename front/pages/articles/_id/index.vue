@@ -32,7 +32,7 @@ import { defineComponent, onMounted, useRoute, useContext, ref } from '@nuxtjs/c
 import vueRemarkable from 'vue-remarkable'
 
 export default defineComponent({
-  name: 'Articles',
+  name: 'ArticleIndex',
   components: {
     vueRemarkable
   },

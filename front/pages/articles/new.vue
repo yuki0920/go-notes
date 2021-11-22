@@ -41,7 +41,7 @@
 import { defineComponent, useRouter, useContext, reactive } from '@nuxtjs/composition-api'
 
 export default defineComponent({
-  name: 'Articles',
+  name: 'ArticleNew',
   setup () {
     const { $axios } = useContext()
     const article = reactive({ title: null, body: null })
