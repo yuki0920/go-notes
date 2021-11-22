@@ -43,7 +43,7 @@
 import { defineComponent, onMounted, useRoute, useRouter, useContext, ref } from '@nuxtjs/composition-api'
 import { Article } from '~/types/article'
 export default defineComponent({
-  name: 'Articles',
+  name: 'ArticleEdit',
   setup () {
     const route = useRoute()
     const id = route.value.params.id

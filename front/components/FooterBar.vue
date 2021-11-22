@@ -29,7 +29,7 @@
 <script lang="ts">
 import { defineComponent, useContext, useRouter, ref } from '@nuxtjs/composition-api'
 export default defineComponent({
-  name: '',
+  name: 'FooterBar',
   setup () {
     const { $axios } = useContext()
     const router = useRouter()
