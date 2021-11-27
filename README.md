@@ -1,5 +1,36 @@
 # Go製ブログサイト
 
+## 言語・ツール
+
+### 言語
+
+Docker 環境を用意している
+
+```sh
+$ go version
+go version go1.16.1 darwin/amd64
+$ mysql --version
+mysql  Ver 8.0.26 for Linux on x86_64 (MySQL Community Server - GPL)
+```
+
+## マイグレーションツール
+
+```
+$ go get -u github.com/pressly/goose/v3/cmd/goose
+$ which goose
+/Users/yuki.watanabe/.goenv/shims/goose
+```
+
+## ホットリロードツール
+
+```sh
+$ go get -u github.com/cosmtrek/air
+$ which air
+/Users/yuki.watanabe/.goenv/shims/air
+# 初期化
+$ air init
+```
+
 ## 起動
 
 ### マイグレーション
@@ -58,40 +89,9 @@ $ docker-compose run --rm api go test ./... -v
 $ make generate-api
 ```
 
----以下、記事用のまとめ---
-
-## 言語、ミドルウェア
-
-Dockerfile で用意している
-
-```sh
-$ go version
-go version go1.16.1 darwin/amd64
-$ mysql --version
-mysql  Ver 8.0.26 for Linux on x86_64 (MySQL Community Server - GPL)
-```
-
-## マイグレーションツール
-
-```
-$ go get -u github.com/pressly/goose/v3/cmd/goose
-$ which goose
-/Users/yuki.watanabe/.goenv/shims/goose
-```
-
-## ホットリロードツール
-
-```sh
-$ go get -u github.com/cosmtrek/air
-$ which air
-/Users/yuki.watanabe/.goenv/shims/air
-# 初期化
-$ air init
-```
-
 ## ディレクトリ構成
 
-### 構成
+クリーンアーキテクチャーをベースにした構成にしている
 
 - handler
   - router: リクエストとハンドラのマッピングをする(ルーティングの役割)
@@ -106,7 +106,3 @@ $ air init
   - repository: ドメインモデルのの永続化、再構築を担うためのインターフェースを定義する
 - middleware: カスタムのミドルウェアを設定する
 - util: ドメインモデルとは関連のないヘルパー関数を配置する
-
-### ディレクトリ構成とアーキテクチャの関連
-
-- main | handler(Presentation層), infra(Presentation層) | usecase(Usecase層) | domain(Domain層)
