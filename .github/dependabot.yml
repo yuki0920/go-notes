@@ -8,3 +8,5 @@ updates:
     directory: "./front"
     schedule:
       interval: "monthly"
+    ignore:
+      - dependency-name: "sass-loader"
