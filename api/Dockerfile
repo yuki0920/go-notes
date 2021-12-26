@@ -1,9 +1,9 @@
-FROM golang:1.16-alpine
+FROM golang:1.17-alpine
 
 RUN apk update
-RUN apk add --no-cache git curl make gcc g++ \
-  && go get -u github.com/cosmtrek/air \
-  && go get -u github.com/pressly/goose/v3/cmd/goose
+RUN apk add --no-cache git curl make gcc g++
+RUN go install github.com/cosmtrek/air@v1
+RUN go install github.com/pressly/goose/v3/cmd/goose@latest
 
 # go moduleを使用
 ENV GO111MODULE=on
