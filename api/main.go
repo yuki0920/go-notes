@@ -41,6 +41,9 @@ func createMux() *echo.Echo {
 	e.Use(middleware.Recover())
 	e.Use(middleware.Logger())
 	e.Use(middleware.Gzip())
+	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
+		Format: "\nmethod=${method}, uri=${uri}, status=${status}\n",
+	}))
 
 	return e
 }
