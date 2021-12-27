@@ -23,10 +23,12 @@
           <b-pagination-nav :link-gen="linkGen" :number-of-pages="totalPage" use-router />
         </div>
       </template>
-      <div v-else class="d-flex justify-content-center align-items-center">
-        <div class="spinner-border mr-2" style="width: 2rem; height: 2rem;" role="status" />
-        <span>Loading...(Please wait 30 secs for heroku's server to start)</span>
-        <div class="spinner-border ml-2" style="width: 2rem; height: 2rem;" role="status" />
+      <div v-else class="d-flex flex-column justify-content-center align-items-center mt-5">
+        <div class="spinner-border ml-2" style="width: 10rem; height: 10rem;" role="status" />
+        <h3 class="mt-3">
+          Loading
+        </h3>
+        <p>(Please wait 30 secs for heroku's server to start)</p>
       </div>
     </div>
   </div>
