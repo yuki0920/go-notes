@@ -30,6 +30,7 @@ func (authHandler *AuthHandler) Create() echo.HandlerFunc {
 		if err := c.Bind(&userParam); err != nil {
 			return c.JSON(http.StatusBadRequest, err)
 		}
+
 		user, err := authHandler.userUsecase.GetByName(userParam.Name)
 		if err != nil {
 			return c.JSON(http.StatusBadRequest, err)
@@ -39,7 +40,6 @@ func (authHandler *AuthHandler) Create() echo.HandlerFunc {
 			return c.JSON(http.StatusBadRequest, err)
 		}
 
-		// TODO: 署名用キーは環境変数から取得する
 		token, err := util.GenerateJwtToken(user.Name)
 		if err != nil {
 			return err
