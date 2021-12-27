@@ -1,5 +1,5 @@
 <template>
-  <div class="l-col pt-2">
+  <div class="container pt-2">
     <div class="d-flex flex-column">
       <h1>
         記事一覧
