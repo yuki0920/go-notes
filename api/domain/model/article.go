@@ -8,11 +8,12 @@ import (
 
 // タグによってメタ情報を付与することで、 sqlxがsqlxがSQL実行結果やフォームのname属性と紐付ける
 type Article struct {
-	ID      int       `db:"id" json:"id"`
-	Title   string    `db:"title" validate:"required,max=50" json:"title"`
-	Body    string    `db:"body" validate:"required" json:"body"`
-	Created time.Time `db:"created" json:"created"`
-	Updated time.Time `db:"updated" json:"updated"`
+	ID           int                    `db:"id" json:"id"`
+	Title        string                 `db:"title" validate:"required,max=50" json:"title"`
+	Body         string                 `db:"body" validate:"required" json:"body"`
+	Relationship []CategoryRelationship `json:"relationship"`
+	Created      time.Time              `db:"created" json:"created"`
+	Updated      time.Time              `db:"updated" json:"updated"`
 }
 
 func (a *Article) ValidationErrors(err error) []string {
