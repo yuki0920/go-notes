@@ -3,13 +3,13 @@
 SELECT 'up SQL query';
 -- +goose StatementEnd
 
-CREATE TABLE category_relationships (
+CREATE TABLE article_categories (
     id int AUTO_INCREMENT,
-    category_id int,
     article_id int,
+    category_id int,
     PRIMARY KEY(id),
-    FOREIGN KEY(category_id) REFERENCES categories(id),
     FOREIGN KEY(article_id) REFERENCES articles(id)
+    FOREIGN KEY(category_id) REFERENCES categories(id),
 );
 
 -- +goose Down
