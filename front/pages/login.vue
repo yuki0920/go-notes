@@ -1,8 +1,8 @@
 <template>
-  <div class="l-col l-row l-v-padd">
-    <div class="l-row">
-      <div class="l-row">
-        <form class="l-row" name="form" @submit.prevent>
+  <div class="container row">
+    <div class="row">
+      <div class="row">
+        <form class="row" name="form" @submit.prevent>
           <div>
             <label for="form-name">名前</label>
             <input id="form-name" v-model="name" type="text" name="name">

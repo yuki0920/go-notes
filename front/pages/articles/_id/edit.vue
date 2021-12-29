@@ -1,9 +1,9 @@
 <template>
-  <div v-if="article" class="l-col l-row l-v-padd">
-    <div class="l-row">
-      <div class="l-row">
+  <div v-if="article" class="container">
+    <div class="row">
+      <div class="row">
         <!-- TODO: 入力フォームと共通化したい -->
-        <form class="l-row">
+        <form class="row">
           <!-- TODO: TODO: エラーを表示したい -->
           <div>
             <label class="d-block" for="form-title">タイトル</label>

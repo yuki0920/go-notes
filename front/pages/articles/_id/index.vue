@@ -1,5 +1,5 @@
 <template>
-  <div v-if="article" class="l-col l-row l-v-padd">
+  <div v-if="article" class="container">
     <div>
       <div class="px-3 pt-1 pb-3">
         <h1>
