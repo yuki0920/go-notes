@@ -65,6 +65,13 @@ $ goose mysql $DSN down
 $ docker-compose up
 ```
 
+### DB接続
+
+```
+docker exec -it <container_id> sh
+mysql -u user -p
+```
+
 ### ユーザー作成
 
 - 記事の作成、編集、削除に必要となる
