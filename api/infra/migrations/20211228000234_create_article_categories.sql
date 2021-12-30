@@ -8,11 +8,13 @@ CREATE TABLE article_categories (
     article_id int,
     category_id int,
     PRIMARY KEY(id),
-    FOREIGN KEY(article_id) REFERENCES articles(id)
-    FOREIGN KEY(category_id) REFERENCES categories(id),
+    FOREIGN KEY(article_id) REFERENCES articles(id),
+    FOREIGN KEY(category_id) REFERENCES categories(id)
 );
 
 -- +goose Down
 -- +goose StatementBegin
 SELECT 'down SQL query';
 -- +goose StatementEnd
+
+DROP TABLE article_categories;
