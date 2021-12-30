@@ -33,5 +33,5 @@ func InitAuthRouting(e *echo.Echo, authHandler AuthHandler) {
 }
 
 func InitCategoryRouting(e *echo.Echo, categoryHandler CategoryHandler) {
-	e.POST("/api/categories", categoryHandler.Create())
+	e.POST("/api/categories", categoryHandler.Create(), middleware.IsAuthenticated)
 }
