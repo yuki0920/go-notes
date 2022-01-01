@@ -36,3 +36,16 @@ func (handler *CategoryHandler) Create() echo.HandlerFunc {
 		return c.JSON(http.StatusOK, nil)
 	}
 }
+
+func (handler *CategoryHandler) List() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		categories, err := handler.categoryUsecase.List()
+		if err != nil {
+			c.Logger().Error(err.Error())
+
+			return c.JSON(http.StatusInternalServerError, err)
+		}
+
+		return c.JSON(http.StatusOK, categories)
+	}
+}

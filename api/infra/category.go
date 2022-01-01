@@ -35,3 +35,15 @@ func (categoryRepository *CategoryRepository) Create(category *model.Category) e
 
 	return nil
 }
+
+func (categoryRepository *CategoryRepository) List() ([]*model.Category, error) {
+	query := `SELECT * FROM categories ORDER BY title;`
+
+	var categories []*model.Category
+	err := categoryRepository.SqlHandler.Conn.Select(&categories, query)
+	if err != nil {
+		return nil, err
+	}
+
+	return categories, nil
+}
