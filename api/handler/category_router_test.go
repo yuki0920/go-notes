@@ -7,6 +7,7 @@ import (
 	"testing"
 	"yuki0920/go-notes/domain/model"
 
+	"github.com/bxcodec/faker"
 	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/assert"
 	"gopkg.in/go-playground/validator.v9"
@@ -16,6 +17,15 @@ type mockCategoryUsecase struct{}
 
 func (usecase *mockCategoryUsecase) Create(category *model.Category) (err error) {
 	return err
+}
+
+func (usecase *mockCategoryUsecase) List() (categories []*model.Category, err error) {
+	var mockCategory model.Category
+	faker.FakeData((&mockCategory))
+	categories = make([]*model.Category, 0)
+	categories = append(categories, &mockCategory)
+
+	return categories, err
 }
 
 func TestCategoryCreate(t *testing.T) {
@@ -37,5 +47,23 @@ func TestCategoryCreate(t *testing.T) {
 	res, err := client.Do(req)
 	assert.NoError(t, err)
 
+	assert.Equal(t, http.StatusOK, res.StatusCode)
+}
+
+func TestCategoryList(t *testing.T) {
+	e := echo.New()
+	e.Validator = &CustomValidator{Validator: validator.New()}
+	handler := CategoryHandler{categoryUsecase: &mockCategoryUsecase{}}
+	InitCategoryRouting(e, handler)
+
+	ts := httptest.NewServer(e)
+	defer ts.Close()
+
+	req, _ := http.NewRequest("GET", ts.URL+"/api/categories", nil)
+	client := &http.Client{}
+
+	res, err := client.Do(req)
+
+	assert.NoError(t, err)
 	assert.Equal(t, http.StatusOK, res.StatusCode)
 }
