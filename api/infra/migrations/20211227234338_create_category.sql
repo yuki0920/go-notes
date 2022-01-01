@@ -13,3 +13,5 @@ CREATE TABLE categories (
 -- +goose StatementBegin
 SELECT 'down SQL query';
 -- +goose StatementEnd
+
+DROP TABLE categories;

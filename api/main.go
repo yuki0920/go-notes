@@ -54,4 +54,7 @@ func setupRouting(e *echo.Echo) {
 
 	authHandler := injector.InjectAuthHandler()
 	handler.InitAuthRouting(e, authHandler)
+
+	categoryHandler := injector.InjectCategoryHandler()
+	handler.InitCategoryRouting(e, categoryHandler)
 }
