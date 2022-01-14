@@ -10,6 +10,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/runtime/middleware"
 
+	"yuki0920/go-notes/server"
 	"yuki0920/go-notes/server/gen/restapi/factory"
 )
 
@@ -36,6 +37,8 @@ func configureAPI(api *factory.FactoryAPI) http.Handler {
 	api.JSONConsumer = runtime.JSONConsumer()
 
 	api.TxtProducer = runtime.TextProducer()
+
+	api.GetGreetingHandler = factory.GetGreetingHandlerFunc(server.GetGreeting)
 
 	if api.GetGreetingHandler == nil {
 		api.GetGreetingHandler = factory.GetGreetingHandlerFunc(func(params factory.GetGreetingParams) middleware.Responder {
