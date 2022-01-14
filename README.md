@@ -96,6 +96,18 @@ $ docker-compose run --rm api go test ./... -v
 $ make generate-api
 ```
 
+### go-swaggerによるコード生成
+
+```bash
+# コード生成
+$ cd server
+$ docker cpmpose run --rm api swagger generate server -a factory -A factory -t gen -f ../swagger/swagger.yaml
+
+# サーバー起動
+$ cd ../
+$ docker-compose run --rm api --service-ports api go run server/gen/cmd/factory-server/main.go --host 0.0.0.0 --port 3000
+```
+
 ## ディレクトリ構成
 
 クリーンアーキテクチャーをベースにした構成にしている
