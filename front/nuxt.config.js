@@ -1,3 +1,4 @@
+
 export default {
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
   ssr: false,
@@ -46,7 +47,9 @@ export default {
     // https://go.nuxtjs.dev/bootstrap
     'bootstrap-vue/nuxt',
     // https://go.nuxtjs.dev/axios
-    '@nuxtjs/axios'
+    '@nuxtjs/axios',
+    // https://github.com/spektrummedia/nuxt-vue-multiselect
+    'nuxt-vue-multiselect'
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
