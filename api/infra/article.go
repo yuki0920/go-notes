@@ -19,14 +19,24 @@ func NewArticleRepository(sqlHandler SqlHandler) repository.ArticleRepository {
 }
 
 func (articleRepository *ArticleRepository) GetById(id int) (*model.Article, error) {
-	query := `SELECT *
+	var article model.Article
+	articleQuery := `SELECT *
 	FROM articles
 	WHERE id = ?;`
-
-	var article model.Article
-	if err := articleRepository.SqlHandler.Conn.Get(&article, query, id); err != nil {
+	if err := articleRepository.SqlHandler.Conn.Get(&article, articleQuery, id); err != nil {
 		return nil, err
 	}
+
+	var categories []model.Category
+	categoryQuery := `SELECT categories.*
+	FROM article_categories
+	INNER JOIN categories
+	ON article_categories.category_id = categories.id
+	WHERE article_id = ?;`
+	if err := articleRepository.SqlHandler.Conn.Select(&categories, categoryQuery, id); err != nil {
+		return nil, err
+	}
+	article.Categories = categories
 
 	return &article, nil
 }
@@ -43,6 +53,20 @@ func (articleRepository *ArticleRepository) ListByPage(page int) ([]*model.Artic
 	offset := 5*(page-1) + 1
 	if err := articleRepository.SqlHandler.Conn.Select(&articles, selectQuery, offset); err != nil {
 		return nil, 0, err
+	}
+
+	// TODO: N+1の解消
+	for _, article := range articles {
+		var categories []model.Category
+		categoryQuery := `SELECT categories.*
+		FROM article_categories
+		INNER JOIN categories
+		ON article_categories.category_id = categories.id
+		WHERE article_id = ?;`
+		if err := articleRepository.SqlHandler.Conn.Select(&categories, categoryQuery, article.ID); err != nil {
+			return nil, 0, err
+		}
+		article.Categories = categories
 	}
 
 	var count int
