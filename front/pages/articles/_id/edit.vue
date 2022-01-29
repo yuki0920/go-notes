@@ -9,7 +9,21 @@
             <label class="d-block" for="form-title">タイトル</label>
             <input id="form-title" v-model=" article.title" class="w-100" type="text" name="title">
           </div>
-
+          <div>
+            <label class="typo__label">Tagging</label>
+            <multiselect
+              v-model="selectedTags"
+              tag-placeholder="Add this as new tag"
+              placeholder="Search or add a tag"
+              label="name"
+              track-by="code"
+              :options="options"
+              :multiple="true"
+              :taggable="true"
+              @tag="addTag"
+            />
+            <pre class="language-json"><code>{{ value }}</code></pre>
+          </div>
           <div class="">
             <label class="d-block" for="form-body">本文</label>
             <textarea
@@ -62,6 +76,25 @@ export default defineComponent({
       if (isAuthenticated.value === false) { router.push(`../${article.value?.id}`) }
     })
 
+    const selectedTags = ref([
+      { name: 'Javascript', code: 'js' }
+    ])
+
+    const options = ref([
+      { name: 'Vue.js', code: 'vu' },
+      { name: 'Javascript', code: 'js' },
+      { name: 'Open Source', code: 'os' }
+    ])
+
+    const addTag = (newTag: string) => {
+      const tag = {
+        name: newTag,
+        code: newTag.substring(0, 2) + Math.floor((Math.random() * 10000000))
+      }
+      options.value.push(tag)
+      selectedTags.value.push(tag)
+    }
+
     const deleteArticle = async () => {
       try {
         await $axios.delete(`/api/articles/${id}`)
@@ -85,7 +118,10 @@ export default defineComponent({
     return {
       article,
       submit,
-      deleteArticle
+      deleteArticle,
+      options,
+      selectedTags,
+      addTag
     }
   }
 })
