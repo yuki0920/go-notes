@@ -1,7 +1,7 @@
 package model
 
 type ArticleCategory struct {
-	ID       int      `db:"id" json:"id"`
-	Article  Article  `db:"article_id" json:"article_id"`
-	Category Category `db:"category_id" json:"category_id"`
+	ID         int `db:"id" json:"id"`
+	ArticleID  int `db:"article_id"`
+	CategoryID int `db:"category_id"`
 }

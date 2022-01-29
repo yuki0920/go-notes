@@ -19,14 +19,24 @@ func NewArticleRepository(sqlHandler SqlHandler) repository.ArticleRepository {
 }
 
 func (articleRepository *ArticleRepository) GetById(id int) (*model.Article, error) {
-	query := `SELECT *
+	var article model.Article
+	articleQuery := `SELECT *
 	FROM articles
 	WHERE id = ?;`
-
-	var article model.Article
-	if err := articleRepository.SqlHandler.Conn.Get(&article, query, id); err != nil {
+	if err := articleRepository.SqlHandler.Conn.Get(&article, articleQuery, id); err != nil {
 		return nil, err
 	}
+
+	var categories []model.Category
+	categoryQuery := `SELECT categories.*
+	FROM article_categories
+	INNER JOIN categories
+	ON article_categories.category_id = categories.id
+	WHERE article_id = ?;`
+	if err := articleRepository.SqlHandler.Conn.Select(&categories, categoryQuery, id); err != nil {
+		return nil, err
+	}
+	article.Categories = categories
 
 	return &article, nil
 }
