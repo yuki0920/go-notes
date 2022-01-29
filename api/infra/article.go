@@ -55,6 +55,20 @@ func (articleRepository *ArticleRepository) ListByPage(page int) ([]*model.Artic
 		return nil, 0, err
 	}
 
+	// TODO: N+1の解消
+	for _, article := range articles {
+		var categories []model.Category
+		categoryQuery := `SELECT categories.*
+		FROM article_categories
+		INNER JOIN categories
+		ON article_categories.category_id = categories.id
+		WHERE article_id = ?;`
+		if err := articleRepository.SqlHandler.Conn.Select(&categories, categoryQuery, article.ID); err != nil {
+			return nil, 0, err
+		}
+		article.Categories = categories
+	}
+
 	var count int
 	countQuery := `SELECT
 	COUNT(*)
