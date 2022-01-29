@@ -15,8 +15,8 @@ import (
 
 type mockCategoryUsecase struct{}
 
-func (usecase *mockCategoryUsecase) Create(category *model.Category) (err error) {
-	return err
+func (usecase *mockCategoryUsecase) Create(category *model.Category) (id int64, err error) {
+	return 0, err
 }
 
 func (usecase *mockCategoryUsecase) List() (categories []*model.Category, err error) {

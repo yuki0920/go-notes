@@ -89,11 +89,11 @@ export default defineComponent({
 
     const selectedTags = ref<categoryOption[]>([])
     const addTag = async (newTag: string) => {
+      const { data: id } = await $axios.post('/api/categories', { title: newTag })
       const tag = {
-        id: Math.random(),
+        id: parseInt(id, 10),
         title: newTag
       }
-      await $axios.post('/api/categories', { title: newTag })
       categoryOptions.value.push(tag)
       selectedTags.value.push(tag)
     }
@@ -109,7 +109,11 @@ export default defineComponent({
 
     const submit = async (event: any) => {
       event.preventDefault()
-      const params = { title: article.value?.title, body: article.value?.body }
+      const params = {
+        title: article.value?.title,
+        body: article.value?.body,
+        category_ids: selectedTags.value.map(tag => tag.id)
+      }
       try {
         await $axios.put(`/api/articles/${id}`, params)
         router.push(`../${article.value?.id}`)

@@ -27,13 +27,14 @@ func (handler *CategoryHandler) Create() echo.HandlerFunc {
 
 			return c.JSON(http.StatusUnprocessableEntity, category)
 		}
-		if err := handler.categoryUsecase.Create(&category); err != nil {
+		id, err := handler.categoryUsecase.Create(&category)
+		if err != nil {
 			c.Logger().Error(err.Error())
 
 			return c.JSON(http.StatusInternalServerError, err)
 		}
 
-		return c.JSON(http.StatusOK, nil)
+		return c.JSON(http.StatusOK, id)
 	}
 }
 

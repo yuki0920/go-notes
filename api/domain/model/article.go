@@ -12,8 +12,9 @@ type Article struct {
 	Title      string     `db:"title" validate:"required,max=50" json:"title"`
 	Body       string     `db:"body" validate:"required" json:"body"`
 	Categories []Category `db:"-" json:"categories"`
-	Created    time.Time  `db:"created" json:"created"`
-	Updated    time.Time  `db:"updated" json:"updated"`
+	// CategoryIDs []Category `db:"-" json:"category_ids"`
+	Created time.Time `db:"created" json:"created"`
+	Updated time.Time `db:"updated" json:"updated"`
 }
 
 func (a *Article) ValidationErrors(err error) []string {

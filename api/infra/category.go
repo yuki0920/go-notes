@@ -16,7 +16,7 @@ func NewCategoryRepository(sqlHandler SqlHandler) repository.CategoryRepository 
 	}
 }
 
-func (categoryRepository *CategoryRepository) Create(category *model.Category) error {
+func (categoryRepository *CategoryRepository) Create(category *model.Category) (int64, error) {
 	now := time.Now()
 	category.Created = now
 	category.Updated = now
@@ -24,16 +24,21 @@ func (categoryRepository *CategoryRepository) Create(category *model.Category) e
 	query := `INSERT INTO categories (title, created, updated) VALUES (:title, :created, :updated);`
 
 	tx := categoryRepository.SqlHandler.Conn.MustBegin()
-	_, err := tx.NamedExec(query, category)
+	res, err := tx.NamedExec(query, category)
 	if err != nil {
 		tx.Rollback()
 
-		return err
+		return 0, err
+	}
+
+	id, err := res.LastInsertId()
+	if err != nil {
+		return 0, err
 	}
 
 	tx.Commit()
 
-	return nil
+	return id, nil
 }
 
 func (categoryRepository *CategoryRepository) List() ([]*model.Category, error) {
