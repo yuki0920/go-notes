@@ -10,19 +10,17 @@
             <input id="form-title" v-model=" article.title" class="w-100" type="text" name="title">
           </div>
           <div>
-            <label class="typo__label">Tagging</label>
             <multiselect
               v-model="selectedTags"
               tag-placeholder="Add this as new tag"
               placeholder="Search or add a tag"
-              label="name"
-              track-by="code"
-              :options="options"
+              label="title"
+              track-by="id"
+              :options="categoryOptions"
               :multiple="true"
               :taggable="true"
               @tag="addTag"
             />
-            <pre class="language-json"><code>{{ value }}</code></pre>
           </div>
           <div class="">
             <label class="d-block" for="form-body">本文</label>
@@ -56,6 +54,7 @@
 <script lang="ts">
 import { defineComponent, onMounted, useRoute, useRouter, useContext, ref } from '@nuxtjs/composition-api'
 import { Article } from '~/types/article'
+import { Category } from '~/types/category'
 export default defineComponent({
   name: 'ArticleEdit',
   setup () {
@@ -66,32 +65,36 @@ export default defineComponent({
 
     const isAuthenticated = ref<Boolean>(false)
     const article = ref<Article | null>(null)
+    type categoryOption = {
+      id: number,
+      title: string,
+    }
+    const categoryOptions = ref<categoryOption[]>([])
 
     onMounted(async () => {
       const { data: articleData } = await $axios.get(`/api/articles/${id}`)
       if (articleData) { article.value = articleData }
+
+      const { data: categoryData } = await $axios.get('/api/categories')
+      if (categoryData) {
+        categoryData.forEach((category: Category) => {
+          categoryOptions.value.push({ id: category.id, title: category.title })
+        })
+      }
 
       const { data: authData } = await $axios.get('/api/auth')
       isAuthenticated.value = authData.IsAuthenticated
       if (isAuthenticated.value === false) { router.push(`../${article.value?.id}`) }
     })
 
-    const selectedTags = ref([
-      { name: 'Javascript', code: 'js' }
-    ])
-
-    const options = ref([
-      { name: 'Vue.js', code: 'vu' },
-      { name: 'Javascript', code: 'js' },
-      { name: 'Open Source', code: 'os' }
-    ])
-
-    const addTag = (newTag: string) => {
+    const selectedTags = ref<categoryOption[]>([])
+    const addTag = async (newTag: string) => {
       const tag = {
-        name: newTag,
-        code: newTag.substring(0, 2) + Math.floor((Math.random() * 10000000))
+        id: Math.random(),
+        title: newTag
       }
-      options.value.push(tag)
+      await $axios.post('/api/categories', { title: newTag })
+      categoryOptions.value.push(tag)
       selectedTags.value.push(tag)
     }
 
@@ -119,7 +122,7 @@ export default defineComponent({
       article,
       submit,
       deleteArticle,
-      options,
+      categoryOptions,
       selectedTags,
       addTag
     }
