@@ -150,16 +150,38 @@ func (articleRepository *ArticleRepository) Update(article *model.Article) error
 	return nil
 }
 
-func (articleRepository *ArticleRepository) Delete(idn int) error {
+func (articleRepository *ArticleRepository) Delete(id int) error {
 	query := `DELETE FROM articles WHERE id = ?;`
 
 	tx := articleRepository.SqlHandler.Conn.MustBegin()
 
-	if _, err := tx.Exec(query, idn); err != nil {
+	if _, err := tx.Exec(query, id); err != nil {
 		tx.Rollback()
 
 		return err
 	}
 
 	return tx.Commit()
+}
+
+func (articleRepository *ArticleRepository) CreateCategories(article *model.Article) error {
+	for _, categoryId := range article.CategoryIDs {
+		q := `INSERT INTO article_categories (article_id, category_id) VALUES (?, ?)`
+		if _, err := articleRepository.SqlHandler.Conn.Exec(q, article.ID, categoryId); err != nil {
+			err = fmt.Errorf("failed to create article_category: %w", err)
+			return err
+		}
+	}
+	return nil
+}
+
+func (articleRepository *ArticleRepository) DeleteCategories(articleID int) error {
+	fmt.Println("articleID:", articleID)
+	q := `DELETE FROM article_categories WHERE article_id = ?;`
+	if _, err := articleRepository.SqlHandler.Conn.Exec(q, articleID); err != nil {
+		err = fmt.Errorf("failed to delete article_category: %w", err)
+		return err
+	}
+
+	return nil
 }

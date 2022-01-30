@@ -40,6 +40,14 @@ func (mockRepo *mockArticleRepository) Delete(id int) error {
 	return nil
 }
 
+func (mockRepo *mockArticleRepository) CreateCategories(article *model.Article) error {
+	return nil
+}
+
+func (mockRepo *mockArticleRepository) DeleteCategories(id int) error {
+	return nil
+}
+
 func TestArticleGetById(t *testing.T) {
 	mockRepo := &mockArticleRepository{}
 	articleUsecase := usecase.NewArticleUsecase(mockRepo)
