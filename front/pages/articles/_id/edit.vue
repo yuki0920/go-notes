@@ -102,12 +102,8 @@ export default defineComponent({
     }
 
     const deleteArticle = async () => {
-      try {
-        await $axios.delete(`/api/articles/${id}`)
-        router.push('../../')
-      } catch (err) {
-        // console.error(err)
-      }
+      await $axios.delete(`/api/articles/${id}`)
+      router.push('../../')
     }
 
     const submit = async (event: any) => {
@@ -117,12 +113,8 @@ export default defineComponent({
         body: article.value?.body,
         category_ids: selectedTags.value.map(tag => tag.id)
       }
-      try {
-        await $axios.put(`/api/articles/${id}`, params)
-        router.push(`../${article.value?.id}`)
-      } catch (err) {
-        // console.log(err)
-      }
+      await $axios.put(`/api/articles/${id}`, params)
+      router.push(`../${article.value?.id}`)
     }
 
     return {
