@@ -67,10 +67,17 @@ export default defineComponent({
       title: string,
     }
     const categoryOptions = ref<categoryOption[]>([])
+    const selectedTags = ref<categoryOption[]>([])
 
     onMounted(async () => {
       const { data: articleData } = await $axios.get(`/api/articles/${id}`)
       if (articleData) { article.value = articleData }
+      article.value?.categories?.forEach((category: Category) => {
+        selectedTags.value.push({
+          id: category.id,
+          title: category.title
+        })
+      })
 
       const { data: categoryData } = await $axios.get('/api/categories')
       if (categoryData) {
@@ -84,7 +91,6 @@ export default defineComponent({
       if (isAuthenticated.value === false) { router.push(`../${article.value?.id}`) }
     })
 
-    const selectedTags = ref<categoryOption[]>([])
     const addTag = async (newTag: string) => {
       const { data: id } = await $axios.post('/api/categories', { title: newTag })
       const tag = {
