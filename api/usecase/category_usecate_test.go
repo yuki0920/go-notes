@@ -11,8 +11,8 @@ import (
 
 type mockCategoryRepository struct{}
 
-func (mockRepo *mockCategoryRepository) Create(category *model.Category) error {
-	return nil
+func (mockRepo *mockCategoryRepository) Create(category *model.Category) (int64, error) {
+	return 0, nil
 }
 
 func (mockRepo *mockCategoryRepository) List() ([]*model.Category, error) {
@@ -29,7 +29,7 @@ func TestCategoryCreate(t *testing.T) {
 	mockRepo := &mockCategoryRepository{}
 	categoryUsecase := usecase.NewCategoryUsecase(mockRepo)
 
-	err := categoryUsecase.Create(&model.Category{})
+	_, err := categoryUsecase.Create(&model.Category{})
 	assert.NoError(t, err)
 }
 

@@ -1,13 +1,12 @@
 package usecase
 
 import (
-	"fmt"
 	"yuki0920/go-notes/domain/model"
 	"yuki0920/go-notes/domain/repository"
 )
 
 type CategoryUsecase interface {
-	Create(category *model.Category) error
+	Create(category *model.Category) (int64, error)
 	List() ([]*model.Category, error)
 }
 
@@ -21,19 +20,17 @@ func NewCategoryUsecase(categoryRepo repository.CategoryRepository) CategoryUsec
 	}
 }
 
-func (usecase *categoryUsecase) Create(category *model.Category) error {
-	err := usecase.categoryRepo.Create(category)
+func (usecase *categoryUsecase) Create(category *model.Category) (int64, error) {
+	id, err := usecase.categoryRepo.Create(category)
 	if err != nil {
-		return err
+		return 0, err
 	}
 
-	return nil
+	return id, nil
 }
 
 func (usecase *categoryUsecase) List() ([]*model.Category, error) {
-	fmt.Println("usecase called start")
 	categories, err := usecase.categoryRepo.List()
-	fmt.Println("usecase called finished")
 	if err != nil {
 		return nil, err
 	}

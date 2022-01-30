@@ -48,6 +48,9 @@ func (usecase *articleUsecase) Create(article *model.Article) (int64, error) {
 		return 0, err
 	}
 
+	// usecase.articleCategoryRepo.Delete(id)
+	// usecase.articleCategoryRepo.Create(id, article.CategoryIDs)
+
 	return id, err
 }
 
@@ -56,6 +59,9 @@ func (usecase *articleUsecase) Update(article *model.Article) error {
 	if err != nil {
 		return err
 	}
+
+	usecase.articleRepo.DeleteCategories(article.ID)
+	usecase.articleRepo.CreateCategories(article)
 
 	return nil
 }

@@ -1,6 +1,7 @@
 package infra
 
 import (
+	"fmt"
 	"time"
 	"yuki0920/go-notes/domain/model"
 	"yuki0920/go-notes/domain/repository"
@@ -16,7 +17,7 @@ func NewCategoryRepository(sqlHandler SqlHandler) repository.CategoryRepository 
 	}
 }
 
-func (categoryRepository *CategoryRepository) Create(category *model.Category) error {
+func (categoryRepository *CategoryRepository) Create(category *model.Category) (int64, error) {
 	now := time.Now()
 	category.Created = now
 	category.Updated = now
@@ -24,16 +25,23 @@ func (categoryRepository *CategoryRepository) Create(category *model.Category) e
 	query := `INSERT INTO categories (title, created, updated) VALUES (:title, :created, :updated);`
 
 	tx := categoryRepository.SqlHandler.Conn.MustBegin()
-	_, err := tx.NamedExec(query, category)
+	res, err := tx.NamedExec(query, category)
 	if err != nil {
+		err = fmt.Errorf("failed to create category: %w", err)
 		tx.Rollback()
 
-		return err
+		return 0, err
+	}
+
+	id, err := res.LastInsertId()
+	if err != nil {
+		err = fmt.Errorf("failed to get last insert id: %w", err)
+		return 0, err
 	}
 
 	tx.Commit()
 
-	return nil
+	return id, nil
 }
 
 func (categoryRepository *CategoryRepository) List() ([]*model.Category, error) {
@@ -42,6 +50,7 @@ func (categoryRepository *CategoryRepository) List() ([]*model.Category, error) 
 	var categories []*model.Category
 	err := categoryRepository.SqlHandler.Conn.Select(&categories, query)
 	if err != nil {
+		err = fmt.Errorf("failed to list categories: %w", err)
 		return nil, err
 	}
 
