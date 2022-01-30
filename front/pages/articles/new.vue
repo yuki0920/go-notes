@@ -1,38 +1,35 @@
 <template>
   <div class="container">
     <div class="row">
-      <div class="row">
-        <!-- TODO: 入力フォームと共通化したい -->
-        <form class="row">
-          <!-- TODO: TODO: エラーを表示したい -->
-          <div>
-            <label class="d-block" for="form-title">タイトル</label>
-            <input id="form-title" v-model=" article.title" class="w-100" type="text" name="title">
-          </div>
+      <!-- TODO: 入力フォームと共通化したい -->
+      <form>
+        <!-- TODO: TODO: エラーを表示したい -->
+        <div>
+          <label for="form-title">タイトル</label>
+          <input id="form-title" v-model=" article.title" type="text" name="title">
+        </div>
 
-          <div class="">
-            <label class="d-block" for="form-body">本文</label>
-            <textarea
-              id="form-body"
-              v-model="article.body"
-              class="w-100"
-              rows="20"
-              name="body"
-            />
-          </div>
+        <div>
+          <label for="form-body">本文</label>
+          <textarea
+            id="form-body"
+            v-model="article.body"
+            rows="20"
+            name="body"
+          />
+        </div>
 
-          <div>
-            <a href="javascript:void(0)" class="btn btn-secondary">
-              <nuxt-link to="/">
-                キャンセル
-              </nuxt-link>
-            </a>
-            <a href="javascript:void(0)" class="btn btn-dark" @click="submit">
-              保存
-            </a>
-          </div>
-        </form>
-      </div>
+        <div>
+          <a href="javascript:void(0)" class="btn btn-secondary">
+            <nuxt-link to="/">
+              キャンセル
+            </nuxt-link>
+          </a>
+          <a href="javascript:void(0)" class="btn btn-dark" @click="submit">
+            保存
+          </a>
+        </div>
+      </form>
     </div>
   </div>
 </template>

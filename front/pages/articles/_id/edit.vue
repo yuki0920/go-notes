@@ -1,52 +1,49 @@
 <template>
   <div v-if="article" class="container">
     <div class="row">
-      <div class="row">
-        <!-- TODO: 入力フォームと共通化したい -->
-        <form class="row">
-          <!-- TODO: TODO: エラーを表示したい -->
-          <div>
-            <label class="d-block" for="form-title">タイトル</label>
-            <input id="form-title" v-model=" article.title" class="w-100" type="text" name="title">
-          </div>
-          <div>
-            <multiselect
-              v-model="selectedTags"
-              tag-placeholder="Add this as new tag"
-              placeholder="Search or add a tag"
-              label="title"
-              track-by="id"
-              :options="categoryOptions"
-              :multiple="true"
-              :taggable="true"
-              @tag="addTag"
-            />
-          </div>
-          <div class="">
-            <label class="d-block" for="form-body">本文</label>
-            <textarea
-              id="form-body"
-              v-model="article.body"
-              class="w-100"
-              rows="20"
-              name="body"
-            />
-          </div>
-          <div>
-            <a href="javascript:void(0)" class="btn btn-secondary">
-              <nuxt-link :to="`../${article.id}`">
-                キャンセル
-              </nuxt-link>
-            </a>
-            <a id="article-form__save" href="javascript:void(0)" class="btn btn-dark" @click="submit">
-              保存
-            </a>
-            <a href="javascript:void(0)" class="btn" @click="deleteArticle">
-              <b-icon-trash style="font-size: 2rem; color: red;" />
-            </a>
-          </div>
-        </form>
-      </div>
+      <!-- TODO: 入力フォームと共通化したい -->
+      <form>
+        <!-- TODO: TODO: エラーを表示したい -->
+        <div>
+          <label for="form-title">タイトル</label>
+          <input id="form-title" v-model=" article.title" type="text" name="title">
+        </div>
+        <div>
+          <multiselect
+            v-model="selectedTags"
+            tag-placeholder="Add this as new tag"
+            placeholder="Search or add a tag"
+            label="title"
+            track-by="id"
+            :options="categoryOptions"
+            :multiple="true"
+            :taggable="true"
+            @tag="addTag"
+          />
+        </div>
+        <div>
+          <label for="form-body">本文</label>
+          <textarea
+            id="form-body"
+            v-model="article.body"
+            rows="20"
+            name="body"
+          />
+        </div>
+        <div>
+          <a href="javascript:void(0)" class="btn btn-secondary">
+            <nuxt-link :to="`../${article.id}`">
+              キャンセル
+            </nuxt-link>
+          </a>
+          <a id="article-form__save" href="javascript:void(0)" class="btn btn-dark" @click="submit">
+            保存
+          </a>
+          <a href="javascript:void(0)" class="btn" @click="deleteArticle">
+            <b-icon-trash style="font-size: 2rem; color: red;" />
+          </a>
+        </div>
+      </form>
     </div>
   </div>
 </template>
