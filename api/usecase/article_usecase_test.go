@@ -40,7 +40,7 @@ func (mockRepo *mockArticleRepository) Delete(id int) error {
 	return nil
 }
 
-func (mockRepo *mockArticleRepository) CreateCategories(article *model.Article) error {
+func (mockRepo *mockArticleRepository) CreateCategories(id int, article *model.Article) error {
 	return nil
 }
 
