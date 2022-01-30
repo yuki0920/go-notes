@@ -164,10 +164,10 @@ func (articleRepository *ArticleRepository) Delete(id int) error {
 	return tx.Commit()
 }
 
-func (articleRepository *ArticleRepository) CreateCategories(article *model.Article) error {
+func (articleRepository *ArticleRepository) CreateCategories(articleID int, article *model.Article) error {
 	for _, categoryId := range article.CategoryIDs {
 		q := `INSERT INTO article_categories (article_id, category_id) VALUES (?, ?)`
-		if _, err := articleRepository.SqlHandler.Conn.Exec(q, article.ID, categoryId); err != nil {
+		if _, err := articleRepository.SqlHandler.Conn.Exec(q, articleID, categoryId); err != nil {
 			err = fmt.Errorf("failed to create article_category: %w", err)
 			return err
 		}

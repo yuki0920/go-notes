@@ -8,6 +8,6 @@ type ArticleRepository interface {
 	Create(article *model.Article) (int64, error)
 	Update(article *model.Article) error
 	Delete(id int) error
-	CreateCategories(article *model.Article) error
+	CreateCategories(id int, article *model.Article) error
 	DeleteCategories(id int) error
 }
