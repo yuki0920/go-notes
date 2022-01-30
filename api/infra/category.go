@@ -1,6 +1,7 @@
 package infra
 
 import (
+	"fmt"
 	"time"
 	"yuki0920/go-notes/domain/model"
 	"yuki0920/go-notes/domain/repository"
@@ -26,6 +27,7 @@ func (categoryRepository *CategoryRepository) Create(category *model.Category) (
 	tx := categoryRepository.SqlHandler.Conn.MustBegin()
 	res, err := tx.NamedExec(query, category)
 	if err != nil {
+		err = fmt.Errorf("failed to create category: %w", err)
 		tx.Rollback()
 
 		return 0, err
@@ -33,6 +35,7 @@ func (categoryRepository *CategoryRepository) Create(category *model.Category) (
 
 	id, err := res.LastInsertId()
 	if err != nil {
+		err = fmt.Errorf("failed to get last insert id: %w", err)
 		return 0, err
 	}
 
@@ -47,6 +50,7 @@ func (categoryRepository *CategoryRepository) List() ([]*model.Category, error) 
 	var categories []*model.Category
 	err := categoryRepository.SqlHandler.Conn.Select(&categories, query)
 	if err != nil {
+		err = fmt.Errorf("failed to list categories: %w", err)
 		return nil, err
 	}
 

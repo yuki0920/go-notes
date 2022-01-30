@@ -1,6 +1,7 @@
 package infra
 
 import (
+	"fmt"
 	"time"
 	"yuki0920/go-notes/domain/model"
 	"yuki0920/go-notes/domain/repository"
@@ -24,6 +25,7 @@ func (articleRepository *ArticleRepository) GetById(id int) (*model.Article, err
 	FROM articles
 	WHERE id = ?;`
 	if err := articleRepository.SqlHandler.Conn.Get(&article, articleQuery, id); err != nil {
+		err = fmt.Errorf("failed to select article: %w", err)
 		return nil, err
 	}
 
@@ -34,6 +36,7 @@ func (articleRepository *ArticleRepository) GetById(id int) (*model.Article, err
 	ON article_categories.category_id = categories.id
 	WHERE article_id = ?;`
 	if err := articleRepository.SqlHandler.Conn.Select(&categories, categoryQuery, id); err != nil {
+		err = fmt.Errorf("failed to select categories: %w", err)
 		return nil, err
 	}
 	article.Categories = categories
@@ -52,6 +55,7 @@ func (articleRepository *ArticleRepository) ListByPage(page int) ([]*model.Artic
 	articles := make([]*model.Article, 0, 5)
 	offset := 5*(page-1) + 1
 	if err := articleRepository.SqlHandler.Conn.Select(&articles, selectQuery, offset); err != nil {
+		err = fmt.Errorf("failed to select articles: %w", err)
 		return nil, 0, err
 	}
 
@@ -64,6 +68,7 @@ func (articleRepository *ArticleRepository) ListByPage(page int) ([]*model.Artic
 		ON article_categories.category_id = categories.id
 		WHERE article_id = ?;`
 		if err := articleRepository.SqlHandler.Conn.Select(&categories, categoryQuery, article.ID); err != nil {
+			err = fmt.Errorf("failed to select categories: %w", err)
 			return nil, 0, err
 		}
 		article.Categories = categories
@@ -78,6 +83,7 @@ func (articleRepository *ArticleRepository) ListByPage(page int) ([]*model.Artic
 	rows := articleRepository.SqlHandler.Conn.QueryRow(countQuery)
 	err := rows.Scan(&count)
 	if err != nil {
+		err = fmt.Errorf("failed to count articles: %w", err)
 		return nil, 0, err
 	}
 
@@ -102,6 +108,7 @@ func (articleRepository *ArticleRepository) Create(article *model.Article) (int6
 	// 構造体タグで指定してあるフィールドが対象となる ex)`db:"title"`
 	res, err := tx.NamedExec(query, article)
 	if err != nil {
+		err = fmt.Errorf("failed to create article: %w", err)
 		tx.Rollback()
 
 		return 0, err
@@ -111,6 +118,7 @@ func (articleRepository *ArticleRepository) Create(article *model.Article) (int6
 
 	id, err := res.LastInsertId()
 	if err != nil {
+		err = fmt.Errorf("failed to get last insert id: %w", err)
 		return 0, err
 	}
 
@@ -131,6 +139,7 @@ func (articleRepository *ArticleRepository) Update(article *model.Article) error
 
 	// クエリ文字列内の :title, :body, :id には、第 2 引数の Article 構造体の Title, Body, ID が bind される
 	if _, err := tx.NamedExec(query, article); err != nil {
+		err = fmt.Errorf("failed to update article: %w", err)
 		tx.Rollback()
 
 		return err
