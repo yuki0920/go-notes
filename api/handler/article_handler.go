@@ -121,6 +121,7 @@ func (handler *ArticleHandler) Update() echo.HandlerFunc {
 
 		// フォームの内容を構造体にバインドする、構造体で設定した型と異なる場合はエラーになる
 		if err := c.Bind(&article); err != nil {
+			c.Logger().Error(err.Error())
 			out.Message = err.Error()
 
 			return c.JSON(http.StatusBadRequest, out)
@@ -128,6 +129,7 @@ func (handler *ArticleHandler) Update() echo.HandlerFunc {
 
 		// フォームの内容を検証する
 		if err := c.Validate(&article); err != nil {
+			c.Logger().Error(err.Error())
 			out.ValidationErrors = article.ValidationErrors(err)
 			return c.JSON(http.StatusUnprocessableEntity, out)
 		}
@@ -137,6 +139,7 @@ func (handler *ArticleHandler) Update() echo.HandlerFunc {
 
 		err := handler.articleUsecase.Update(&article)
 		if err != nil {
+			c.Logger().Error(err.Error())
 			out.Message = err.Error()
 
 			return c.JSON(http.StatusInternalServerError, out)

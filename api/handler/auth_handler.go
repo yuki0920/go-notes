@@ -28,21 +28,29 @@ func (authHandler *AuthHandler) Create() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		var userParam UserParam
 		if err := c.Bind(&userParam); err != nil {
+			c.Logger().Error(err.Error())
+
 			return c.JSON(http.StatusBadRequest, err)
 		}
 
 		user, err := authHandler.userUsecase.GetByName(userParam.Name)
 		if err != nil {
+			c.Logger().Error(err.Error())
+
 			return c.JSON(http.StatusBadRequest, err)
 		}
 
 		if user.ComparePassword(userParam.Password); err != nil {
+			c.Logger().Error(err.Error())
+
 			return c.JSON(http.StatusBadRequest, err)
 		}
 
 		token, err := util.GenerateJwtToken(user.Name)
 		if err != nil {
-			return err
+			c.Logger().Error(err.Error())
+
+			return c.JSON(http.StatusBadRequest, err)
 		}
 
 		cookie := &http.Cookie{
