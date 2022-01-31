@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 	"os"
 
@@ -44,6 +45,7 @@ func createMux() *echo.Echo {
 	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
 		Format: "\nmethod=${method}, uri=${uri}, status=${status}\n",
 	}))
+	e.Use(middleware.BodyDump(bodyDumpHandler))
 
 	return e
 }
@@ -57,4 +59,9 @@ func setupRouting(e *echo.Echo) {
 
 	categoryHandler := injector.InjectCategoryHandler()
 	handler.InitCategoryRouting(e, categoryHandler)
+}
+
+func bodyDumpHandler(c echo.Context, reqBody, resBody []byte) {
+	fmt.Printf("Request Body: %v\n", string(reqBody))
+	fmt.Printf("Response Body: %v\n", string(resBody))
 }
