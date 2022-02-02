@@ -8,15 +8,18 @@
         <article v-for="(article, index) in articles" :key="index">
           <div class="p-2">
             <nuxt-link :to="`/articles/${article.id}`">
-              <p class="h3">
+              <p class="h4 mb-0">
                 {{ article.title }}
               </p>
             </nuxt-link>
             <div>
-              <small class="text-muted">
-                {{ article.created }}
-              </small>
+              <span v-for="category in article.categories" :key="category.title" class="badge badge-dark inline-block mr-1">
+                {{ category.title }}
+              </span>
             </div>
+            <small class="text-muted">
+              {{ article.created }}
+            </small>
           </div>
         </article>
         <div class="overflow-auto">
