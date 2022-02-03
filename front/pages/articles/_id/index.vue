@@ -6,20 +6,17 @@
           {{ article.title }}
         </h1>
         <div>
-          <span v-for="category in article.categories" :key="category.title" class="badge badge-dark inline-block mr-1">
+          <span v-for="category in article.categories" :key="category.title" class="badge badge-dark inline-block mb-1 mr-1">
             {{ category.title }}
           </span>
         </div>
         <div class="d-flex">
-          <div class="text-muted">
-            更新: {{ article.updated }}
-          </div>
-          <div class="text-muted">
-            公開: {{ article.created }}
-          </div>
+          <small class="text-muted">
+            Published: {{ article.created }} / Updated: {{ article.updated }}
+          </small>
         </div>
-        <nuxt-link v-if="isAuthenticated" class="text-muted" :to="`/articles/${articleId}/edit`">
-          編集
+        <nuxt-link v-if="isAuthenticated" :to="`/articles/${articleId}/edit`">
+          Edit
         </nuxt-link>
       </div>
       <div class="px-3">
