@@ -5,16 +5,18 @@
         <h1>
           {{ article.title }}
         </h1>
-        <div class="d-flex">
-          <div class="text-muted">
-            更新: {{ article.updated }}
-          </div>
-          <div class="text-muted">
-            公開: {{ article.created }}
-          </div>
+        <div>
+          <span v-for="category in article.categories" :key="category.title" class="badge badge-dark inline-block mb-1 mr-1">
+            {{ category.title }}
+          </span>
         </div>
-        <nuxt-link v-if="isAuthenticated" class="text-muted" :to="`/articles/${articleId}/edit`">
-          編集
+        <div class="d-flex">
+          <small class="text-muted">
+            Published: {{ article.created }} / Updated: {{ article.updated }}
+          </small>
+        </div>
+        <nuxt-link v-if="isAuthenticated" :to="`/articles/${articleId}/edit`">
+          Edit
         </nuxt-link>
       </div>
       <div class="px-3">
@@ -30,6 +32,7 @@
 import { defineComponent, onMounted, useRoute, useContext, ref } from '@nuxtjs/composition-api'
 // @ts-ignore # NOTE: 型定義ファイルがないため
 import vueRemarkable from 'vue-remarkable'
+import { Article } from '~/types/article'
 
 export default defineComponent({
   name: 'ArticleIndex',
@@ -42,14 +45,14 @@ export default defineComponent({
 
     const articleId = route.value.params.id
     const isAuthenticated = ref(false)
-    const article = ref(null)
+    const article = ref<Article | null>(null)
 
     onMounted(async () => {
       const { data: authData } = await $axios.get('/api/auth')
       isAuthenticated.value = authData.IsAuthenticated
 
-      const { data: articleData } = await $axios.get(`/api/articles/${articleId}`)
-      if (articleData) { article.value = articleData }
+      const { data }: { data: Article } = await $axios.get(`/api/articles/${articleId}`)
+      if (data) { article.value = data }
     })
 
     return {
