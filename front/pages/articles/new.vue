@@ -1,48 +1,51 @@
 <template>
   <div class="container">
-    <div class="row">
-      <!-- TODO: 入力フォームと共通化したい -->
-      <form>
-        <!-- TODO: TODO: エラーを表示したい -->
-        <div>
-          <label for="form-title">タイトル</label>
-          <input id="form-title" v-model=" article.title" type="text" name="title">
-        </div>
-        <div>
-          <multiselect
-            v-model="selectedTags"
-            tag-placeholder="Add this as new tag"
-            placeholder="Search or add a tag"
-            label="title"
-            track-by="id"
-            :options="categoryOptions"
-            :multiple="true"
-            :taggable="true"
-            @tag="addTag"
-          />
-        </div>
-        <div>
-          <label for="form-body">本文</label>
-          <textarea
-            id="form-body"
-            v-model="article.body"
-            rows="20"
-            name="body"
-          />
-        </div>
-
-        <div>
-          <a href="javascript:void(0)" class="btn btn-secondary">
-            <nuxt-link to="/">
-              キャンセル
-            </nuxt-link>
-          </a>
-          <a href="javascript:void(0)" class="btn btn-dark" @click="submit">
-            保存
-          </a>
-        </div>
-      </form>
-    </div>
+    <form>
+      <!-- TODO: TODO: エラーを表示したい -->
+      <div class="form-group">
+        <label for="form-title">タイトル</label>
+        <input
+          id="form-title"
+          v-model="article.title"
+          class="form-control"
+          type="text"
+          name="title"
+        >
+      </div>
+      <div class="form-group">
+        <multiselect
+          v-model="selectedTags"
+          tag-placeholder="Add this as new tag"
+          placeholder="Search or add a tag"
+          label="title"
+          track-by="id"
+          :options="categoryOptions"
+          :multiple="true"
+          :taggable="true"
+          @tag="addTag"
+        />
+      </div>
+      <div class="form-group">
+        <label for="form-body">本文</label>
+        <textarea
+          id="form-body"
+          v-model="article.body"
+          class="form-control"
+          rows="20"
+          name="body"
+        />
+      </div>
+      <div>
+        <a href="javascript:void(0)" class="btn btn-secondary">
+          <nuxt-link to="/">
+            キャンセル
+          </nuxt-link>
+        </a>
+        <a href="javascript:void(0)" class="btn btn-dark" @click="submit">
+          保存
+        </a>
+      </div>
+    </form>
   </div>
 </template>
 
