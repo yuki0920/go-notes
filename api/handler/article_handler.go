@@ -58,7 +58,7 @@ func (handler *ArticleHandler) Index() echo.HandlerFunc {
 	}
 }
 
-type ArticleCreateOutput struct {
+type ArticleOutput struct {
 	Article          *model.Article
 	Message          string
 	ValidationErrors []string
@@ -66,11 +66,10 @@ type ArticleCreateOutput struct {
 
 func (handler *ArticleHandler) Create() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		// 送信されてくるフォームの内容を格納する構造体を宣言
-		var article model.Article
-
-		// レスポンスとして返却する構造体を宣言
-		var out ArticleCreateOutput
+		var (
+			article model.Article // 送信されてくるフォームの内容を格納する構造体
+			out     ArticleOutput // レスポンスとして返却する構造体
+		)
 
 		// フォームの内容を構造体にバインド
 		if err := c.Bind(&article); err != nil {
@@ -108,15 +107,9 @@ func (handler *ArticleHandler) Create() echo.HandlerFunc {
 	}
 }
 
-type ArticleUpdateOutput struct {
-	Article          *model.Article
-	Message          string
-	ValidationErrors []string
-}
-
 func (handler *ArticleHandler) Update() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		var out ArticleUpdateOutput
+		var out ArticleOutput
 		var article model.Article
 
 		// フォームの内容を構造体にバインドする、構造体で設定した型と異なる場合はエラーになる
@@ -137,8 +130,7 @@ func (handler *ArticleHandler) Update() echo.HandlerFunc {
 		articleID, _ := strconv.Atoi(c.Param("articleID"))
 		article.ID = articleID
 
-		err := handler.articleUsecase.Update(&article)
-		if err != nil {
+		if err := handler.articleUsecase.Update(&article); err != nil {
 			c.Logger().Error(err.Error())
 			out.Message = err.Error()
 

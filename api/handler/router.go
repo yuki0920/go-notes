@@ -4,16 +4,7 @@ import (
 	"yuki0920/go-notes/middleware"
 
 	"github.com/labstack/echo/v4"
-	"gopkg.in/go-playground/validator.v9"
 )
-
-type CustomValidator struct {
-	Validator *validator.Validate
-}
-
-func (cv *CustomValidator) Validate(i interface{}) error {
-	return cv.Validator.Struct(i)
-}
 
 func InitArticleRouting(e *echo.Echo, articleHandler ArticleHandler) {
 	e.GET("/api/articles/:articleID", articleHandler.Show())

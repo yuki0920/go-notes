@@ -7,10 +7,8 @@ import (
 	"yuki0920/go-notes/usecase"
 )
 
-func InjectArticleRepository() repository.ArticleRepository {
-	sqlHandler := InjectDB()
-
-	return infra.NewArticleRepository(sqlHandler)
+func InjectArticleHandler() handler.ArticleHandler {
+	return handler.NewArticleHandler(InjectArticleUsecase())
 }
 
 func InjectArticleUsecase() usecase.ArticleUsecase {
@@ -19,6 +17,8 @@ func InjectArticleUsecase() usecase.ArticleUsecase {
 	return usecase.NewArticleUsecase(articleRepository)
 }
 
-func InjectArticleHandler() handler.ArticleHandler {
-	return handler.NewArticleHandler(InjectArticleUsecase())
+func InjectArticleRepository() repository.ArticleRepository {
+	sqlHandler := InjectDB()
+
+	return infra.NewArticleRepository(sqlHandler)
 }

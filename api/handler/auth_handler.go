@@ -53,16 +53,7 @@ func (authHandler *AuthHandler) Create() echo.HandlerFunc {
 			return c.JSON(http.StatusBadRequest, err)
 		}
 
-		cookie := &http.Cookie{
-			Name:     "jwt",
-			Value:    token,
-			Expires:  time.Now().Add(time.Hour * 72),
-			SameSite: http.SameSiteNoneMode,
-			Path:     "/",
-			Secure:   true,
-			HttpOnly: true,
-		}
-		c.SetCookie(cookie)
+		c.SetCookie(newCookie(token))
 
 		return c.JSON(http.StatusOK, echo.Map{
 			"message": "login success",
@@ -74,21 +65,23 @@ func (authHandler *AuthHandler) Create() echo.HandlerFunc {
 
 func (authHandler *AuthHandler) Delete() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		cookie := &http.Cookie{
-			Name:     "jwt",
-			Value:    "",
-			Expires:  time.Now().Add(time.Hour * -1),
-			SameSite: http.SameSiteNoneMode,
-			Path:     "/",
-			Secure:   true,
-			HttpOnly: true,
-		}
-
-		c.SetCookie(cookie)
+		c.SetCookie(newCookie(""))
 
 		return c.JSON(http.StatusOK, echo.Map{
 			"message": "logout success",
 		})
+	}
+}
+
+func newCookie(token string) *http.Cookie {
+	return &http.Cookie{
+		Name:     "jwt",
+		Value:    token,
+		Expires:  time.Now().Add(time.Hour * 72),
+		SameSite: http.SameSiteNoneMode,
+		Path:     "/",
+		Secure:   true,
+		HttpOnly: true,
 	}
 }
 
