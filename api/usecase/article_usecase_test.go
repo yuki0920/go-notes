@@ -3,54 +3,19 @@ package usecase_test
 import (
 	"testing"
 	"yuki0920/go-notes/domain/model"
-	"yuki0920/go-notes/usecase"
+	"yuki0920/go-notes/usecase/mocks"
 
 	"github.com/bxcodec/faker"
+	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
 )
 
-type mockArticleRepository struct{}
-
-func (mockRepo *mockArticleRepository) GetById(id int) (*model.Article, error) {
-	var mockArticle model.Article
-	faker.FakeData(&mockArticle)
-
-	return &mockArticle, nil
-}
-
-func (mockRepo *mockArticleRepository) ListByPage(page int) ([]*model.Article, int, error) {
-	var mockArticle model.Article
-	faker.FakeData(&mockArticle)
-
-	mockArticles := make([]*model.Article, 0)
-	mockArticles = append(mockArticles, &mockArticle)
-
-	return mockArticles, page, nil
-}
-
-func (mockRepo *mockArticleRepository) Create(article *model.Article) (int64, error) {
-	return int64(article.ID), nil
-}
-
-func (mockRepo *mockArticleRepository) Update(article *model.Article) error {
-	return nil
-}
-
-func (mockRepo *mockArticleRepository) Delete(id int) error {
-	return nil
-}
-
-func (mockRepo *mockArticleRepository) CreateCategories(id int, article *model.Article) error {
-	return nil
-}
-
-func (mockRepo *mockArticleRepository) DeleteCategories(id int) error {
-	return nil
-}
-
 func TestArticleGetById(t *testing.T) {
-	mockRepo := &mockArticleRepository{}
-	articleUsecase := usecase.NewArticleUsecase(mockRepo)
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+
+	articleUsecase := mocks.NewMockArticleUsecase(ctrl)
+	articleUsecase.EXPECT().GetById(10).Return(&model.Article{}, nil)
 
 	article, err := articleUsecase.GetById(10)
 	assert.NoError(t, err)
@@ -58,20 +23,32 @@ func TestArticleGetById(t *testing.T) {
 }
 
 func TestArticleListByPage(t *testing.T) {
-	mockRepo := &mockArticleRepository{}
-	articleUsecase := usecase.NewArticleUsecase(mockRepo)
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
 
-	articles, _, err := articleUsecase.ListByPage(2)
+	var mockArticle model.Article
+	faker.FakeData(&mockArticle)
+	mockArticles := make([]*model.Article, 0)
+	mockArticles = append(mockArticles, &mockArticle)
+
+	articleUsecase := mocks.NewMockArticleUsecase(ctrl)
+	articleUsecase.EXPECT().ListByPage(2).Return(mockArticles, 3, nil)
+
+	articles, totalPage, err := articleUsecase.ListByPage(2)
 	assert.NoError(t, err)
+	assert.Equal(t, totalPage, 3)
 	assert.NotEmpty(t, articles)
 }
 
 func TestArticleCreate(t *testing.T) {
-	mockRepo := &mockArticleRepository{}
-	articleUsecase := usecase.NewArticleUsecase(mockRepo)
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
 
 	article := model.Article{}
 	faker.FakeData(&article)
+
+	articleUsecase := mocks.NewMockArticleUsecase(ctrl)
+	articleUsecase.EXPECT().Create(&article).Return(int64(article.ID), nil)
 
 	id, err := articleUsecase.Create(&article)
 	assert.NoError(t, err)
@@ -79,19 +56,25 @@ func TestArticleCreate(t *testing.T) {
 }
 
 func TestArticleUpdate(t *testing.T) {
-	mockRepo := &mockArticleRepository{}
-	articleUsecase := usecase.NewArticleUsecase(mockRepo)
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
 
 	article := model.Article{}
 	faker.FakeData(&article)
+
+	articleUsecase := mocks.NewMockArticleUsecase(ctrl)
+	articleUsecase.EXPECT().Update(&article).Return(nil)
 
 	err := articleUsecase.Update(&article)
 	assert.NoError(t, err)
 }
 
 func TestArticleDelete(t *testing.T) {
-	mockRepo := &mockArticleRepository{}
-	articleUsecase := usecase.NewArticleUsecase(mockRepo)
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+
+	articleUsecase := mocks.NewMockArticleUsecase(ctrl)
+	articleUsecase.EXPECT().Delete(1).Return(nil)
 
 	err := articleUsecase.Delete(1)
 	assert.NoError(t, err)
