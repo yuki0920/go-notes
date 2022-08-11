@@ -1,3 +1,4 @@
+//go:generate mockgen -source=$GOFILE -package=mocks -destination=mocks/article_repository.go
 package repository
 
 import "yuki0920/go-notes/domain/model"

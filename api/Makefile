@@ -4,3 +4,6 @@ db-migrate:
 	sleep 3
 	cd ./infra/migrations
 	goose mysql "${DSN}" up
+
+generate:
+	go generate ./...
