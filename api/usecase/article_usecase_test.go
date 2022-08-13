@@ -30,7 +30,7 @@ func TestArticleListByPage(t *testing.T) {
 	defer ctrl.Finish()
 
 	var mockArticle model.Article
-	faker.FakeData(&mockArticle)
+	_ = faker.FakeData(&mockArticle)
 	mockArticles := make([]*model.Article, 0)
 	mockArticles = append(mockArticles, &mockArticle)
 
@@ -48,7 +48,7 @@ func TestArticleCreate(t *testing.T) {
 	defer ctrl.Finish()
 
 	article := model.Article{}
-	faker.FakeData(&article)
+	_ = faker.FakeData(&article)
 
 	articleUsecase := mocks.NewMockArticleUsecase(ctrl)
 	articleUsecase.EXPECT().Create(&article).Return(int64(article.ID), nil)
@@ -63,7 +63,7 @@ func TestArticleUpdate(t *testing.T) {
 	defer ctrl.Finish()
 
 	article := model.Article{}
-	faker.FakeData(&article)
+	_ = faker.FakeData(&article)
 
 	articleUsecase := mocks.NewMockArticleUsecase(ctrl)
 	articleUsecase.EXPECT().Update(&article).Return(nil)
@@ -110,7 +110,7 @@ func Test_articleUsecase_GetById(t *testing.T) {
 	}
 
 	article := model.Article{}
-	faker.FakeData(&article)
+	_ = faker.FakeData(&article)
 
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
@@ -156,7 +156,7 @@ func Test_articleUsecase_ListByPage(t *testing.T) {
 	}
 
 	var mockArticle model.Article
-	faker.FakeData(&mockArticle)
+	_ = faker.FakeData(&mockArticle)
 	mockArticles := make([]*model.Article, 0)
 	mockArticles = append(mockArticles, &mockArticle)
 
@@ -213,7 +213,7 @@ func Test_articleUsecase_Create(t *testing.T) {
 	defer ctrl.Finish()
 
 	article := model.Article{}
-	faker.FakeData(&article)
+	_ = faker.FakeData(&article)
 
 	tests := []struct {
 		name       string
@@ -259,7 +259,7 @@ func Test_articleUsecase_Update(t *testing.T) {
 	defer ctrl.Finish()
 
 	article := model.Article{}
-	faker.FakeData(&article)
+	_ = faker.FakeData(&article)
 
 	tests := []struct {
 		name       string

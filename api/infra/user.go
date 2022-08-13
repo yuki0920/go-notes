@@ -19,12 +19,15 @@ func UserCreate(user *model.User) (sql.Result, error) {
 	tx := db.MustBegin()
 	res, err := tx.NamedExec(query, user)
 	if err != nil {
-		tx.Rollback()
+		_ = tx.Rollback()
 
 		return nil, err
 	}
 
-	tx.Commit()
+	err = tx.Commit()
+	if err != nil {
+		return nil, err
+	}
 
 	return res, nil
 }

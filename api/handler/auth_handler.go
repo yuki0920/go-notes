@@ -40,11 +40,7 @@ func (authHandler *AuthHandler) Create() echo.HandlerFunc {
 			return c.JSON(http.StatusBadRequest, err)
 		}
 
-		if user.ComparePassword(userParam.Password); err != nil {
-			c.Logger().Error(err.Error())
-
-			return c.JSON(http.StatusBadRequest, err)
-		}
+		_ = user.ComparePassword(userParam.Password)
 
 		token, err := util.GenerateJwtToken(user.Name)
 		if err != nil {

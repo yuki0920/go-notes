@@ -109,12 +109,15 @@ func (articleRepository *ArticleRepository) Create(article *model.Article) (int6
 	res, err := tx.NamedExec(query, article)
 	if err != nil {
 		err = fmt.Errorf("failed to create article: %w", err)
-		tx.Rollback()
+		_ = tx.Rollback()
 
 		return 0, err
 	}
 
-	tx.Commit()
+	err = tx.Commit()
+	if err != nil {
+		return 0, err
+	}
 
 	id, err := res.LastInsertId()
 	if err != nil {
@@ -138,14 +141,18 @@ func (articleRepository *ArticleRepository) Update(article *model.Article) error
 	tx := articleRepository.SqlHandler.Conn.MustBegin()
 
 	// クエリ文字列内の :title, :body, :id には、第 2 引数の Article 構造体の Title, Body, ID が bind される
-	if _, err := tx.NamedExec(query, article); err != nil {
+	_, err := tx.NamedExec(query, article)
+	if err != nil {
 		err = fmt.Errorf("failed to update article: %w", err)
-		tx.Rollback()
+		_ = tx.Rollback()
 
 		return err
 	}
 
-	tx.Commit()
+	err = tx.Commit()
+	if err != nil {
+		return err
+	}
 
 	return nil
 }
@@ -155,8 +162,9 @@ func (articleRepository *ArticleRepository) Delete(id int) error {
 
 	tx := articleRepository.SqlHandler.Conn.MustBegin()
 
-	if _, err := tx.Exec(query, id); err != nil {
-		tx.Rollback()
+	_, err := tx.Exec(query, id)
+	if err != nil {
+		_ = tx.Rollback()
 
 		return err
 	}

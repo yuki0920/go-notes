@@ -18,7 +18,7 @@ type mockUserUsecase struct{}
 
 func (usecase *mockUserUsecase) GetByName(name string) (user *model.User, err error) {
 	var mockUser model.User
-	faker.FakeData((&mockUser))
+	_ = faker.FakeData((&mockUser))
 
 	return &mockUser, err
 }

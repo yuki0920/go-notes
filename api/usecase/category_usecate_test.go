@@ -17,7 +17,7 @@ func (mockRepo *mockCategoryRepository) Create(category *model.Category) (int64,
 
 func (mockRepo *mockCategoryRepository) List() ([]*model.Category, error) {
 	var mockCategory model.Category
-	faker.FakeData(&mockCategory)
+	_ = faker.FakeData(&mockCategory)
 
 	mockCategories := make([]*model.Category, 0)
 	mockCategories = append(mockCategories, &mockCategory)

@@ -17,14 +17,14 @@ type mockArticleUsecase struct{}
 
 func (usecase *mockArticleUsecase) GetById(id int) (article *model.Article, err error) {
 	var mockArticle model.Article
-	faker.FakeData((&mockArticle))
+	_ = faker.FakeData((&mockArticle))
 
 	return &mockArticle, err
 }
 
 func (usecase *mockArticleUsecase) ListByCursor(cursor int) (articles []*model.Article, err error) {
 	var mockArticle model.Article
-	faker.FakeData((&mockArticle))
+	_ = faker.FakeData((&mockArticle))
 	articles = make([]*model.Article, 0)
 	articles = append(articles, &mockArticle)
 
@@ -33,7 +33,7 @@ func (usecase *mockArticleUsecase) ListByCursor(cursor int) (articles []*model.A
 
 func (usecase *mockArticleUsecase) ListByPage(page int) (articles []*model.Article, totalPage int, err error) {
 	var mockArticle model.Article
-	faker.FakeData((&mockArticle))
+	_ = faker.FakeData((&mockArticle))
 	articles = make([]*model.Article, 0)
 	articles = append(articles, &mockArticle)
 

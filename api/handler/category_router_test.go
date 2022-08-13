@@ -21,7 +21,7 @@ func (usecase *mockCategoryUsecase) Create(category *model.Category) (id int64, 
 
 func (usecase *mockCategoryUsecase) List() (categories []*model.Category, err error) {
 	var mockCategory model.Category
-	faker.FakeData((&mockCategory))
+	_ = faker.FakeData((&mockCategory))
 	categories = make([]*model.Category, 0)
 	categories = append(categories, &mockCategory)
 
