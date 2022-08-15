@@ -13,7 +13,7 @@ type mockUserRepository struct{}
 
 func (mockRepo *mockUserRepository) GetByName(name string) (*model.User, error) {
 	var mockUser model.User
-	faker.FakeData(&mockUser)
+	_ = faker.FakeData(&mockUser)
 
 	return &mockUser, nil
 }
@@ -36,7 +36,7 @@ func TestUserCreate(t *testing.T) {
 	userUsecase := usecase.NewUserUsecase(mockRepo)
 
 	User := model.User{}
-	faker.FakeData(&User)
+	_ = faker.FakeData(&User)
 
 	err := userUsecase.Create(&User)
 	assert.NoError(t, err)

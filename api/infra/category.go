@@ -28,7 +28,7 @@ func (categoryRepository *CategoryRepository) Create(category *model.Category) (
 	res, err := tx.NamedExec(query, category)
 	if err != nil {
 		err = fmt.Errorf("failed to create category: %w", err)
-		tx.Rollback()
+		_ = tx.Rollback()
 
 		return 0, err
 	}
@@ -39,7 +39,10 @@ func (categoryRepository *CategoryRepository) Create(category *model.Category) (
 		return 0, err
 	}
 
-	tx.Commit()
+	err = tx.Commit()
+	if err != nil {
+		return 0, err
+	}
 
 	return id, nil
 }
