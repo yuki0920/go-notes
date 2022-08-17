@@ -49,6 +49,25 @@ jobs:
         run: go get -v -t -d ./...
       - name: test
         run: go test ./... -v
+  test-coverage:
+    needs: setup
+    runs-on: ubuntu-latest
+    env:
+      JWT_SECRET_KEY: secret
+    defaults:
+      run:
+        working-directory: ./api
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: get dependencies
+        run: go get -v -t -d ./...
+      - name: test with coverage report output
+        run: go test ./... -coverprofile=coverage.out
+      - name: report
+        uses: k1LoW/octocov-action@v0
+        with:
+          config: ./api/.octocov.yml
   lint:
     needs: setup
     runs-on: ubuntu-latest
