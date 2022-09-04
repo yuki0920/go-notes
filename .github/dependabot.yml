@@ -10,3 +10,7 @@ updates:
       interval: "monthly"
     ignore:
       - dependency-name: "sass-loader"
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "monthly"
