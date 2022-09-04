@@ -63,9 +63,11 @@ func (userRepository UserRepository) GetByName(name string) (*model.User, error)
 }
 
 func (userRepository UserRepository) Create(user *model.User) error {
-	query := `INSERT INTO users (name, password) VALUES (?, ?);`
+	query := `INSERT INTO users (name, password, created, updated) VALUES (?, ?, ?, ?);`
 
-	if _, err := userRepository.SqlHandler.Conn.Exec(query, user.Name, user.Password); err != nil {
+	now := time.Now()
+
+	if _, err := userRepository.SqlHandler.Conn.Exec(query, user.Name, user.Password, now, now); err != nil {
 		return err
 	}
 
