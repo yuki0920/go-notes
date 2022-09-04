@@ -5,6 +5,9 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/brpaz/echozap"
+	"go.uber.org/zap"
+
 	"yuki0920/go-notes/handler"
 	"yuki0920/go-notes/injector"
 
@@ -42,9 +45,8 @@ func createMux() *echo.Echo {
 	e.Use(middleware.Recover())
 	e.Use(middleware.Logger())
 	e.Use(middleware.Gzip())
-	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
-		Format: "\nmethod=${method}, uri=${uri}, status=${status}\n",
-	}))
+	zapLogger, _ := zap.NewProduction()
+	e.Use(echozap.ZapLogger(zapLogger))
 	e.Use(middleware.BodyDump(bodyDumpHandler))
 
 	return e
@@ -62,6 +64,6 @@ func setupRouting(e *echo.Echo) {
 }
 
 func bodyDumpHandler(c echo.Context, reqBody, resBody []byte) {
-	fmt.Printf("Request Body: %v\n", string(reqBody))
-	fmt.Printf("Response Body: %v\n", string(resBody))
+	fmt.Println("Request Body:", string(reqBody))
+	fmt.Println("Response Body:", string(resBody))
 }

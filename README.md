@@ -41,17 +41,17 @@ $ make db-migrate
 
 ```sh
 # コンテナに入る
-$ docker-compose run --rm api bash
+$ docker-compose run --rm api sh
 
 # 接続確認
 $ goose mysql $DSN status
 
 # 適用
-cd migrations
+$ cd infra/migrations
 $ goose mysql $DSN up
 
 # ロールバック
-$ cd migrations
+$ cd infra/migrations
 $ goose mysql $DSN down
 ```
 
