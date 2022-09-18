@@ -8,6 +8,8 @@ jobs:
     steps:
       - name: set up
         uses: actions/setup-go@v2
+        with:
+          go-version: 1.16
         id: go
       - name: check out
         uses: actions/cache@v2
@@ -18,6 +20,7 @@ jobs:
           key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
           restore-keys: |
             ${{ runner.os }}-go-
+
   build:
     needs: setup
     runs-on: ubuntu-latest
@@ -31,7 +34,7 @@ jobs:
         run: go get -v -t -d ./...
       - name: build
         run: go build ./...
-  coverage:
+  test:
     needs: setup
     runs-on: ubuntu-latest
     env:
@@ -39,15 +42,42 @@ jobs:
     defaults:
       run:
         working-directory: ./api
-    permissions: write-all
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: get dependencies
+        run: go get -v -t -d ./...
+      - name: test
+        run: go test ./... -v
+  test-coverage:
+    needs: setup
+    runs-on: ubuntu-latest
+    env:
+      JWT_SECRET_KEY: secret
+    defaults:
+      run:
+        working-directory: ./api
     steps:
       - name: checkout
         uses: actions/checkout@v2
       - name: get dependencies
         run: go get -v -t -d ./...
       - name: test with coverage report output
-        run: make coverage
+        run: go test ./... -coverprofile=coverage.out
       - name: report
         uses: k1LoW/octocov-action@v0
         with:
           config: ./api/.octocov.yml
+  lint:
+    needs: setup
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./api
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: get dependencies
+        run: go get -v -t -d ./...
+      - name: go-vet
+        run: go vet ./...
