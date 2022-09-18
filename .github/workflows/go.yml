@@ -8,8 +8,6 @@ jobs:
     steps:
       - name: set up
         uses: actions/setup-go@v2
-        with:
-          go-version: 1.16
         id: go
       - name: check out
         uses: actions/cache@v2
@@ -48,7 +46,7 @@ jobs:
       - name: get dependencies
         run: go get -v -t -d ./...
       - name: test with coverage report output
-        run: coverage
+        run: make coverage
       - name: report
         uses: k1LoW/octocov-action@v0
         with:
