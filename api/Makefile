@@ -7,3 +7,6 @@ db-migrate:
 
 generate:
 	go generate ./...
+
+coverage:
+	go test ./... -coverprofile=coverage.out
