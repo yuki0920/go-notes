@@ -16,7 +16,7 @@
     "@nuxtjs/composition-api": "^0.32.0",
     "bootstrap": "^4.6.0",
     "bootstrap-vue": "^2.21.2",
-    "core-js": "^3.24.1",
+    "core-js": "^3.25.0",
     "nuxt": "^2.15.7",
     "nuxt-vue-multiselect": "^1.0.4",
     "vue-prism-editor": "^1.3.0",
