@@ -4,12 +4,20 @@ updates:
     directory: "./api"
     schedule:
       interval: "monthly"
+    groups:
+      dependencies:
+        patterns:
+          - "*"
   - package-ecosystem: "npm"
     directory: "./front"
     schedule:
       interval: "monthly"
     ignore:
       - dependency-name: "sass-loader"
+    groups:
+      dependencies:
+        patterns:
+          - "*"
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
